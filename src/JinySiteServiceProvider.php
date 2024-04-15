@@ -3,6 +3,9 @@
 namespace Jiny\Site;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\View\Compilers\BladeCompiler;
+use Livewire\Livewire;
 
 class JinySiteServiceProvider extends ServiceProvider
 {
@@ -14,6 +17,8 @@ class JinySiteServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package);
 
         $this->resourceSetting();
+
+        Blade::component($this->package.'::components.'.'site_setting', 'site-setting');
 
     }
 
@@ -34,6 +39,14 @@ class JinySiteServiceProvider extends ServiceProvider
 
     public function register()
     {
-
+        /* 라이브와이어 컴포넌트 등록 */
+        $this->app->afterResolving(BladeCompiler::class, function () {
+            Livewire::component('site-session-slot',
+                \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
+            Livewire::component('site-slot-setting',
+                \Jiny\Site\Http\Livewire\SiteSlotSetting::class);
+            Livewire::component('site-userslot-setting',
+                \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+        });
     }
 }
