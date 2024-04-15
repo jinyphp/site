@@ -22,7 +22,7 @@
                         <a href="javascript: void(0);">Admin</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/admin/module/site">Site</a>
+                        <a href="/admin/site">Site</a>
                     </li>
                     <li class="breadcrumb-item active">
                         Dashbaord
@@ -33,18 +33,7 @@
         </div>
 
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
 
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!-- end page title -->
 
         <div class="row">
             <div class="col-4">

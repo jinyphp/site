@@ -22,7 +22,7 @@ class AdminSiteDashboard extends DashboardController
 
         $this->actions['view']['layout'] = "jiny-site::admin.dashboard.dash";
 
-        $this->actions['title'] = "Dashboard";
+        $this->actions['title'] = "Site Dashboard";
         $this->actions['subtitle'] = "사이트를 관리합니다.";
 
         //setMenu('menus/site.json');
