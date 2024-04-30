@@ -23,8 +23,11 @@ if(!function_exists("route_dynamic")) {
 
     // 인증된 사용자를 처리하는 라우트 그룹
     Route::middleware(['web'])->group(function () {
+        //dd("aaa");
         // 인증된 사용자에 대한 fallback 설정
         Route::fallback(function () {
+            //dd("aaa");
+
             // 여기에 인증된 사용자에 대한 처리를 추가합니다.
             $user = Auth::user();
             $slots = config("jiny.site.userslot");
@@ -43,11 +46,15 @@ if(!function_exists("route_dynamic")) {
             }
 
 
+
+
             $path = resource_path('www');
             $slotPath = $path."/".$activeSlot;
             if(!is_dir($slotPath)) {
                 return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
             }
+
+
 
             if(isset($_SERVER['REQUEST_URI'])) {
                 if($res = route_dynamic($_SERVER['REQUEST_URI'], $activeSlot)) {
@@ -277,7 +284,6 @@ if(!function_exists("route_dynamic")) {
 }
 
 
-
 /**
  * Admin Site Router
  */
@@ -305,6 +311,7 @@ if(function_exists('admin_prefix')) {
 
     });
 }
+
 
 
 

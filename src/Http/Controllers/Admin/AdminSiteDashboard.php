@@ -32,13 +32,7 @@ class AdminSiteDashboard extends DashboardController
 
     public function index(Request $request)
     {
-
-
         return parent::index($request);
     }
-
-
-
-
 
 }

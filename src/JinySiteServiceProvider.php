@@ -18,7 +18,16 @@ class JinySiteServiceProvider extends ServiceProvider
 
         $this->resourceSetting();
 
-        Blade::component($this->package.'::components.'.'site_setting', 'site-setting');
+        Blade::component($this->package.'::components.'.'easy_setting', 'easy-setting');
+
+        Blade::component(\Jiny\Site\View\Components\Header::class, "header");
+        Blade::component(\Jiny\Site\View\Components\Footer::class, "footer");
+        Blade::component(\Jiny\Site\View\Components\Layout::class, "layout");
+        Blade::component(\Jiny\Site\View\Components\Sidebar::class, "sidebar");
+        Blade::component(\Jiny\Site\View\Components\Rightbar::class, "rightbar");
+        Blade::component(\Jiny\Site\View\Components\Main::class, "main");
+        Blade::component(\Jiny\Site\View\Components\Content::class, "content");
+        //Blade::component(\Jiny\Site\View\Components\Menu::class, "menu");
 
     }
 
