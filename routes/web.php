@@ -31,30 +31,32 @@ if(!function_exists("route_dynamic")) {
             // 여기에 인증된 사용자에 대한 처리를 추가합니다.
             $user = Auth::user();
             $slots = config("jiny.site.userslot");
-            if($user && isset($slots[$user->id])) {
-
-                $activeSlot = $slots[$user->id];
+            if($user){
+                if($slots && isset($slots[$user->id])) {
+                    $activeSlot = $slots[$user->id];
+                } else {
+                    $activeSlot = "";
+                }
             } else {
                 // 설정파일에서 active slot을 읽어옴
                 $slots = config("jiny.site.slot");
                 $activeSlot = "";
-                foreach($slots as $slot => $item) {
-                    if($item['active']) {
-                        $activeSlot = $slot;
+                if($slots) {
+                    foreach($slots as $slot => $item) {
+                        if($item['active']) {
+                            $activeSlot = $slot;
+                        }
                     }
                 }
             }
 
-
-
+            //dd($activeSlot);
 
             $path = resource_path('www');
             $slotPath = $path."/".$activeSlot;
             if(!is_dir($slotPath)) {
                 return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
             }
-
-
 
             if(isset($_SERVER['REQUEST_URI'])) {
                 if($res = route_dynamic($_SERVER['REQUEST_URI'], $activeSlot)) {
@@ -70,7 +72,11 @@ if(!function_exists("route_dynamic")) {
 
             // fallback 리소스에서
             //return view("fallback::404");
-            return $activeSlot."에서 ".$_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
+            if($activeSlot) {
+                return $activeSlot."에서 ".$_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
+            }
+
+            return $_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
 
         });
     });
