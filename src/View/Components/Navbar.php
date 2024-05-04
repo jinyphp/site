@@ -4,13 +4,14 @@ namespace Jiny\Site\View\Components;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\View;
 
-class Layout extends SiteView
+class Navbar extends SiteView
 {
-    public $key = "layout";
+    public $key = "nav";
     public $data;
 
     public function __construct($data=null)
     {
         $this->data = $data;
     }
+
 }
