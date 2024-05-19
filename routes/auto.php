@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Blade;
 
 
 /**
@@ -24,14 +24,14 @@ if(!function_exists("isLivewireUri")) {
 }
 
 
+
 if(!function_exists("route_dynamic")) {
 
     // 인증된 사용자를 처리하는 라우트 그룹
     Route::middleware(['web'])->group(function () {
-        //dd("aaa");
+
         // 인증된 사용자에 대한 fallback 설정
         Route::fallback(function () {
-            //dd("aaa");
 
             // 여기에 인증된 사용자에 대한 처리를 추가합니다.
             $user = Auth::user();
@@ -227,21 +227,26 @@ if(!function_exists("route_dynamic")) {
         }
     }
 
+
     // 마크다운 파일인 경우
     function www_isMarkdown($uri, $slot) {
         $prefix_www = "www";
-        $filename = str_replace('/','.',$uri);
-        $filename = ltrim($filename,".");
+        //$filename = str_replace('/','.',$uri);
+        $filename = str_replace('/', DIRECTORY_SEPARATOR, $uri);
+        //$filename = $uri;
+        $filename = ltrim($filename, DIRECTORY_SEPARATOR);
         if(!$filename) {
             $filename = "index";
         }
 
         // slot path
-        $slotKey = $prefix_www."-".$slot;
+        $slotKey = $prefix_www.DIRECTORY_SEPARATOR.$slot;
 
         // 마크다운 페이지 생성
         $path = resource_path($slotKey);
         $txt = null;
+
+        //dd($path.DIRECTORY_SEPARATOR.$filename.".md");
 
         // 일치하는 마크다운 파일이 있는 경우
         if(file_exists($path.DIRECTORY_SEPARATOR.$filename.".md")) {
@@ -257,11 +262,37 @@ if(!function_exists("route_dynamic")) {
 
         // 마크다운 변환
         if($txt) {
-            $Parsedown = new Parsedown();
-            $content = $Parsedown->parse($txt);
 
-            if(view()->exists($slotKey."::_layouts.markdown")) {
-                return view($slotKey."::_layouts.markdown",['content'=>$content]);
+            $frontMatter = \Webuni\FrontMatter\FrontMatterChain::create();
+            $document = $frontMatter->parse($txt);
+
+            $data = $document->getData();
+
+            $content = $document->getContent();
+            $Parsedown = new Parsedown();
+            $content = $Parsedown->parse($content);
+
+
+            if(isset($data['layout'])) {
+                $layout = $prefix_www."::".$slot."._layouts.".$data['layout'];
+                //dd($layout);
+                if(view()->exists($layout)) {
+                    //dd("exist=".$layout);
+                    return view($layout,[
+                        'slot'=>$content
+                    ]);
+                }
+            }
+
+
+            //dd($prefix_www."::".$slot."._layouts.markdown");
+            if(view()->exists($prefix_www."::".$slot."._layouts.markdown")) {
+
+                // 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
+                //$content = Blade::compileString($content);
+                return view($prefix_www."::".$slot."._layouts.markdown",[
+                    'slot'=>$content
+                ]);
             }
 
             return $content;

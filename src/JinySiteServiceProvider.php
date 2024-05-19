@@ -40,6 +40,13 @@ class JinySiteServiceProvider extends ServiceProvider
 
         Blade::component(\Jiny\Site\View\Components\Menu::class, "www-menu");
 
+        Blade::component(\Jiny\Site\View\Components\Home::class, "www-home");
+        Blade::component(\Jiny\Site\View\Components\Page::class, "www-page");
+        Blade::component(\Jiny\Site\View\Components\Docs::class, "www-docs");
+        Blade::component(\Jiny\Site\View\Components\Markdown::class, "www-markdown");
+
+        $this->dynamicComponents();
+
 
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
@@ -82,6 +89,69 @@ class JinySiteServiceProvider extends ServiceProvider
         $this->loadViewsFrom($path."/slot1", 'www1');
     }
 
+    // _components 안에 있는 파일들을 동적으로 컴포넌트화 합니다.
+    private function dynamicComponents()
+    {
+
+        $base = resource_path('www');
+        $base .= DIRECTORY_SEPARATOR;
+        $slot = www_slot();
+
+        $path = $base.DIRECTORY_SEPARATOR.$slot;
+        $path .= DIRECTORY_SEPARATOR."_components";
+
+        $dir = scandir($path);
+        foreach($dir as $file) {
+            if($file == '.' || $file == '..') continue;
+            if($file[0] == '.') continue; // 숨김파일
+
+            if(substr($file, -10) === '.blade.php') {
+                $name = substr($file, 0, strlen($file)-10);
+                //dump($name);
+                Blade::component("www::".$slot.'._components.'.$name, 'www-'.$name);
+            }
+
+        }
+
+        //dd($dir);
+
+
+
+
+
+
+    //     private function scanComponents($path, $except=[])
+    // {
+    //     foreach($except as $i => $name) {
+    //         $except[$i] .= ".blade.php";
+    //     }
+
+    //
+    //     $names = [];
+    //     foreach($dir as $file) {
+    //         if($file == '.' || $file == '..') continue;
+    //         if($file[0] == '.') continue;
+    //         if(in_array($file,$except)) continue;
+
+    //         if(is_dir($path.DIRECTORY_SEPARATOR.$file)) {
+    //             $sub = $this->scanComponents($path.DIRECTORY_SEPARATOR.$file);
+    //             foreach($sub as $name) {
+    //                 $component = str_replace(".blade.php","",$file.".".$name);
+    //                 Blade::component(\Jiny\Theme\View\Components\ThemeComponent::class, "theme-".$component);
+    //                 $names []= $component;
+    //             }
+    //         } else {
+    //             $component = str_replace(".blade.php","",$file);
+    //             Blade::component(\Jiny\Theme\View\Components\ThemeComponent::class, "theme-".$component);
+    //             $names []= $component;
+    //         }
+    //     }
+
+    //     return $names;
+    // }
+
+    }
+
     public function register()
     {
         /* 라이브와이어 컴포넌트 등록 */
@@ -92,6 +162,7 @@ class JinySiteServiceProvider extends ServiceProvider
                 \Jiny\Site\Http\Livewire\SiteSlotSetting::class);
             Livewire::component('site-userslot-setting',
                 \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+
         });
     }
 }
