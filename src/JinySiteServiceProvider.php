@@ -100,6 +100,10 @@ class JinySiteServiceProvider extends ServiceProvider
         $path = $base.DIRECTORY_SEPARATOR.$slot;
         $path .= DIRECTORY_SEPARATOR."_components";
 
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
         $dir = scandir($path);
         foreach($dir as $file) {
             if($file == '.' || $file == '..') continue;
