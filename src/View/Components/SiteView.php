@@ -21,16 +21,18 @@ class SiteView extends Component
             return $result;
         }
 
-        $msg = "layout 디자인 리소스를 읽어 올 수 없습니다.";
+        $msg = $this->key."의 layout 디자인 리소스를 읽어 올 수 없습니다.";
         return $this->errorView($msg);
     }
 
     private function wwwView($key)
     {
         $slot = www_slot();
+        //dd($slot);
         if($slot) {
             // slot의 레이아웃 리소스는 _layouts 안에 지정됨
             $viewFile = "www::".$slot.".".$this->layout_path.".".$key;
+            //dd($viewFile);
             if(View::exists($viewFile)) {
                 return view($viewFile);
             }

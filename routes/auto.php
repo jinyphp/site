@@ -228,12 +228,11 @@ if(!function_exists("route_dynamic")) {
     }
 
 
-    // 마크다운 파일인 경우
+    // 마크다운 파일인
+if(!function_exists("www_isMarkdown")) {
     function www_isMarkdown($uri, $slot) {
         $prefix_www = "www";
-        //$filename = str_replace('/','.',$uri);
         $filename = str_replace('/', DIRECTORY_SEPARATOR, $uri);
-        //$filename = $uri;
         $filename = ltrim($filename, DIRECTORY_SEPARATOR);
         if(!$filename) {
             $filename = "index";
@@ -241,65 +240,17 @@ if(!function_exists("route_dynamic")) {
 
         // slot path
         $slotKey = $prefix_www.DIRECTORY_SEPARATOR.$slot;
-
-        // 마크다운 페이지 생성
         $path = resource_path($slotKey);
-        $txt = null;
-
-        //dd($path.DIRECTORY_SEPARATOR.$filename.".md");
-
-        // 일치하는 마크다운 파일이 있는 경우
-        if(file_exists($path.DIRECTORY_SEPARATOR.$filename.".md")) {
-            $txt = file_get_contents($path.DIRECTORY_SEPARATOR.$filename.".md");
-        }
-
-        // 일치하는 폴더가 존재하는 경우,
-        // index로 대체합니다.
-        else
-        if(file_exists($path.DIRECTORY_SEPARATOR.$filename.DIRECTORY_SEPARATOR."index.md")) {
-            $txt = file_get_contents($path.DIRECTORY_SEPARATOR.$filename.DIRECTORY_SEPARATOR."index.md");
-        }
 
         // 마크다운 변환
+        $mk = Jiny\Markdown\MarkdownPage::instance();
+        $txt = $mk->load($path.DIRECTORY_SEPARATOR.$filename);
         if($txt) {
-
-            $frontMatter = \Webuni\FrontMatter\FrontMatterChain::create();
-            $document = $frontMatter->parse($txt);
-
-            $data = $document->getData();
-
-            $content = $document->getContent();
-            $Parsedown = new Parsedown();
-            $content = $Parsedown->parse($content);
-
-
-            if(isset($data['layout'])) {
-                $layout = $prefix_www."::".$slot."._layouts.".$data['layout'];
-                //dd($layout);
-                if(view()->exists($layout)) {
-                    //dd("exist=".$layout);
-                    return view($layout,[
-                        'slot'=>$content
-                    ]);
-                }
-            }
-
-
-            //dd($prefix_www."::".$slot."._layouts.markdown");
-            if(view()->exists($prefix_www."::".$slot."._layouts.markdown")) {
-
-                // 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
-                //$content = Blade::compileString($content);
-                return view($prefix_www."::".$slot."._layouts.markdown",[
-                    'slot'=>$content
-                ]);
-            }
-
-            return $content;
+            $mk->parser($txt); //->render();
+            return $mk->view($prefix_www."::".$slot."._layouts.");
         }
-
     }
-
+}
 
     // 라라벨 기본 resources 에서 검색
     function route_isBladeResource($uri) {
