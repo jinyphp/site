@@ -42,7 +42,7 @@ if(!function_exists("www_slot")) {
                 //dump($item);
                 if($item['active']) {
                     $activeSlot = $item['name'];//slot;
-                    //dump($activeSlot);
+                    //dd($activeSlot);
                     return $activeSlot;
                 }
             }

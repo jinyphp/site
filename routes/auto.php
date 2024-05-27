@@ -36,7 +36,8 @@ if(!function_exists("route_dynamic")) {
             // 여기에 인증된 사용자에 대한 처리를 추가합니다.
             $user = Auth::user();
             $slots = config("jiny.site.userslot");
-            if($user){
+
+            if($user && count($slots)>0){
                 if($slots && isset($slots[$user->id])) {
                     $activeSlot = $slots[$user->id];
                 } else {
@@ -46,7 +47,7 @@ if(!function_exists("route_dynamic")) {
                 // 설정파일에서 active slot을 읽어옴
                 $slots = config("jiny.site.slot");
                 $activeSlot = "";
-                if($slots) {
+                if(count($slots)>0) {
                     foreach($slots as $slot => $item) {
                         if($item['active']) {
                             $activeSlot = $slot;
