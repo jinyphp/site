@@ -47,7 +47,7 @@ if(!function_exists("route_dynamic")) {
                 // 설정파일에서 active slot을 읽어옴
                 $slots = config("jiny.site.slot");
                 $activeSlot = "";
-                if(count($slots)>0) {
+                if(is_array($slots) && count($slots)>0) {
                     foreach($slots as $slot => $item) {
                         if($item['active']) {
                             $activeSlot = $slot;
