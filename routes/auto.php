@@ -25,6 +25,7 @@ if(!function_exists("isLivewireUri")) {
 
 
 
+
 if(!function_exists("route_dynamic")) {
 
     // 인증된 사용자를 처리하는 라우트 그룹
@@ -56,8 +57,7 @@ if(!function_exists("route_dynamic")) {
                 }
             }
 
-            //dd($activeSlot);
-
+            // 활성화된 slot 확인
             $path = resource_path('www');
             $slotPath = $path."/".$activeSlot;
             if(!is_dir($slotPath)) {
@@ -182,6 +182,9 @@ if(!function_exists("route_dynamic")) {
 
 
     function route_dynamic($uri, $slot) {
+
+        //dd($uri);
+
         //1. blade.php 파일이 있는 경우 찾아서 출력함
         if($res = www_isBlade($uri, $slot)) {
             return $res;
@@ -192,8 +195,13 @@ if(!function_exists("route_dynamic")) {
             return $res;
         }
 
-        //9. 리소스가
+        //3. 리소스가
         if($res = route_isBladeResource($uri)) {
+            return $res;
+        }
+
+        //4. 이미지 파일 경우
+        if($res = www_isImage($uri, $slot)) {
             return $res;
         }
 
@@ -243,13 +251,69 @@ if(!function_exists("www_isMarkdown")) {
         $slotKey = $prefix_www.DIRECTORY_SEPARATOR.$slot;
         $path = resource_path($slotKey);
 
+        if(file_exists($path.DIRECTORY_SEPARATOR.$filename)) {
+            // 마크다운 변환
+            $mk = Jiny\Markdown\MarkdownPage::instance();
+            $txt = $mk->load($path.DIRECTORY_SEPARATOR.$filename);
+            if($txt) {
+                $mk->parser($txt); //->render();
+                //dd($mk);
+                return $mk->view($prefix_www."::".$slot."._layouts.");
+            }
+        }
+    }
+}
+
+if(!function_exists("www_isImage")) {
+    function www_isImage($uri, $slot) {
+        //dd($uri);
+        $prefix_www = "www";
+        $filename = str_replace('/', DIRECTORY_SEPARATOR, $uri);
+        $filename = ltrim($filename, DIRECTORY_SEPARATOR);
+
+        // slot path
+        $slotKey = $prefix_www.DIRECTORY_SEPARATOR.$slot;
+        $path = resource_path($slotKey);
+
+        if(file_exists($path.DIRECTORY_SEPARATOR.$filename)) {
+
+            //$file = basename($filePath);
+            $file = $path.DIRECTORY_SEPARATOR.$filename;
+            $extension = strtolower(substr(strrchr($file,"."),1));
+            switch( $extension ) {
+                case "gif": $content_Type="image/gif"; break;
+                case "png": $content_Type="image/png"; break;
+                case "jpeg":
+                case "jpg": $content_Type="image/jpeg"; break;
+                case "svg": $content_Type="image/svg+xml"; break;
+                default:
+            }
+
+            $body = file_get_contents($file);
+
+            return response($body)
+                ->header('Content-type',$content_Type);
+
+            //dd($path.DIRECTORY_SEPARATOR.$filename);
+
+            //$img = file_get_contents($path.DIRECTORY_SEPARATOR.$filename);
+
+        }
+
+
+
+
         // 마크다운 변환
+        /*
         $mk = Jiny\Markdown\MarkdownPage::instance();
         $txt = $mk->load($path.DIRECTORY_SEPARATOR.$filename);
         if($txt) {
             $mk->parser($txt); //->render();
             return $mk->view($prefix_www."::".$slot."._layouts.");
         }
+            */
+
+
     }
 }
 
