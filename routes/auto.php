@@ -243,23 +243,45 @@ if(!function_exists("www_isMarkdown")) {
         $prefix_www = "www";
         $filename = str_replace('/', DIRECTORY_SEPARATOR, $uri);
         $filename = ltrim($filename, DIRECTORY_SEPARATOR);
+        /*
         if(!$filename) {
             $filename = "index";
         }
+
+        dd($filename);
+        */
 
         // slot path
         $slotKey = $prefix_www.DIRECTORY_SEPARATOR.$slot;
         $path = resource_path($slotKey);
 
-        if(file_exists($path.DIRECTORY_SEPARATOR.$filename)) {
-            // 마크다운 변환
-            $mk = Jiny\Markdown\MarkdownPage::instance();
-            $txt = $mk->load($path.DIRECTORY_SEPARATOR.$filename);
-            if($txt) {
-                $mk->parser($txt); //->render();
-                //dd($mk);
-                return $mk->view($prefix_www."::".$slot."._layouts.");
+
+        $filePath = $path.DIRECTORY_SEPARATOR.$filename;
+
+        $body = null;
+        $mk = Jiny\Markdown\MarkdownPage::instance();
+
+        if(file_exists($filePath.".md")) {
+            //$body = file_get_contents($filePath.".md");
+            $body = $mk->load($filePath);
+
+            //dump($filePath.".md");
+        } else if(is_dir($filePath)) {
+            $filePath = $filePath.DIRECTORY_SEPARATOR."index";
+            if(file_exists($filePath.".md")) {
+                //$body = file_get_contents($filePath.".md");
+                $body = $mk->load($filePath);
             }
+        }
+
+
+
+
+        if($body) {
+            // 마크다운 변환
+            $mk->parser($body); //->render();
+            //dd($mk);
+            return $mk->view($prefix_www."::".$slot."._layouts.");
         }
     }
 }
