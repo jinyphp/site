@@ -12,6 +12,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.2",
+        "jiny/laravel": "^0.2.0",
+        "laravel/sanctum": "^4.0",
         "jiny/menu": "^0.5",
         "jiny/posts": "^0.0.3",
         "jiny/markdown": "^0.2",
