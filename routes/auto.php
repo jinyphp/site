@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  *  자동 URL 라우팅
@@ -64,14 +64,27 @@ if(!function_exists("route_dynamic")) {
                 return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
             }
 
+
             if(isset($_SERVER['REQUEST_URI'])) {
+                ## 라우트 순번1 : www.slot에서 검색
                 if($res = route_dynamic($_SERVER['REQUEST_URI'], $activeSlot)) {
                     return $res;
                 }
+
+                ## 라우트 순번2 : 테마에서 검색
+                if($res = route_dynamic_theme($_SERVER['REQUEST_URI'])) {
+                    return $res;
+                }
+
+
             }
 
-            // www 리소스에서
-            // 404 오류 페이지 출력
+
+
+
+
+            ## 404 오류 페이지 출력
+            ## www 리소스에서
             if(view()->exists("www.".$activeSlot."::404")) {
                 return view("www.".$activeSlot."::404");
             }
@@ -178,6 +191,43 @@ if(!function_exists("route_dynamic")) {
 
     }
 
+
+/**
+ * 테마에서 지정된 동적라우트가 있는지 검사
+ */
+if(!function_exists("route_dynamic_theme")) {
+    function route_dynamic_theme($uri) {
+        // 세션에서 현재 테마이름을 읽기
+        $theme = session()->get('theme');
+        if($theme) {
+            $path = base_path('theme');
+            $theme = str_replace(['/','\\'], DIRECTORY_SEPARATOR, $theme);
+            $themePath = $path.DIRECTORY_SEPARATOR.$theme;
+            $uriPath = str_replace(['/','\\'], DIRECTORY_SEPARATOR, $uri);
+
+            ## Blade뷰
+            if (file_exists($themePath.$uriPath.".blade.php")) {
+                $_theme = str_replace(['/','\\'], ".", $theme);
+                $_uri = str_replace(['/','\\'], ".", $uri);
+                return view("theme::".$_theme.$_uri);
+            }
+
+            ## Html
+            //dd($themePath.$uriPath.".html");
+            if (file_exists($themePath.$uriPath.".html")) {
+                //$body = file_get_contents($themePath.$uriPath.".html");
+                // BinaryFileResponse 인스턴스 생성
+                $response = new BinaryFileResponse($themePath.$uriPath.".html");
+
+                // Content-Type 헤더 설정
+                $response->headers->set('Content-Type', "text/html; charset=utf-8");
+                return $response;
+            }
+
+        }
+
+    }
+}
 
 
 
