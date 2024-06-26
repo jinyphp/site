@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
-use Jiny\WireTable\Http\Controllers\DashboardController;
-class AdminSiteDashboard extends DashboardController
+use Jiny\WireTable\Http\Controllers\WireDashController;
+class AdminSiteDashboard extends WireDashController
 {
     public function __construct()
     {
