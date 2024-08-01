@@ -352,7 +352,10 @@ if(!function_exists("www_isImage")) {
             //$file = basename($filePath);
             $file = $path.DIRECTORY_SEPARATOR.$filename;
             $extension = strtolower(substr(strrchr($file,"."),1));
+            $content_Type="";
             switch( $extension ) {
+                //case "html": $content_Type="text/xml"; break;
+
                 case "gif": $content_Type="image/gif"; break;
                 case "png": $content_Type="image/png"; break;
                 case "jpeg":
@@ -414,32 +417,5 @@ if(!function_exists("www_isImage")) {
 }
 
 
-/**
- * Admin Site Router
- */
-if(function_exists('admin_prefix')) {
-    $prefix = admin_prefix();
-
-    Route::middleware(['web','auth', 'admin'])
-    ->name('admin.site')
-    ->prefix($prefix.'/site')->group(function () {
-
-        ## 설정
-        Route::get('slot', [
-            \Jiny\Site\Http\Controllers\Admin\SlotSettingController::class,
-            "index"
-        ]);
-        Route::get('userslot', [
-            \Jiny\Site\Http\Controllers\Admin\UserSlotSettingController::class,
-            "index"
-        ]);
-
-        // 사이트 데쉬보드
-        Route::get('/', [
-            \Jiny\Site\Http\Controllers\Admin\AdminSiteDashboard::class,
-            "index"]);
-
-    });
-}
 
 

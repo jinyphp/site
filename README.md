@@ -1,4 +1,5 @@
-# Site
+# jiny/Site 패키지
+`jiny/site` 패키지는 라라벨 
 
 ## 리소스
 레이아웃의 리소스들들 `_layouts` 폴더 안에 지정합니다.

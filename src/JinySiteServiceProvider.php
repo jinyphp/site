@@ -11,6 +11,8 @@ use Livewire\Livewire;
 class JinySiteServiceProvider extends ServiceProvider
 {
     private $package = "jiny-site";
+    private $components = [];
+
     public function boot()
     {
         // 모듈: 라우트 설정
@@ -45,8 +47,13 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Docs::class, "www-docs");
         Blade::component(\Jiny\Site\View\Components\Markdown::class, "www-markdown");
 
-        $this->dynamicComponents();
+        // 동적 컴포넌트
+        $this->dynamicComponents(); // 공용 _components
+        $this->slotDynamicComponents(); // slot _components
 
+        Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
+        Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
+        Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
 
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
@@ -59,6 +66,31 @@ class JinySiteServiceProvider extends ServiceProvider
             $slot = www_slot();
 
             $themePath = DIRECTORY_SEPARATOR.$slot.DIRECTORY_SEPARATOR."_includes".DIRECTORY_SEPARATOR.$themeFile;
+            if(file_exists($base.$themePath.".blade.php")) {
+                $themeContent = File::get($base.$themePath.".blade.php");
+            } else
+            if(file_exists($base.$themePath.".html")) {
+                $themeContent = File::get($base.$themePath.".html");
+            } else {
+                $themeContent = "can't read ".$themePath;
+            }
+
+            // 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
+            return Blade::compileString($themeContent, $themeVariables);
+        });
+
+
+        // 디렉티브
+        Blade::directive('partials', function ($expression) {
+            $args = str_getcsv($expression);
+            $themeFile = trim($args[0], '\'"');
+            $themeVariables = isset($args[1]) ? trim($args[1], '\'"') : '';
+
+            $base = resource_path('www');
+            $base .= DIRECTORY_SEPARATOR;
+            $slot = www_slot();
+
+            $themePath = DIRECTORY_SEPARATOR.$slot.DIRECTORY_SEPARATOR."_partials".DIRECTORY_SEPARATOR.$themeFile;
             if(file_exists($base.$themePath.".blade.php")) {
                 $themeContent = File::get($base.$themePath.".blade.php");
             } else
@@ -94,6 +126,36 @@ class JinySiteServiceProvider extends ServiceProvider
     {
 
         $base = resource_path('www');
+        $path = $base.DIRECTORY_SEPARATOR."_components";
+
+        // 디렉터리 생성
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $dir = scandir($path);
+        foreach($dir as $file) {
+            if($file == '.' || $file == '..') continue;
+            if($file[0] == '.') continue; // 숨김파일
+
+            if(substr($file, -10) === '.blade.php') {
+                $name = substr($file, 0, strlen($file)-10);
+
+                if(!in_array($name, $this->components)) {
+                    $this->components []= $name;
+                    Blade::component("www::_components.".$name, 'www_'.$name);
+                }
+            }
+
+        }
+
+
+
+    }
+
+    private function slotDynamicComponents()
+    {
+        $base = resource_path('www');
         $base .= DIRECTORY_SEPARATOR;
         $slot = www_slot();
 
@@ -111,49 +173,14 @@ class JinySiteServiceProvider extends ServiceProvider
 
             if(substr($file, -10) === '.blade.php') {
                 $name = substr($file, 0, strlen($file)-10);
-                //dump($name);
-                Blade::component("www::".$slot.'._components.'.$name, 'www-'.$name);
+
+                if(!in_array($name, $this->components)) {
+                    $this->components []= $name;
+                    Blade::component("www::".$slot.'._components.'.$name, 'www_'.$name);
+                }
             }
 
         }
-
-        //dd($dir);
-
-
-
-
-
-
-    //     private function scanComponents($path, $except=[])
-    // {
-    //     foreach($except as $i => $name) {
-    //         $except[$i] .= ".blade.php";
-    //     }
-
-    //
-    //     $names = [];
-    //     foreach($dir as $file) {
-    //         if($file == '.' || $file == '..') continue;
-    //         if($file[0] == '.') continue;
-    //         if(in_array($file,$except)) continue;
-
-    //         if(is_dir($path.DIRECTORY_SEPARATOR.$file)) {
-    //             $sub = $this->scanComponents($path.DIRECTORY_SEPARATOR.$file);
-    //             foreach($sub as $name) {
-    //                 $component = str_replace(".blade.php","",$file.".".$name);
-    //                 Blade::component(\Jiny\Theme\View\Components\ThemeComponent::class, "theme-".$component);
-    //                 $names []= $component;
-    //             }
-    //         } else {
-    //             $component = str_replace(".blade.php","",$file);
-    //             Blade::component(\Jiny\Theme\View\Components\ThemeComponent::class, "theme-".$component);
-    //             $names []= $component;
-    //         }
-    //     }
-
-    //     return $names;
-    // }
-
     }
 
     public function register()
