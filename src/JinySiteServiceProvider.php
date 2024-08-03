@@ -82,9 +82,36 @@ class JinySiteServiceProvider extends ServiceProvider
 
         // 디렉티브
         Blade::directive('partials', function ($expression) {
+            // Parse the expression to extract the view name and variables
+            $args = str_getcsv($expression, ',', "'");
+            //$view = trim($args[0]);
+            $view = trim($args[0], '\'"');
+            $variables = isset($args[1]) ? trim($args[1]) : '[]';
+
+            // Add the prefix to the view name
+            $slot = www_slot();
+            //dd($slot);
+            if($slot) {
+                //$view = "'www::".$slot."._partials." . $view . "'";
+                //$view = "'www::shop_fashion-v1._partials." . $view . "'";
+                $view = "'www::" . $slot . "._partials." . $view . "'";
+                //dd($view);
+            } else {
+                $view = "'www::_partials." . $view . "'";
+            }
+
+
+            // Return the directive code to include the view
+            return "<?php echo \$__env->make({$view}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
+        });
+        /*
+        Blade::directive('partials', function ($expression) {
             $args = str_getcsv($expression);
             $themeFile = trim($args[0], '\'"');
             $themeVariables = isset($args[1]) ? trim($args[1], '\'"') : '';
+            //
+            //$themeVariables = isset($args[1]) ? trim($args[1]) : '[]';
+            //dd($themeVariables);
 
             $base = resource_path('www');
             $base .= DIRECTORY_SEPARATOR;
@@ -102,7 +129,11 @@ class JinySiteServiceProvider extends ServiceProvider
 
             // 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
             return Blade::compileString($themeContent, $themeVariables);
+
+
         });
+        */
+
 
     }
 
