@@ -1,5 +1,4 @@
 <?php
-
 namespace Jiny\Site;
 
 use Illuminate\Support\ServiceProvider;
@@ -84,55 +83,37 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::directive('partials', function ($expression) {
             // Parse the expression to extract the view name and variables
             $args = str_getcsv($expression, ',', "'");
-            //$view = trim($args[0]);
             $view = trim($args[0], '\'"');
             $variables = isset($args[1]) ? trim($args[1]) : '[]';
 
+            // // Determine if the view is a string literal or a variable
+            // if (preg_match('/^\$[a-zA-Z_]\w*$/', $view)) {
+            //     // It's a variable, so don't wrap it in quotes
+            //     $viewCode = "{$view}";
+            // } else {
+            //     // It's a string literal, so wrap it in quotes
+            //     $viewCode = "'{$view}'";
+            // }
+
             // Add the prefix to the view name
             $slot = www_slot();
-            //dd($slot);
             if($slot) {
-                //$view = "'www::".$slot."._partials." . $view . "'";
-                //$view = "'www::shop_fashion-v1._partials." . $view . "'";
                 $view = "'www::" . $slot . "._partials." . $view . "'";
-                //dd($view);
             } else {
                 $view = "'www::_partials." . $view . "'";
             }
+
+            /*
+
+
+            //dd($viewCode);
+            */
 
 
             // Return the directive code to include the view
             return "<?php echo \$__env->make({$view}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
         });
-        /*
-        Blade::directive('partials', function ($expression) {
-            $args = str_getcsv($expression);
-            $themeFile = trim($args[0], '\'"');
-            $themeVariables = isset($args[1]) ? trim($args[1], '\'"') : '';
-            //
-            //$themeVariables = isset($args[1]) ? trim($args[1]) : '[]';
-            //dd($themeVariables);
 
-            $base = resource_path('www');
-            $base .= DIRECTORY_SEPARATOR;
-            $slot = www_slot();
-
-            $themePath = DIRECTORY_SEPARATOR.$slot.DIRECTORY_SEPARATOR."_partials".DIRECTORY_SEPARATOR.$themeFile;
-            if(file_exists($base.$themePath.".blade.php")) {
-                $themeContent = File::get($base.$themePath.".blade.php");
-            } else
-            if(file_exists($base.$themePath.".html")) {
-                $themeContent = File::get($base.$themePath.".html");
-            } else {
-                $themeContent = "can't read ".$themePath;
-            }
-
-            // 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
-            return Blade::compileString($themeContent, $themeVariables);
-
-
-        });
-        */
 
 
     }
@@ -218,6 +199,9 @@ class JinySiteServiceProvider extends ServiceProvider
     {
         /* 라이브와이어 컴포넌트 등록 */
         $this->app->afterResolving(BladeCompiler::class, function () {
+            Livewire::component('site-setting',
+                \Jiny\Site\Http\Livewire\SiteSetting::class);
+
             Livewire::component('site-session-slot',
                 \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
             Livewire::component('site-slot-setting',

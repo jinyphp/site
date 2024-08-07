@@ -5,27 +5,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-/**
- *  자동 URL 라우팅
- */
+
 if(!function_exists("isLivewireUri")) {
     function isLivewireUri() {
         if(isset($_SERVER['REQUEST_URI'])) {
             $uris = explode('/', $_SERVER['REQUEST_URI']);
             if($uris[1] == "livewire") {
                 return false;
-                //dd($uris);
-                //return true;
             }
         }
-
         return false;
     }
 }
 
 
-
-
+/**
+ *  자동 URL 라우팅
+ */
 if(!function_exists("route_dynamic")) {
 
     // 인증된 사용자를 처리하는 라우트 그룹
@@ -456,13 +452,17 @@ if(!function_exists("route_dynamic")) {
             if (view()->exists($filename))
             {
                 // 리소스 뷰를 바로 출력합니다.
-                return view($filename);
+                return view($filename,[
+
+                ]);
             }
             // 혹시 폴더명이 존재하는 경우, $filename/index.blade.php를
             // 출력합니다.
             else if (view()->exists($filename.".index"))
             {
-                return view($filename.".index");
+                return view($filename.".index",[
+
+                ]);
             }
 
         }

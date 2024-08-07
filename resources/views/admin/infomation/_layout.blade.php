@@ -33,21 +33,13 @@
             </div>
         </div>
 
-        @livewire('site-setting',[
-            'actions' => $actions,
-            'jsonName' => "site_setting"
-        ])
 
-
-
-        {{-- @livewire('WireConfigPHP', ['actions'=>$actions]) --}}
+        @livewire('WireConfigYaml', ['actions'=>$actions])
 
         {{-- SuperAdmin Actions Setting --}}
-        {{--
-        @if(Module::has('Actions'))
+        {{-- @if(Module::has('Actions'))
             @livewire('setActionRule', ['actions'=>$actions])
-        @endif
-        --}}
+        @endif --}}
 
     </x-theme-layout>
 </x-theme>
