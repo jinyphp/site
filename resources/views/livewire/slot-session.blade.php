@@ -16,7 +16,7 @@
 
     <x-flex-between class="mt-2">
         <div>
-
+            {{$message}}
         </div>
         <div>
             <button class="btn btn-primary" wire:click="submit()">적용</button>

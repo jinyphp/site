@@ -23,7 +23,7 @@ class JinySiteServiceProvider extends ServiceProvider
 
         $this->resourceSetting();
 
-        Blade::component($this->package.'::components.'.'easy_setting', 'easy-setting');
+        Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
 
         /* 컴포넌트 */
         Blade::component(\Jiny\Site\View\Components\App::class, "www-app");
@@ -86,32 +86,50 @@ class JinySiteServiceProvider extends ServiceProvider
             $view = trim($args[0], '\'"');
             $variables = isset($args[1]) ? trim($args[1]) : '[]';
 
-            // // Determine if the view is a string literal or a variable
-            // if (preg_match('/^\$[a-zA-Z_]\w*$/', $view)) {
-            //     // It's a variable, so don't wrap it in quotes
-            //     $viewCode = "{$view}";
-            // } else {
-            //     // It's a string literal, so wrap it in quotes
-            //     $viewCode = "'{$view}'";
-            // }
-
             // Add the prefix to the view name
+            /*
             $slot = www_slot();
             if($slot) {
                 $view = "'www::" . $slot . "._partials." . $view . "'";
             } else {
                 $view = "'www::_partials." . $view . "'";
             }
-
-            /*
-
-
-            //dd($viewCode);
             */
 
+            // Check if the view contains '..' and adjust the path accordingly
+            if (strpos($view, '..') === 0) {
+                // Remove the leading '..' and any subsequent slashes or dots
+                $view = ltrim($view, '.\\/');
+
+                // Adjust the view path to move up one directory level
+                //$viewPath = 'www::_partials.'. $view;
+                $viewPath = "'www::_partials." . $view . "'";
+            } else {
+                // Add the prefix to the view name
+                $slot = www_slot();
+                if ($slot) {
+                    //$viewPath = "www::" . $slot . "._partials." . $view;
+                    $viewPath = "'www::" . $slot . "._partials." . $view . "'";
+                } else {
+                    //$viewPath = "www::_partials." . $view;
+                    $viewPath = "'www::_partials." . $view . "'";
+                }
+            }
+
+            //dd($viewPath);
 
             // Return the directive code to include the view
-            return "<?php echo \$__env->make({$view}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
+
+            return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
+
+            /*
+            return "<?php if(view()->exists({$viewPath})): ?>" .
+                "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>" .
+                "<?php else: ?>" .
+                "<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
+                "<?php endif; ?>";
+            */
+
         });
 
 
@@ -126,6 +144,11 @@ class JinySiteServiceProvider extends ServiceProvider
             mkdir($path,0777,true);
         }
         $this->loadViewsFrom($path, 'www');
+
+        $partPath = $path.DIRECTORY_SEPARATOR."_partials";
+        if(!is_dir($partPath)) {
+            mkdir($partPath,0777,true);
+        }
 
         if(!is_dir($path."/slot1")) {
             mkdir($path."/slot1",0777,true);
