@@ -97,9 +97,10 @@ class JinySiteServiceProvider extends ServiceProvider
             */
 
             // Check if the view contains '..' and adjust the path accordingly
-            if (strpos($view, '..') === 0) {
+            if (strpos($view, '../') === 0) {
                 // Remove the leading '..' and any subsequent slashes or dots
-                $view = ltrim($view, '.\\/');
+                //$view = ltrim($view, '.\\/');
+                $view = ltrim($view, './');
 
                 // Adjust the view path to move up one directory level
                 //$viewPath = 'www::_partials.'. $view;
@@ -116,6 +117,8 @@ class JinySiteServiceProvider extends ServiceProvider
                 }
             }
 
+
+            $viewPath = str_replace('/','.',$viewPath);
             //dd($viewPath);
 
             // Return the directive code to include the view
@@ -133,6 +136,31 @@ class JinySiteServiceProvider extends ServiceProvider
         });
 
 
+        // 디렉티브
+        Blade::directive('blocks', function ($expression) {
+            // Parse the expression to extract the view name and variables
+            $args = str_getcsv($expression, ',', "'");
+            $view = trim($args[0], '\'"');
+            $variables = isset($args[1]) ? trim($args[1]) : '[]';
+
+            // Check if the view contains '..' and adjust the path accordingly
+            if (strpos($view, '../') === 0) {
+                $view = ltrim($view, './');
+                $viewPath = "'www::_blocks." . $view . "'";
+            } else {
+                // Add the prefix to the view name
+                $slot = www_slot();
+                if ($slot) {
+                    $viewPath = "'www::" . $slot . "._blocks." . $view . "'";
+                } else {
+                    $viewPath = "'www::_blocks." . $view . "'";
+                }
+            }
+
+            $viewPath = str_replace('/','.',$viewPath);
+            return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
+
+        });
 
     }
 
