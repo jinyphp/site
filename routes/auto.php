@@ -29,14 +29,14 @@ if(!function_exists("route_dynamic")) {
 
         // 인증된 사용자에 대한 fallback 설정
         Route::fallback(function () {
-            // www절대경로 파일 체크
+
+            // 1.www절대경로 파일 체크
+            // slot을 포함하는 www 절대경로로 접속하는 경우
             if($res = wwwFile($_SERVER['REQUEST_URI'])) {
                 return $res;
             }
 
-
-
-
+            // 2.slot
             // 여기에 인증된 사용자에 대한 처리를 추가합니다.
             $user = Auth::user();
             $slots = config("jiny.site.userslot");
@@ -67,25 +67,22 @@ if(!function_exists("route_dynamic")) {
                 return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
             }
 
-
             if(isset($_SERVER['REQUEST_URI'])) {
-                ## 라우트 순번1 : www.slot에서 검색
+                ## www.slot에서 검색
                 if($res = route_dynamic($_SERVER['REQUEST_URI'], $activeSlot)) {
                     return $res;
                 }
+            }
 
-                ## 라우트 순번2 : 테마에서 검색
+            // 3.테마검색
+            if(isset($_SERVER['REQUEST_URI'])) {
                 if($res = route_dynamic_theme($_SERVER['REQUEST_URI'])) {
                     return $res;
                 }
-
-
             }
 
-
-
-            ## 404 오류 페이지 출력
-            ## www 리소스에서
+            ## 4.오류 페이지 출력
+            ## 404 www 리소스에서
             if(view()->exists("www.".$activeSlot."::404")) {
                 return view("www.".$activeSlot."::404");
             }
@@ -234,9 +231,18 @@ if(!function_exists("route_dynamic")) {
      */
     if(!function_exists("route_dynamic_theme")) {
         function route_dynamic_theme($uri) {
-            // 세션에서 현재 테마이름을 읽기
-            $theme = session()->get('theme');
+            $theme = xTheme()->getTheme();
+            //// 세션에서 현재 테마이름을 읽기
+            //$theme = session()->get('theme');
             if($theme) {
+                $uriPath = str_replace(['/'], ".", $uri);
+                $viewFile = $theme.$uriPath;
+                //dd($viewFile);
+                if (View::exists("theme::".$viewFile)) {
+                    return view("theme::".$viewFile);
+                }
+
+                /*
                 $path = base_path('theme');
                 $theme = str_replace(['/','\\'], DIRECTORY_SEPARATOR, $theme);
                 $themePath = $path.DIRECTORY_SEPARATOR.$theme;
@@ -248,13 +254,18 @@ if(!function_exists("route_dynamic")) {
                     $_uri = str_replace(['/','\\'], ".", $uri);
                     return view("theme::".$_theme.$_uri);
                 }
+                */
 
-                ## Html
+                ##
+                $path = base_path('theme');
+                $uriPath = str_replace(['.'], DIRECTORY_SEPARATOR, $viewFile);
+                //dd($path.DIRECTORY_SEPARATOR.$uriPath);
+
                 //dd($themePath.$uriPath.".html");
-                if (file_exists($themePath.$uriPath.".html")) {
+                if (file_exists($path.DIRECTORY_SEPARATOR.$uriPath.".html")) {
                     //$body = file_get_contents($themePath.$uriPath.".html");
                     // BinaryFileResponse 인스턴스 생성
-                    $response = new BinaryFileResponse($themePath.$uriPath.".html");
+                    $response = new BinaryFileResponse($path.DIRECTORY_SEPARATOR.$uriPath.".html");
 
                     // Content-Type 헤더 설정
                     $response->headers->set('Content-Type', "text/html; charset=utf-8");
