@@ -53,7 +53,8 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
         Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
         Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
-
+        Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
+        Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
             $args = str_getcsv($expression);
@@ -122,116 +123,117 @@ class JinySiteServiceProvider extends ServiceProvider
 
             return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
 
-            /*
-            return "<?php if(view()->exists({$viewPath})): ?>" .
-                "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>" .
-                "<?php else: ?>" .
-                "<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
-                "<?php endif; ?>";
-            */
+/*
+return "<?php if(view()->exists({$viewPath})): ?>" .
+"<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>"
+.
+"<?php else: ?>" .
+"<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
+"<?php endif; ?>";
+*/
 
-        });
-
-
-
-    }
-
-    private function resourceSetting()
-    {
-        // Custom Site Resources
-        $path = resource_path('www');
-        if(!is_dir($path)) {
-            mkdir($path,0777,true);
-        }
-        $this->loadViewsFrom($path, 'www');
-
-        $partPath = $path.DIRECTORY_SEPARATOR."_partials";
-        if(!is_dir($partPath)) {
-            mkdir($partPath,0777,true);
-        }
-
-        if(!is_dir($path."/slot1")) {
-            mkdir($path."/slot1",0777,true);
-        }
-        $this->loadViewsFrom($path."/slot1", 'www1');
-    }
-
-    // _components 안에 있는 파일들을 동적으로 컴포넌트화 합니다.
-    private function dynamicComponents()
-    {
-
-        $base = resource_path('www');
-        $path = $base.DIRECTORY_SEPARATOR."_components";
-
-        // 디렉터리 생성
-        if(!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        $dir = scandir($path);
-        foreach($dir as $file) {
-            if($file == '.' || $file == '..') continue;
-            if($file[0] == '.') continue; // 숨김파일
-
-            if(substr($file, -10) === '.blade.php') {
-                $name = substr($file, 0, strlen($file)-10);
-
-                if(!in_array($name, $this->components)) {
-                    $this->components []= $name;
-                    Blade::component("www::_components.".$name, 'www_'.$name);
-                }
-            }
-
-        }
+});
 
 
 
-    }
+}
 
-    private function slotDynamicComponents()
-    {
-        $base = resource_path('www');
-        $base .= DIRECTORY_SEPARATOR;
-        $slot = www_slot();
+private function resourceSetting()
+{
+// Custom Site Resources
+$path = resource_path('www');
+if(!is_dir($path)) {
+mkdir($path,0777,true);
+}
+$this->loadViewsFrom($path, 'www');
 
-        $path = $base.DIRECTORY_SEPARATOR.$slot;
-        $path .= DIRECTORY_SEPARATOR."_components";
+$partPath = $path.DIRECTORY_SEPARATOR."_partials";
+if(!is_dir($partPath)) {
+mkdir($partPath,0777,true);
+}
 
-        if(!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
+if(!is_dir($path."/slot1")) {
+mkdir($path."/slot1",0777,true);
+}
+$this->loadViewsFrom($path."/slot1", 'www1');
+}
 
-        $dir = scandir($path);
-        foreach($dir as $file) {
-            if($file == '.' || $file == '..') continue;
-            if($file[0] == '.') continue; // 숨김파일
+// _components 안에 있는 파일들을 동적으로 컴포넌트화 합니다.
+private function dynamicComponents()
+{
 
-            if(substr($file, -10) === '.blade.php') {
-                $name = substr($file, 0, strlen($file)-10);
+$base = resource_path('www');
+$path = $base.DIRECTORY_SEPARATOR."_components";
 
-                if(!in_array($name, $this->components)) {
-                    $this->components []= $name;
-                    Blade::component("www::".$slot.'._components.'.$name, 'www_'.$name);
-                }
-            }
+// 디렉터리 생성
+if(!is_dir($path)) {
+mkdir($path, 0777, true);
+}
 
-        }
-    }
+$dir = scandir($path);
+foreach($dir as $file) {
+if($file == '.' || $file == '..') continue;
+if($file[0] == '.') continue; // 숨김파일
 
-    public function register()
-    {
-        /* 라이브와이어 컴포넌트 등록 */
-        $this->app->afterResolving(BladeCompiler::class, function () {
-            Livewire::component('site-setting',
-                \Jiny\Site\Http\Livewire\SiteSetting::class);
+if(substr($file, -10) === '.blade.php') {
+$name = substr($file, 0, strlen($file)-10);
 
-            Livewire::component('site-session-slot',
-                \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
-            Livewire::component('site-slot-setting',
-                \Jiny\Site\Http\Livewire\SiteSlotSetting::class);
-            Livewire::component('site-userslot-setting',
-                \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+if(!in_array($name, $this->components)) {
+$this->components []= $name;
+Blade::component("www::_components.".$name, 'www_'.$name);
+}
+}
 
-        });
-    }
+}
+
+
+
+}
+
+private function slotDynamicComponents()
+{
+$base = resource_path('www');
+$base .= DIRECTORY_SEPARATOR;
+$slot = www_slot();
+
+$path = $base.DIRECTORY_SEPARATOR.$slot;
+$path .= DIRECTORY_SEPARATOR."_components";
+
+if(!is_dir($path)) {
+mkdir($path, 0777, true);
+}
+
+$dir = scandir($path);
+foreach($dir as $file) {
+if($file == '.' || $file == '..') continue;
+if($file[0] == '.') continue; // 숨김파일
+
+if(substr($file, -10) === '.blade.php') {
+$name = substr($file, 0, strlen($file)-10);
+
+if(!in_array($name, $this->components)) {
+$this->components []= $name;
+Blade::component("www::".$slot.'._components.'.$name, 'www_'.$name);
+}
+}
+
+}
+}
+
+public function register()
+{
+/* 라이브와이어 컴포넌트 등록 */
+$this->app->afterResolving(BladeCompiler::class, function () {
+Livewire::component('site-setting',
+\Jiny\Site\Http\Livewire\SiteSetting::class);
+
+Livewire::component('site-session-slot',
+\Jiny\Site\Http\Livewire\SiteSessionSlot::class);
+Livewire::component('site-slot-setting',
+\Jiny\Site\Http\Livewire\SiteSlotSetting::class);
+Livewire::component('site-userslot-setting',
+\Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+
+});
+}
 }
