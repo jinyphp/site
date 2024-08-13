@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 
 class JinySiteServiceProvider extends ServiceProvider
@@ -40,6 +41,7 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Rightbar::class, "www-rightbar");
 
         Blade::component(\Jiny\Site\View\Components\Menu::class, "www-menu");
+        Blade::component(\Jiny\Site\View\Components\TopMenu::class, "www-topmenu");
 
         Blade::component(\Jiny\Site\View\Components\Home::class, "www-home");
         Blade::component(\Jiny\Site\View\Components\Page::class, "www-page");
@@ -53,8 +55,10 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
         Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
         Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
+
         Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
         Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
+
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
             $args = str_getcsv($expression);
@@ -98,9 +102,10 @@ class JinySiteServiceProvider extends ServiceProvider
             */
 
             // Check if the view contains '..' and adjust the path accordingly
-            if (strpos($view, '..') === 0) {
+            if (strpos($view, '../') === 0) {
                 // Remove the leading '..' and any subsequent slashes or dots
-                $view = ltrim($view, '.\\/');
+                //$view = ltrim($view, '.\\/');
+                $view = ltrim($view, './');
 
                 // Adjust the view path to move up one directory level
                 //$viewPath = 'www::_partials.'. $view;
@@ -117,123 +122,150 @@ class JinySiteServiceProvider extends ServiceProvider
                 }
             }
 
+
+            $viewPath = str_replace('/','.',$viewPath);
             //dd($viewPath);
 
             // Return the directive code to include the view
 
             return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
 
-/*
-return "<?php if(view()->exists({$viewPath})): ?>" .
-"<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>"
-.
-"<?php else: ?>" .
-"<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
-"<?php endif; ?>";
-*/
+            /*
+            return "<?php if(view()->exists({$viewPath})): ?>" .
+                "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>" .
+                "<?php else: ?>" .
+                "<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
+                "<?php endif; ?>";
+            */
 
-});
-
+        });
 
 
-}
+        // 디렉티브
+        Blade::directive('blocks', function ($expression) {
+            // Parse the expression to extract the view name and variables
+            $args = str_getcsv($expression, ',', "'");
+            $view = trim($args[0], '\'"');
+            $variables = isset($args[1]) ? trim($args[1]) : '[]';
 
-private function resourceSetting()
-{
-// Custom Site Resources
-$path = resource_path('www');
-if(!is_dir($path)) {
-mkdir($path,0777,true);
-}
-$this->loadViewsFrom($path, 'www');
+            // Check if the view contains '..' and adjust the path accordingly
+            if (strpos($view, '../') === 0) {
+                $view = ltrim($view, './');
+                $viewPath = "'www::_blocks." . $view . "'";
+            } else {
+                // Add the prefix to the view name
+                $slot = www_slot();
+                if ($slot) {
+                    $viewPath = "'www::" . $slot . "._blocks." . $view . "'";
+                } else {
+                    $viewPath = "'www::_blocks." . $view . "'";
+                }
+            }
 
-$partPath = $path.DIRECTORY_SEPARATOR."_partials";
-if(!is_dir($partPath)) {
-mkdir($partPath,0777,true);
-}
+            $viewPath = str_replace('/','.',$viewPath);
+            return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
 
-if(!is_dir($path."/slot1")) {
-mkdir($path."/slot1",0777,true);
-}
-$this->loadViewsFrom($path."/slot1", 'www1');
-}
+        });
 
-// _components 안에 있는 파일들을 동적으로 컴포넌트화 합니다.
-private function dynamicComponents()
-{
+    }
 
-$base = resource_path('www');
-$path = $base.DIRECTORY_SEPARATOR."_components";
+    private function resourceSetting()
+    {
+        // Custom Site Resources
+        $path = resource_path('www');
+        if(!is_dir($path)) {
+            mkdir($path,0777,true);
+        }
+        $this->loadViewsFrom($path, 'www');
 
-// 디렉터리 생성
-if(!is_dir($path)) {
-mkdir($path, 0777, true);
-}
+        $partPath = $path.DIRECTORY_SEPARATOR."_partials";
+        if(!is_dir($partPath)) {
+            mkdir($partPath,0777,true);
+        }
 
-$dir = scandir($path);
-foreach($dir as $file) {
-if($file == '.' || $file == '..') continue;
-if($file[0] == '.') continue; // 숨김파일
+        if(!is_dir($path."/slot1")) {
+            mkdir($path."/slot1",0777,true);
+        }
+        $this->loadViewsFrom($path."/slot1", 'www1');
+    }
 
-if(substr($file, -10) === '.blade.php') {
-$name = substr($file, 0, strlen($file)-10);
+    // _components 안에 있는 파일들을 동적으로 컴포넌트화 합니다.
+    private function dynamicComponents()
+    {
 
-if(!in_array($name, $this->components)) {
-$this->components []= $name;
-Blade::component("www::_components.".$name, 'www_'.$name);
-}
-}
+        $base = resource_path('www');
+        $path = $base.DIRECTORY_SEPARATOR."_components";
 
-}
+        // 디렉터리 생성
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $dir = scandir($path);
+        foreach($dir as $file) {
+            if($file == '.' || $file == '..') continue;
+            if($file[0] == '.') continue; // 숨김파일
+
+            if(substr($file, -10) === '.blade.php') {
+                $name = substr($file, 0, strlen($file)-10);
+
+                if(!in_array($name, $this->components)) {
+                    $this->components []= $name;
+                    Blade::component("www::_components.".$name, 'www_'.$name);
+                }
+            }
+
+        }
 
 
 
-}
+    }
 
-private function slotDynamicComponents()
-{
-$base = resource_path('www');
-$base .= DIRECTORY_SEPARATOR;
-$slot = www_slot();
+    private function slotDynamicComponents()
+    {
+        $base = resource_path('www');
+        $base .= DIRECTORY_SEPARATOR;
+        $slot = www_slot();
 
-$path = $base.DIRECTORY_SEPARATOR.$slot;
-$path .= DIRECTORY_SEPARATOR."_components";
+        $path = $base.DIRECTORY_SEPARATOR.$slot;
+        $path .= DIRECTORY_SEPARATOR."_components";
 
-if(!is_dir($path)) {
-mkdir($path, 0777, true);
-}
+        if(!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
 
-$dir = scandir($path);
-foreach($dir as $file) {
-if($file == '.' || $file == '..') continue;
-if($file[0] == '.') continue; // 숨김파일
 
-if(substr($file, -10) === '.blade.php') {
-$name = substr($file, 0, strlen($file)-10);
+        $dir = scandir($path);
+        foreach($dir as $file) {
+            if($file == '.' || $file == '..') continue;
+            if($file[0] == '.') continue; // 숨김파일
 
-if(!in_array($name, $this->components)) {
-$this->components []= $name;
-Blade::component("www::".$slot.'._components.'.$name, 'www_'.$name);
-}
-}
+            if(substr($file, -10) === '.blade.php') {
+                $name = substr($file, 0, strlen($file)-10);
 
-}
-}
+                if(!in_array($name, $this->components)) {
+                    $this->components []= $name;
+                    Blade::component("www::".$slot.'._components.'.$name, 'www_'.$name);
+                }
+            }
 
-public function register()
-{
-/* 라이브와이어 컴포넌트 등록 */
-$this->app->afterResolving(BladeCompiler::class, function () {
-Livewire::component('site-setting',
-\Jiny\Site\Http\Livewire\SiteSetting::class);
+        }
+    }
 
-Livewire::component('site-session-slot',
-\Jiny\Site\Http\Livewire\SiteSessionSlot::class);
-Livewire::component('site-slot-setting',
-\Jiny\Site\Http\Livewire\SiteSlotSetting::class);
-Livewire::component('site-userslot-setting',
-\Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+    public function register()
+    {
+        /* 라이브와이어 컴포넌트 등록 */
+        $this->app->afterResolving(BladeCompiler::class, function () {
+            Livewire::component('site-setting',
+                \Jiny\Site\Http\Livewire\SiteSetting::class);
 
-});
-}
+            Livewire::component('site-session-slot',
+                \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
+            Livewire::component('site-slot-setting',
+                \Jiny\Site\Http\Livewire\SiteSlotSetting::class);
+            Livewire::component('site-userslot-setting',
+                \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+
+        });
+    }
 }
