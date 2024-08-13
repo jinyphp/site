@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
 use Jiny\Config\Http\Controllers\ConfigController;
-class SettingController extends ConfigController
+class AdminSiteSetting extends ConfigController
 {
     public function __construct()
     {
@@ -22,7 +22,7 @@ class SettingController extends ConfigController
         $this->actions['filename'] = "jiny/site/setting"; // 설정파일명(경로)
 
         $this->actions['view']['form'] = "jiny-site::admin.setting.form";
-        $this->actions['view']['main'] = "jiny-site::admin.infomation.layout";
+        $this->actions['view']['main'] = "jiny-site::admin.setting.layout";
 
         $this->actions['title'] = "Site 설정";
         $this->actions['subtitle'] = "다양한 사이트의 설정을 입력합니다.";

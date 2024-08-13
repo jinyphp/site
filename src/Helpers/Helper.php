@@ -55,6 +55,34 @@ if(!function_exists("www_slot")) {
     }
 }
 
+## 사이트의 공용 설정을 읽어 옵니다.
+function siteInfo($key=null) {
+    $obj = \Jiny\Site\SiteSettings::instance("site_info");
+    return $obj->get($key);
+}
 
+function siteSetting($key=null) {
+    $obj = \Jiny\Site\SiteSettings::instance("site_setting");
+    return $obj->get($key);
+}
+
+
+function site_log_sum($year=null, $month=null, $day=null)
+{
+    $db = DB::table('site_log');
+    if($year) {
+        $db->where('year', $year);
+    }
+    if($month) {
+        $db->where('month', $month);
+    }
+
+    if($day) {
+        $db->where('day', $day);
+    }
+
+    $sum = $db->sum('cnt');
+    return $sum;
+}
 
 

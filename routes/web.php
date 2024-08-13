@@ -3,6 +3,27 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+Route::middleware(['web'])->group(function(){
+    ## about 기능
+    Route::get('/', [
+        \Jiny\Site\Http\Controllers\Site\SiteHome::class,
+        "index"]);
+
+    ## about 기능
+    Route::get('/about', [
+        \Jiny\Site\Http\Controllers\Site\SiteAbout::class,
+        "index"]);
+
+    ## contact 기능
+    Route::get('/contact', [
+            \Jiny\Site\Http\Controllers\Site\SitePartialsView::class,
+            "index"]);
+
+    ## help 기능
+    Route::get('/help', [
+        \Jiny\Site\Http\Controllers\Site\SitePartialsView::class,
+        "index"]);
+});
 
 
 include(__DIR__.DIRECTORY_SEPARATOR."auto.php");
@@ -18,6 +39,24 @@ if(function_exists('admin_prefix')) {
     ->name('admin.site')
     ->prefix($prefix.'/site')->group(function () {
 
+        Route::get('sitemap', [\Jiny\Site\Http\Controllers\Admin\AdminSitemap::class,
+            "index"]);
+
+        Route::get('layout', [\Jiny\Site\Http\Controllers\Admin\AdminSiteLayout::class,
+            "index"]);
+
+        Route::get('log', [\Jiny\Site\Http\Controllers\Admin\AdminSiteLog::class,
+            "index"]);
+
+        Route::get('seo', [\Jiny\Site\Http\Controllers\Admin\AdminSiteSeo::class,
+            "index"]);
+
+        Route::get('actions', [\Jiny\Site\Http\Controllers\Admin\AdminSiteActions::class,
+            "index"]);
+
+        Route::get('images', [\Jiny\Site\Http\Controllers\Admin\AdminSiteImages::class,
+            "index"]);
+
         ## 상단설정 정보
         Route::get('header', [\Jiny\Site\Http\Controllers\Admin\AdminHeader::class,
             "index"]);
@@ -27,11 +66,13 @@ if(function_exists('admin_prefix')) {
             "index"]);
 
         ## 사이트 정보설정
-        Route::get('info', [\Jiny\Site\Http\Controllers\Admin\InfomationController::class,
+        Route::get('info', [
+            \Jiny\Site\Http\Controllers\Admin\AdminSiteInfomation::class,
             "index"]);
 
         ## 설정
-        Route::get('setting', [\Jiny\Site\Http\Controllers\Admin\SettingController::class,
+        Route::get('setting', [
+            \Jiny\Site\Http\Controllers\Admin\AdminSiteSetting::class,
             "index"]);
 
 

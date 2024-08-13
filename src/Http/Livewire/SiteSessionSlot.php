@@ -11,10 +11,20 @@ class SiteSessionSlot extends Component
     public $userSlot = [];
     public $selectedSlot;
 
+    public $message;
+
     public function mount()
     {
         $this->slots = config("jiny.site.slot");
+        if(is_scalar($this->slots)) {
+            $this->slots = [];
+        }
+
+
         $this->userSlot = config("jiny.site.userslot");
+        if(is_scalar($this->userSlot)) {
+            $this->userSlot = [];
+        }
 
         $user = Auth::user();
         if($user) {
@@ -46,10 +56,22 @@ class SiteSessionSlot extends Component
     public function submit()
     {
         $user_id = $this->user_id;
-        $this->userSlot[$user_id] = $this->selectedSlot;
+        // 로그인 사용자 id가 있는 경우에만 적용됨
+        if($user_id) {
+            //dump($user_id);
+            //dd($this->userSlot);
+            $this->userSlot[$user_id] = $this->selectedSlot;
 
-        // 사용자별 user slot 저장
-        $this->phpSave($this->userSlot, "jiny/site/userslot");
+            // 사용자별 user slot 저장
+            $this->phpSave($this->userSlot, "jiny/site/userslot");
+
+            $this->message = null;
+
+            $this->dispatch('slot-reload');
+        } else {
+            $this->message = "로그인후 사용해 주세요.";
+        }
+
     }
 
     public function phpSave($slots, $path)

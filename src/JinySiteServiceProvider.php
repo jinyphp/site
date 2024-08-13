@@ -1,5 +1,4 @@
 <?php
-
 namespace Jiny\Site;
 
 use Illuminate\Support\ServiceProvider;
@@ -24,7 +23,7 @@ class JinySiteServiceProvider extends ServiceProvider
 
         $this->resourceSetting();
 
-        Blade::component($this->package.'::components.'.'easy_setting', 'easy-setting');
+        Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
 
         /* 컴포넌트 */
         Blade::component(\Jiny\Site\View\Components\App::class, "www-app");
@@ -46,8 +45,7 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Page::class, "www-page");
         Blade::component(\Jiny\Site\View\Components\Docs::class, "www-docs");
         Blade::component(\Jiny\Site\View\Components\Markdown::class, "www-markdown");
-        Blade::component("www::".www_slot()."._layouts.preview", "www-preview");
-        Blade::component("www::".www_slot()."._layouts.sidebarLink", "www-sidebarlink");
+
         // 동적 컴포넌트
         $this->dynamicComponents(); // 공용 _components
         $this->slotDynamicComponents(); // slot _components
@@ -55,7 +53,8 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
         Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
         Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
-
+        Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
+        Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
             $args = str_getcsv($expression);
@@ -85,55 +84,56 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::directive('partials', function ($expression) {
             // Parse the expression to extract the view name and variables
             $args = str_getcsv($expression, ',', "'");
-            //$view = trim($args[0]);
             $view = trim($args[0], '\'"');
             $variables = isset($args[1]) ? trim($args[1]) : '[]';
 
             // Add the prefix to the view name
+            /*
             $slot = www_slot();
-            //dd($slot);
             if($slot) {
-                //$view = "'www::".$slot."._partials." . $view . "'";
-                //$view = "'www::shop_fashion-v1._partials." . $view . "'";
                 $view = "'www::" . $slot . "._partials." . $view . "'";
-                //dd($view);
             } else {
                 $view = "'www::_partials." . $view . "'";
             }
+            */
 
+            // Check if the view contains '..' and adjust the path accordingly
+            if (strpos($view, '..') === 0) {
+                // Remove the leading '..' and any subsequent slashes or dots
+                $view = ltrim($view, '.\\/');
+
+                // Adjust the view path to move up one directory level
+                //$viewPath = 'www::_partials.'. $view;
+                $viewPath = "'www::_partials." . $view . "'";
+            } else {
+                // Add the prefix to the view name
+                $slot = www_slot();
+                if ($slot) {
+                    //$viewPath = "www::" . $slot . "._partials." . $view;
+                    $viewPath = "'www::" . $slot . "._partials." . $view . "'";
+                } else {
+                    //$viewPath = "www::_partials." . $view;
+                    $viewPath = "'www::_partials." . $view . "'";
+                }
+            }
+
+            //dd($viewPath);
 
             // Return the directive code to include the view
-            return "<?php echo \$__env->make({$view}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
-});
+
+            return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
+
 /*
-Blade::directive('partials', function ($expression) {
-$args = str_getcsv($expression);
-$themeFile = trim($args[0], '\'"');
-$themeVariables = isset($args[1]) ? trim($args[1], '\'"') : '';
-//
-//$themeVariables = isset($args[1]) ? trim($args[1]) : '[]';
-//dd($themeVariables);
-
-$base = resource_path('www');
-$base .= DIRECTORY_SEPARATOR;
-$slot = www_slot();
-
-$themePath = DIRECTORY_SEPARATOR.$slot.DIRECTORY_SEPARATOR."_partials".DIRECTORY_SEPARATOR.$themeFile;
-if(file_exists($base.$themePath.".blade.php")) {
-$themeContent = File::get($base.$themePath.".blade.php");
-} else
-if(file_exists($base.$themePath.".html")) {
-$themeContent = File::get($base.$themePath.".html");
-} else {
-$themeContent = "can't read ".$themePath;
-}
-
-// 변수를 템플릿에 전달하고 컴파일된 결과를 반환합니다.
-return Blade::compileString($themeContent, $themeVariables);
-
+return "<?php if(view()->exists({$viewPath})): ?>" .
+"<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>"
+.
+"<?php else: ?>" .
+"<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
+"<?php endif; ?>";
+*/
 
 });
-*/
+
 
 
 }
@@ -146,6 +146,11 @@ if(!is_dir($path)) {
 mkdir($path,0777,true);
 }
 $this->loadViewsFrom($path, 'www');
+
+$partPath = $path.DIRECTORY_SEPARATOR."_partials";
+if(!is_dir($partPath)) {
+mkdir($partPath,0777,true);
+}
 
 if(!is_dir($path."/slot1")) {
 mkdir($path."/slot1",0777,true);
@@ -219,6 +224,9 @@ public function register()
 {
 /* 라이브와이어 컴포넌트 등록 */
 $this->app->afterResolving(BladeCompiler::class, function () {
+Livewire::component('site-setting',
+\Jiny\Site\Http\Livewire\SiteSetting::class);
+
 Livewire::component('site-session-slot',
 \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
 Livewire::component('site-slot-setting',
