@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\ViewException;
 
 if(!function_exists("www_view")) {
     function www_view($path, $args=[]) {
@@ -85,4 +87,14 @@ function site_log_sum($year=null, $month=null, $day=null)
     return $sum;
 }
 
-
+// 주어진 블레이드의 실제 파일 경로를 반환합니다.
+function getViewPath($viewName) {
+    //$viewName = 'www::_blocks.hello';
+    try {
+        $filePath = View::getFinder()->find($viewName);
+        return $filePath;
+    } catch (ViewException $e) {
+        //echo "View not found: " . $e->getMessage();
+        return $e;
+    }
+}

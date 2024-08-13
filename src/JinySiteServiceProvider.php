@@ -91,53 +91,27 @@ class JinySiteServiceProvider extends ServiceProvider
             $view = trim($args[0], '\'"');
             $variables = isset($args[1]) ? trim($args[1]) : '[]';
 
-            // Add the prefix to the view name
-            /*
-            $slot = www_slot();
-            if($slot) {
-                $view = "'www::" . $slot . "._partials." . $view . "'";
-            } else {
-                $view = "'www::_partials." . $view . "'";
-            }
-            */
-
             // Check if the view contains '..' and adjust the path accordingly
             if (strpos($view, '../') === 0) {
                 // Remove the leading '..' and any subsequent slashes or dots
-                //$view = ltrim($view, '.\\/');
                 $view = ltrim($view, './');
 
                 // Adjust the view path to move up one directory level
-                //$viewPath = 'www::_partials.'. $view;
                 $viewPath = "'www::_partials." . $view . "'";
             } else {
                 // Add the prefix to the view name
                 $slot = www_slot();
                 if ($slot) {
-                    //$viewPath = "www::" . $slot . "._partials." . $view;
                     $viewPath = "'www::" . $slot . "._partials." . $view . "'";
                 } else {
-                    //$viewPath = "www::_partials." . $view;
                     $viewPath = "'www::_partials." . $view . "'";
                 }
             }
 
-
             $viewPath = str_replace('/','.',$viewPath);
-            //dd($viewPath);
 
             // Return the directive code to include the view
-
             return "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>";
-
-            /*
-            return "<?php if(view()->exists({$viewPath})): ?>" .
-                "<?php echo \$__env->make({$viewPath}, {$variables}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>" .
-                "<?php else: ?>" .
-                "<div style='color: red;'>Error: View '{$viewPath}' not found.</div>" .
-                "<?php endif; ?>";
-            */
-
         });
 
 
