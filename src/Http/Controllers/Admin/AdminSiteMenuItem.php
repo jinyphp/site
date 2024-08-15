@@ -24,7 +24,7 @@ class AdminSiteMenuItem extends WireDashController
         $this->actions['subtitle'] = "사이트 메뉴를 관리합니다.";
 
         //setMenu('menus/site.json');
-        //setTheme("admin/sidebar");
+        setTheme("admin.hyper");
     }
 
 

@@ -12,6 +12,7 @@ class JinySiteServiceProvider extends ServiceProvider
 {
     private $package = "jiny-site";
     private $components = [];
+    private $slot;
 
     public function boot()
     {
@@ -195,20 +196,30 @@ class JinySiteServiceProvider extends ServiceProvider
         }
     }
 
+
     private function slotDynamicComponents()
     {
         $base = resource_path('www');
         $base .= DIRECTORY_SEPARATOR;
+
         $slot = www_slot();
+        $this->slot = $slot;
 
         $path = $base.DIRECTORY_SEPARATOR.$slot;
-        $path .= DIRECTORY_SEPARATOR."_components";
+        //$path .= DIRECTORY_SEPARATOR."_components";
 
         if(!is_dir($path)) {
             mkdir($path, 0777, true);
         }
 
+        // 1. 컴포넌트 폴더 동적로드
+        if(!is_dir($path.DIRECTORY_SEPARATOR."_components")) {
+            mkdir($path.DIRECTORY_SEPARATOR."_components",0777,true);
+        }
+        $this->makeRescueComponents($path.DIRECTORY_SEPARATOR."_components",["www_"]);
 
+
+        /*
         $dir = scandir($path);
         foreach($dir as $file) {
             if($file == '.' || $file == '..') continue;
@@ -224,7 +235,70 @@ class JinySiteServiceProvider extends ServiceProvider
             }
 
         }
+        */
     }
+
+
+    private function makeRescueComponents($path, $prefix=null)
+    {
+        // $prefix = trim($prefix, '-'); // 앞에 -로 시작하는 것 제외
+
+        // 테마에서 파일을 읽기
+        $dir = scandir($path);
+        //dump($path);
+        //dd($dir);
+        foreach($dir as $file) {
+            if($file == '.' || $file == '..') continue;
+            if($file[0] == '.') continue; // 숨김파일
+
+            if(is_dir($path.DIRECTORY_SEPARATOR.$file)) {
+                // dd($prefix);
+                $temp = $prefix;
+                $temp []= $file;
+                $this->makeRescueComponents($path.DIRECTORY_SEPARATOR.$file, $temp);
+                continue;
+            }
+
+            // blade 파일인지 검사
+            if(substr($file, -10) === '.blade.php') {
+                $name = substr($file, 0, strlen($file)-10);
+
+                $temp = $prefix;
+                $temp []= $name;
+                if(count($temp)>0) {
+                    $comName = $temp[0];
+                    $comName .= implode('-',array_slice($temp,1));
+                    //dump($comName);
+                    //$comName .= "-".$name;
+                } else {
+                    //$comName = "";
+                    $comName = implode('-',array_slice($temp,1));
+                    //$comName .= "-".$name;
+                }
+                //dump($comName);
+
+
+                if(!in_array($comName, $this->components)) {
+                    $this->components []= $comName;
+
+                    $comPath = "www::".$this->slot."._components.";
+                    if(count($temp)>0) {
+                        $comPath .= implode('.',array_slice($temp,1));
+                    } else {
+
+                    }
+                    //$comPath .= ".".$name;
+                    //dd($comPath);
+                    //dump($comPath);
+                    Blade::component($comPath,$comName);
+                }
+            }
+
+        }
+    }
+
+
+
 
     public function register()
     {
