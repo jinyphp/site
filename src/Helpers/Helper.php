@@ -20,12 +20,17 @@ if(!function_exists("www_slot_view")) {
     }
 }
 
+
+/**
+ * 현재의 슬롯
+ */
 if(!function_exists("www_slot")) {
     function www_slot() {
         $activeSlot = "";
 
         // 여기에 인증된 사용자에 대한 처리를 추가합니다.
         $user = Auth::user();
+        //dd($user);
         $slots = config("jiny.site.userslot");
         if($user){
             if($slots && isset($slots[$user->id])) {
@@ -33,6 +38,8 @@ if(!function_exists("www_slot")) {
                 return $activeSlot;
             }
         }
+
+
 
 
         // 설정파일에서 active slot을 읽어옴
@@ -85,4 +92,18 @@ function site_log_sum($year=null, $month=null, $day=null)
     return $sum;
 }
 
+function menu($file) {
+    return menuLoad($file);
+}
 
+function menuLoad($file) {
+
+    $path = resource_path('menus');
+    $filename = $path.DIRECTORY_SEPARATOR.$file;
+    if(file_exists($filename)) {
+        $json = file_get_contents($filename);
+        return json_decode($json,true);
+    }
+
+    return [];
+}

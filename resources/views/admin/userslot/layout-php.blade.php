@@ -33,8 +33,10 @@
         </div>
 
         {{-- SuperAdmin Actions Setting --}}
+        {{--
         @if(Module::has('Actions'))
             @livewire('setActionRule', ['actions'=>$actions])
         @endif
+        --}}
     </x-theme-layout>
 </x-theme>

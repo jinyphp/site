@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 
 class JinySiteServiceProvider extends ServiceProvider
@@ -40,6 +41,7 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Rightbar::class, "www-rightbar");
 
         Blade::component(\Jiny\Site\View\Components\Menu::class, "www-menu");
+        Blade::component(\Jiny\Site\View\Components\TopMenu::class, "www-topmenu");
 
         Blade::component(\Jiny\Site\View\Components\Home::class, "www-home");
         Blade::component(\Jiny\Site\View\Components\Page::class, "www-page");
@@ -53,6 +55,12 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
         Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
         Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
+
+        Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
+        Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
+
+
+
 
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
@@ -211,9 +219,6 @@ class JinySiteServiceProvider extends ServiceProvider
             }
 
         }
-
-
-
     }
 
     private function slotDynamicComponents()
@@ -228,6 +233,7 @@ class JinySiteServiceProvider extends ServiceProvider
         if(!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+
 
         $dir = scandir($path);
         foreach($dir as $file) {
@@ -259,6 +265,11 @@ class JinySiteServiceProvider extends ServiceProvider
                 \Jiny\Site\Http\Livewire\SiteSlotSetting::class);
             Livewire::component('site-userslot-setting',
                 \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
+
+            Livewire::component('site-menu-code',
+                \Jiny\Site\Http\Livewire\SiteMenuCode::class);
+            Livewire::component('site-menu-item',
+                \Jiny\Site\Http\Livewire\SiteMenuItem::class);
 
         });
     }

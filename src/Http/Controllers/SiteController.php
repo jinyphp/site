@@ -13,18 +13,7 @@ class SiteController extends LiveController
         $this->setVisit($this);
 
         // 페이지 레이아웃
-        $this->viewFileLayout = "jiny-site"."::www.layout";
-
-
-        /*
-        $this->actions['view']['layout'] = "jiny-site::admin.dashboard.dash";
-
-        $this->actions['title'] = "Site Dashboard";
-        $this->actions['subtitle'] = "사이트를 관리합니다.";
-
-        //setMenu('menus/site.json');
-        setTheme("admin/sidebar");
-        */
+        //$this->viewFileLayout = "jiny-site"."::www.layout";
 
     }
 
@@ -38,10 +27,17 @@ class SiteController extends LiveController
         return $this;
     }
 
+    public function index(Request $request)
+    {
+        return parent::index($request);
+    }
+
+
 
     /**
      * index Process
      */
+    /*
     public function index(Request $request)
     {
         // 1.IP확인
@@ -98,6 +94,7 @@ class SiteController extends LiveController
             'request'=>$request
         ]);
     }
+    */
 
 
 

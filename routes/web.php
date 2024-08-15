@@ -39,6 +39,12 @@ if(function_exists('admin_prefix')) {
     ->name('admin.site')
     ->prefix($prefix.'/site')->group(function () {
 
+        Route::get('/menu', [\Jiny\Site\Http\Controllers\Admin\AdminSiteMenuCode::class,
+            "index"]);
+
+        Route::get('/menu/item/{code}', [\Jiny\Site\Http\Controllers\Admin\AdminSiteMenuItem::class,
+            "index"]);
+
         Route::get('sitemap', [\Jiny\Site\Http\Controllers\Admin\AdminSitemap::class,
             "index"]);
 

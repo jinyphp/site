@@ -1,6 +1,45 @@
 # SiteController
 `SiteController`를 통하여 보다 쉽게 페이지를 구현할 수 있습니다.
 
+## 화면처리
+화면 레이아웃을 동적으로 분석하여 반환합니다.
+
+`getViewFileLayout($default)` 메소드는 순차적으로 리소스를 검색하여 최우선 매칭되는 view 이름을 반환합니다.
+
+```php
+// View 우선순위 처리
+// 1. actions -> 절대경로 -> slot경로 -> www:: -> theme -> resources/views
+// 2. viewFileLayout 프로퍼티 ->
+// 3. default
+if($viewFile = $this->getViewFileLayout($default)) {
+    return $viewFile;
+}
+```
+
+순차적으로 매칭된 view 이름이 없는 경우에는 인자로 전달된 `$default`가 반환됩니다.
+
+### 우선순위 추가하기
+매칭되는 view 이름이 없는 경우 default 값이 반환됩니다. 만일, default 값이 지정되지 않았다면, false를 반환할 것입니다. 이를 이용하여 추가 단계의 우선순위를 더 부여할 수도 있습니다.
+
+다음은 예시 코드 입니다.
+```php
+// View 우선순위 처리
+// 1. actions -> 절대경로 -> slot경로 -> www:: -> theme -> resources/views
+// 2. viewFileLayout 프로퍼티 ->
+// 3. default
+if($viewFile = $this->getViewFileLayout()) {
+    return $viewFile;
+}
+
+// 3. 우선순위 추가
+// auth layout 환경설정 파일 읽기
+if($layout = config("jiny.auth.layout")) {
+    if(isset($layout['login']) && $layout['login']) {
+        return $layout['login'];
+    }
+}
+```
+
 ## 라우트설정
 url 접속에 응답할 수 있는 라우트 경로를 생성합니다.
 
