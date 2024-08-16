@@ -32,6 +32,7 @@ class SiteHome extends SiteController
 
     public function index(Request $request)
     {
+
         $this->log();
 
         $slot = www_slot();
