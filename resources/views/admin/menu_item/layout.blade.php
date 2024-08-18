@@ -1,4 +1,4 @@
-<x-theme name="admin.hyper">
+<x-theme name="admin.sidebar">
     <x-theme-layout>
 
         <x-flex-between>

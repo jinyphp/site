@@ -27,21 +27,33 @@
                 </x-form-item>
             </x-form-hor>
 
-            <x-form-hor>
-                <x-form-label>Blade</x-form-label>
-                <x-form-item>
-                    {!! xInputText()
-                        ->setWire('model.defer',"forms.blade")
-                        ->setWidth("standard")
-                    !!}
-                </x-form-item>
-            </x-form-hor>
+
 
             <x-form-hor>
                 <x-form-label>메모</x-form-label>
                 <x-form-item>
                     {!! xTextarea()
                         ->setWire('model.defer',"forms.description")
+                    !!}
+                </x-form-item>
+            </x-form-hor>
+
+        </x-navtab-item>
+
+
+        <!-- formTab -->
+        <x-navtab-item class="" >
+
+            <x-navtab-link class="rounded-0 ">
+                <span class="d-none d-md-block">View</span>
+            </x-navtab-link>
+
+            <x-form-hor>
+                <x-form-label>Blade</x-form-label>
+                <x-form-item>
+                    {!! xInputText()
+                        ->setWire('model.defer',"forms.blade")
+                        ->setWidth("standard")
                     !!}
                 </x-form-item>
             </x-form-hor>

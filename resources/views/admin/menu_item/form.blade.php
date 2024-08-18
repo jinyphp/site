@@ -66,6 +66,17 @@
                 <span class="d-none d-md-block">외부정보</span>
             </x-navtab-link>
 
+
+
+        </x-navtab-item>
+
+         <!-- formTab -->
+         <x-navtab-item class="" >
+
+            <x-navtab-link class="rounded-0">
+                <span class="d-none d-md-block">View</span>
+            </x-navtab-link>
+
             <x-form-hor>
                 <x-form-label>Blade</x-form-label>
                 <x-form-item>
@@ -77,7 +88,7 @@
                 </x-form-item>
             </x-form-hor>
 
-        </x-navtab-item>
+         </x-navtab-item>
 
     </x-navtab>
 
