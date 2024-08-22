@@ -14,9 +14,8 @@
         "php": "^8.2",
         "jiny/laravel": "^0.7",
 
-        "jiny/ui": "^0.5",
         "jiny/icons": "^0.3.1",
-        "jiny/theme": "^0.6",
+        "jiny/theme": "^0.7",
 
         "jiny/menu": "^0.5",
         "jiny/posts": "^0.0.3",
