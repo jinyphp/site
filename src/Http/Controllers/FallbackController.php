@@ -309,15 +309,11 @@ class FallbackController extends LiveController
                 default:
             }
 
-            $body = file_get_contents($file);
-
-            return response($body)
-                ->header('Content-type',$content_Type);
-
-            //dd($path.DIRECTORY_SEPARATOR.$filename);
-
-            //$img = file_get_contents($path.DIRECTORY_SEPARATOR.$filename);
-
+            if(is_file($file)) {
+                $body = file_get_contents($file);
+                return response($body)
+                    ->header('Content-type',$content_Type);
+            }
         }
 
 

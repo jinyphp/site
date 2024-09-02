@@ -15,7 +15,17 @@
                             </p>
 							 --}}
 
-                            <a class="btn btn-primary btn-lg" href="/">Home</a>
+
+                            @livewire('site-new-page')
+                            <script>
+                                document.addEventListener('livewire:init', () => {
+                                    Livewire.on('page-realod', (event) => {
+                                        console.log("page-realod");
+                                        location.reload();
+                                    });
+                                });
+                            </script>
+
 
 						</div>
 

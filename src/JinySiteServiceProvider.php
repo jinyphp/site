@@ -322,6 +322,9 @@ class JinySiteServiceProvider extends ServiceProvider
             Livewire::component('site-menu-item',
                 \Jiny\Site\Http\Livewire\SiteMenuItem::class);
 
+            Livewire::component('site-new-page',
+                \Jiny\Site\Http\Livewire\SiteNewPage::class);
+
         });
     }
 }
