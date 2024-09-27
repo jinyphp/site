@@ -14,6 +14,7 @@ class SiteSettings
             // 자기 자신의 인스턴스를 생성합니다.
             self::$Instance = new self();
 
+            // json 정보를 읽어 옵니다.
             self::$Instance->load($jname);
 
             return self::$Instance;
@@ -23,7 +24,7 @@ class SiteSettings
         }
     }
 
-    //public $jsonName = "site";
+
     public $info = [];
 
     private function load($jname) {
@@ -32,7 +33,6 @@ class SiteSettings
         if(!is_dir($path)) mkdir($path);
 
         $filename = $path.DIRECTORY_SEPARATOR.$jname.".json";
-        //dd($filename);
         if (file_exists($filename)) {
             $rules = json_decode(file_get_contents($filename), true);
 

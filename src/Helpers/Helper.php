@@ -2,6 +2,13 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
+use Illuminate\Support\Facades\DB;
+
+
+
+function country() {
+    return DB::table('site_country')->get();
+}
 
 if(!function_exists("www_view")) {
     function www_view($path, $args=[]) {
@@ -22,12 +29,18 @@ if(!function_exists("www_slot_view")) {
     }
 }
 
+// 슬롯 싱글턴 반환
+function Slot() {
+    return \Jiny\Site\Slot::instance();
+}
 
 /**
  * 현재의 슬롯
  */
 if(!function_exists("www_slot")) {
     function www_slot() {
+        return Slot()->name;
+
         $activeSlot = "";
 
         // 여기에 인증된 사용자에 대한 처리를 추가합니다.
@@ -64,16 +77,7 @@ if(!function_exists("www_slot")) {
     }
 }
 
-## 사이트의 공용 설정을 읽어 옵니다.
-function siteInfo($key=null) {
-    $obj = \Jiny\Site\SiteSettings::instance("site_info");
-    return $obj->get($key);
-}
 
-function siteSetting($key=null) {
-    $obj = \Jiny\Site\SiteSettings::instance("site_setting");
-    return $obj->get($key);
-}
 
 
 function site_log_sum($year=null, $month=null, $day=null)
@@ -121,3 +125,7 @@ function getViewPath($viewName) {
         return $e;
     }
 }
+
+include_once("view.php");
+
+include_once("info.php");

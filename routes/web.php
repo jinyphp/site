@@ -14,6 +14,10 @@ Route::middleware(['web'])->group(function(){
 
 
 Route::middleware(['web'])->group(function(){
+    ## about 기능
+    Route::get('/terms/{any?}', [
+        \Jiny\Site\Http\Controllers\Site\SiteTermsUse::class,
+        "index"])->where('any', '.*');
 
     ## about 기능
     Route::get('/about', [

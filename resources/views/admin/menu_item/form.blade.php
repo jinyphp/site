@@ -27,6 +27,17 @@
             </x-form-hor>
 
             <x-form-hor>
+                <x-form-label>아이콘</x-form-label>
+                <x-form-item>
+                    {!! xInputText()
+                        ->setAttribute('name',"icon")
+                        ->setWire('model.defer',"forms.icon")
+                        ->setWidth("standard")
+                    !!}
+                </x-form-item>
+            </x-form-hor>
+
+            <x-form-hor>
                 <x-form-label>제목</x-form-label>
                 <x-form-item>
                     {!! xInputText()

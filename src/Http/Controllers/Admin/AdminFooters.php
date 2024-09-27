@@ -1,5 +1,4 @@
 <?php
-
 namespace Jiny\Site\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * 하단 정보를 담고 있는 configPHP 데이터를 생성합니다.
+ */
 use Jiny\Config\Http\Controllers\ConfigController;
 class AdminFooters extends ConfigController
 {

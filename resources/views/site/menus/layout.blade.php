@@ -1,51 +1,37 @@
-<nav class="navbar navbar-expand-lg navbar-light w-100">
-    <div class="container px-3">
+<div>
 
-        @include('site::menus.logo')
-
-        <!-- 모바일 버튼 -->
-        <button class="navbar-toggler offcanvas-nav-btn" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+    {{-- 수정모드 --}}
+    {{-- @if($design_mode)
+    <div class="d-flex justify-content-end">
+        <span wire:click="setting">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
             </svg>
-        </button>
-
-        <div class="offcanvas offcanvas-start offcanvas-nav" style="width: 20rem">
-            <div class="offcanvas-header">
-                <a href="/" class="text-inverse">
-                    @if($title = config('jiny.site.headers.title'))
-                    {{$title}}
-                    @else
-                    Title2
-                    @endif
-                </a>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-
-            <div class="offcanvas-body pt-0 align-items-center">
-
-                {{$slot}}
-
-                <div class="mt-2 mt-lg-0 d-flex align-items-center">
-
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/home') }}" class="btn btn-light btn-sm mx-2">Home</a>
-                            <a href="{{ url('/account') }}" class="btn btn-success btn-sm mx-2">account</a>
-                        @else
-                            <a href="{{ route('login') }}" class="btn btn-light btn-sm mx-2">Login</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Create account</a>
-                            @endif
-                        @endauth
-                    @endif
-
-                </div>
-
-            </div>
-        </div>
-
+        </span>
     </div>
-</nav>
+    @endif --}}
+
+
+    @if($code)
+        @includeIf($viewFile)
+    @else
+    <div>메뉴 파일(코드)이 선택되어 있지 않습니다.</div>
+    @endif
+
+    <!-- 위젯 팝업 -->
+    @if ($popupForm)
+        @switch($mode)
+            @case('setting')
+                {{-- 위젯 설정 --}}
+                @includeIf("jiny-site::site.menus.setting")
+                @break
+            @case(2)
+
+                @break
+            @default
+                {{-- 위젯 데이터 수정 --}}
+                @includeIf("jiny-wire-table::table_popup_forms.popup_forms")
+        @endswitch
+    @endif
+</div>

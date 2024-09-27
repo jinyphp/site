@@ -30,7 +30,12 @@ class JinySiteServiceProvider extends ServiceProvider
 
         Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
 
-        /* 컴포넌트 */
+        Blade::component($this->package.'::layouts.'.'container-fluid', 'site-container-fluid');
+        Blade::component($this->package.'::layouts.'.'container', 'site-container');
+
+
+
+        // 다이나믹 레이아웃 컴포넌트
         Blade::component(\Jiny\Site\View\Components\App::class, "www-app");
         Blade::component(\Jiny\Site\View\Components\Layout::class, "www-layout");
 
@@ -38,6 +43,7 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Brand::class, "www-brand");
         Blade::component(\Jiny\Site\View\Components\Navbar::class, "www-nav");
         Blade::component(\Jiny\Site\View\Components\Footer::class, "www-footer");
+        Blade::component(\Jiny\Site\View\Components\Copyright::class, "www-copyright");
 
         Blade::component(\Jiny\Site\View\Components\Main::class, "www-main");
         Blade::component(\Jiny\Site\View\Components\Content::class, "www-content");
@@ -62,6 +68,9 @@ class JinySiteServiceProvider extends ServiceProvider
 
         Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
         Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
+
+
+
 
         // 디렉티브
         Blade::directive('www_slot_include', function ($expression) {
@@ -248,8 +257,6 @@ class JinySiteServiceProvider extends ServiceProvider
 
         // 테마에서 파일을 읽기
         $dir = scandir($path);
-        //dump($path);
-        //dd($dir);
         foreach($dir as $file) {
             if($file == '.' || $file == '..') continue;
             if($file[0] == '.') continue; // 숨김파일
@@ -290,9 +297,7 @@ class JinySiteServiceProvider extends ServiceProvider
                     } else {
 
                     }
-                    //$comPath .= ".".$name;
-                    //dd($comPath);
-                    //dump($comPath);
+
                     Blade::component($comPath,$comName);
                 }
             }
@@ -310,6 +315,8 @@ class JinySiteServiceProvider extends ServiceProvider
             Livewire::component('site-setting',
                 \Jiny\Site\Http\Livewire\SiteSetting::class);
 
+
+
             Livewire::component('site-session-slot',
                 \Jiny\Site\Http\Livewire\SiteSessionSlot::class);
             Livewire::component('site-slot-setting',
@@ -317,13 +324,34 @@ class JinySiteServiceProvider extends ServiceProvider
             Livewire::component('site-userslot-setting',
                 \Jiny\Site\Http\Livewire\SiteUserSlotSetting::class);
 
+
+            // Livewire::component('site-menu',
+            //     \Jiny\Site\Http\Livewire\SiteMenu::class);
             Livewire::component('site-menu-code',
                 \Jiny\Site\Http\Livewire\SiteMenuCode::class);
             Livewire::component('site-menu-item',
                 \Jiny\Site\Http\Livewire\SiteMenuItem::class);
 
+
+
             Livewire::component('site-new-page',
                 \Jiny\Site\Http\Livewire\SiteNewPage::class);
+
+            // 사이트 베너를 관리합니다.
+            Livewire::component('site-banner',
+                \Jiny\Site\Http\Livewire\SiteBanner::class);
+
+            Livewire::component('site-widget-menu',
+                \Jiny\Site\Http\Livewire\SiteWidgetMenu::class);
+
+            Livewire::component('site-country',
+                \Jiny\Site\Http\Livewire\SiteCountry::class);
+
+            Livewire::component('site-location',
+                \Jiny\Site\Http\Livewire\SiteLocation::class);
+
+            Livewire::component('site-terms-use',
+                \Jiny\Site\Http\Livewire\SiteTermsUse::class);
 
         });
     }

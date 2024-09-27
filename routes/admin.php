@@ -16,6 +16,14 @@ if(function_exists('admin_prefix')) {
     Route::middleware(['web','auth', 'admin'])
     ->name('admin.site')
     ->prefix($prefix.'/site')->group(function () {
+        Route::get('/terms', [\Jiny\Site\Http\Controllers\Admin\AdminSiteTerms::class,
+            "index"]);
+
+        Route::get('/country', [\Jiny\Site\Http\Controllers\Admin\AdminSiteCountry::class,
+            "index"]);
+
+        Route::get('/location', [\Jiny\Site\Http\Controllers\Admin\AdminSiteLocation::class,
+            "index"]);
 
         Route::get('/menu', [\Jiny\Site\Http\Controllers\Admin\AdminSiteMenuCode::class,
             "index"]);
@@ -49,7 +57,8 @@ if(function_exists('admin_prefix')) {
         Route::get('footer', [\Jiny\Site\Http\Controllers\Admin\AdminFooters::class,
             "index"]);
 
-        ## 사이트 정보설정
+        ## 사이트 정보를 관리합니다.
+        ## 위치: www 리소스 폴더 안에 위치합니다.
         Route::get('info', [
             \Jiny\Site\Http\Controllers\Admin\AdminSiteInfomation::class,
             "index"]);

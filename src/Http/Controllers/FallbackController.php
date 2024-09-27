@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+/**
+ * 동적 페이지 반환
+ */
 use Jiny\WireTable\Http\Controllers\LiveController;
 class FallbackController extends LiveController
 {
@@ -15,11 +18,30 @@ class FallbackController extends LiveController
     {
         parent::__construct();
         $this->setVisit($this);
+
+        //$actObj = Action();
+        //dd($actObj);
+
     }
 
+    ## 페이지 반환
     public function index(Request $request)
     {
-        // 1.www절대경로 파일 체크
+        //dd("fallback route");
+        // uri에 대한 actions 설정값이 있는 경우,
+        // 설정 정보에 따라서 라우트 동작을 처리
+        $urlPath = $request->path();
+        $urlPath = str_replace('/',DIRECTORY_SEPARATOR, $urlPath);
+        $pathAction = resource_path("actions");
+        if(file_exists($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json")) {
+            $this->actions = json_file_decode($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json");
+            if($res = $this->processByActions($request)) {
+                return $res;
+            }
+        }
+
+
+        // 1.www 절대경로 파일 체크
         // slot을 포함하는 www 절대경로로 접속하는 경우
         if($res = $this->wwwFile($_SERVER['REQUEST_URI'])) {
             return $res;
@@ -27,27 +49,32 @@ class FallbackController extends LiveController
 
         // 2.slot
         // 여기에 인증된 사용자에 대한 처리를 추가합니다.
-        $user = Auth::user();
-        $slots = config("jiny.site.userslot");
+        // $user = Auth::user();
+        // $slots = config("jiny.site.userslot");
+        // if($user && count($slots)>0){
+        //     if($slots && isset($slots[$user->id])) {
+        //         $activeSlot = $slots[$user->id];
+        //     } else {
+        //         $activeSlot = "";
+        //     }
+        // } else {
+        //     // 설정파일에서 active slot을 읽어옴
+        //     $slots = config("jiny.site.slot");
+        //     $activeSlot = "";
+        //     if(is_array($slots) && count($slots)>0) {
+        //         foreach($slots as $slot => $item) {
+        //             if($item['active']) {
+        //                 //$activeSlot = $slot;
+        //                 $activeSlot = $item['name'];
+        //             }
+        //         }
+        //     }
+        // }
 
-        if($user && count($slots)>0){
-            if($slots && isset($slots[$user->id])) {
-                $activeSlot = $slots[$user->id];
-            } else {
-                $activeSlot = "";
-            }
-        } else {
-            // 설정파일에서 active slot을 읽어옴
-            $slots = config("jiny.site.slot");
-            $activeSlot = "";
-            if(is_array($slots) && count($slots)>0) {
-                foreach($slots as $slot => $item) {
-                    if($item['active']) {
-                        $activeSlot = $slot;
-                    }
-                }
-            }
-        }
+        $activeSlot = Slot()->name;
+
+        //dump($activeSlot);
+        //dd("dynamic route");
 
         // 활성화된 slot 확인
         $path = resource_path('www');
@@ -63,7 +90,7 @@ class FallbackController extends LiveController
             }
         }
 
-        // 3.테마검색
+        // 3.테마 리소스
         if(isset($_SERVER['REQUEST_URI'])) {
             if($res = $this->route_dynamic_theme($_SERVER['REQUEST_URI'])) {
                 return $res;
@@ -72,21 +99,84 @@ class FallbackController extends LiveController
 
 
         ## 4.오류 페이지 출력
-        if($activeSlot) {
-            ## 404 www 리소스에서
-            $viewFile = "www.".$activeSlot."::404";
-            if(view()->exists($viewFile)) {
-                return view($viewFile);
-            }
-
-            // return $viewFile." 리소스를 찾을 수 없습니다.";
-            return view("jiny-site::www.errors.404");
+        ## 404 페이지 처리
+        if($res = $this->page404($activeSlot)) {
+            return $res;
         }
+
 
 
         //return $_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
         abort(404);
     }
+
+    /**
+     * 재귀호출, 다차원 배열값 병합하기
+     */
+    private function actionMergeValues(&$actions, $items)
+    {
+        foreach($items as $key => $value) {
+            if(is_array($value)) {
+                $this->actionMergeValues($actions[$key], $value);
+            }
+            $actions[$key] = $value;
+        }
+    }
+
+    private function processByActions($request)
+    {
+        // 동작타입 분석
+        if(isset($this->actions['type'])) {
+            $type = $this->actions['type'];
+            switch($type) {
+                case 'board':
+                    // 계시판 테이블 컨트롤러
+                    // 싱글 popup형 계시판만 적용
+                    //$obj = new \Jiny\Site\Board\Http\Controllers\Site\SiteBoardTable();
+                    $obj = new \Jiny\Site\Board\Http\Controllers\Site\SiteBoardPopup();
+                    $this->actionMergeValues($obj->actions, $this->actions);
+
+                    return $obj->index($request);
+                    //break;
+            }
+        }
+
+        return null;
+    }
+
+    private function page404($activeSlot)
+    {
+        // 우선순위1 : actions 설정값
+        if (isset($this->actions['view']['layout'])) {
+            $aViewLayout = $this->actions['view']['layout'];
+            if ($aViewLayout) {
+                if($res = siteViewName($aViewLayout)){
+                    return view($res);
+                    //return $res;
+                }
+            }
+        }
+
+        if($res = siteViewName("jiny-site::www.errors.404")){
+            return view($res);
+            //return $res;
+        }
+
+
+
+
+        // if($activeSlot) {
+        //     ## 404 www 리소스에서
+        //     $viewFile = "www.".$activeSlot."::404";
+        //     if(view()->exists($viewFile)) {
+        //         return view($viewFile);
+        //     }
+
+        //     // return $viewFile." 리소스를 찾을 수 없습니다.";
+        //     return view("jiny-site::www.errors.404");
+        // }
+    }
+
 
     private function wwwFile($uri) {
         $path = resource_path('www');

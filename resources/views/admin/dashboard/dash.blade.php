@@ -39,12 +39,18 @@
         <!-- dash info -->
         @includeIf('jiny-site::admin.dashboard.users', [])
 
-        <!-- Dashboard Content-->
+        <x-ui-divider>사이트 컨덴츠 관리</x-ui-divider>
+
         @includeIf('jiny-site::admin.dashboard.cms', [])
 
-        <hr>
+
+        <x-ui-divider>사이트 관리</x-ui-divider>
 
         @includeIf('jiny-site::admin.dashboard.site', [])
+
+        <x-ui-divider>사이트 설정</x-ui-divider>
+
+        @includeIf('jiny-site::admin.dashboard.setting', [])
 
     </x-theme-layout>
 </x-theme>

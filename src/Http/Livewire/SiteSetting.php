@@ -98,7 +98,8 @@ class SiteSetting extends Component
         $filename = $this->getFilename();
 
         // json 포맷으로 데이터 변환
-        $json = json_encode($this->forms,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        $json = json_encode($this->forms,
+            JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents($filename, $json);
 
     }

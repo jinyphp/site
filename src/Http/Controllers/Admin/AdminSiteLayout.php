@@ -18,7 +18,14 @@ class AdminSiteLayout extends WireTablePopupForms
         parent::__construct();
         $this->setVisit($this);
 
-        //$this->actions['view']['main'] = "jiny-site::admin.files.main";
+        ## 테이블 정보
+        $this->actions['table'] = "site_layouts";
+
+        $this->actions['view']['list'] = "jiny-site::admin.layouts.list";
+        $this->actions['view']['form'] = "jiny-site::admin.layouts.form";
+
+        $this->actions['title'] = "다이나믹 레이아웃";
+        $this->actions['subtitle'] = "다양한 레이아웃을 관리합니다.";
     }
 
 

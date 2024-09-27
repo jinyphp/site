@@ -34,7 +34,11 @@
         </div>
 
 
-        @livewire('WireConfigPHP', ['actions'=>$actions])
+        {{-- @livewire('WireConfigPHP', ['actions'=>$actions]) --}}
+        @livewire('site-setting',[
+            'actions' => $actions,
+            'jsonName' => "header"
+        ])
 
 
 

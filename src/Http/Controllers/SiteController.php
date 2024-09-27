@@ -18,14 +18,14 @@ class SiteController extends LiveController
     }
 
     // 레이아웃을 변경할 수 있습니다.
-    protected function setLayout($path)
-    {
-        if($path) {
-            $this->viewFileLayout = $path;
-        }
+    // protected function setLayout($path)
+    // {
+    //     if($path) {
+    //         $this->viewFileLayout = $path;
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function index(Request $request)
     {

@@ -15,7 +15,7 @@
                             </p>
 							 --}}
 
-
+                            {{-- 404에서 신규 페이지를 생성합니다. --}}
                             @livewire('site-new-page')
                             <script>
                                 document.addEventListener('livewire:init', () => {
@@ -25,7 +25,6 @@
                                     });
                                 });
                             </script>
-
 
 						</div>
 

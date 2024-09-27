@@ -119,8 +119,10 @@ class SiteMenuCode extends Component
         if($this->filename != $this->forms['code']) {
             $path = resource_path('menus');
             $src = $path.DIRECTORY_SEPARATOR.$this->filename.".json";
-            $dst = $path.DIRECTORY_SEPARATOR.$this->forms['code'].".json";
-            rename($src, $dst);
+            if(file_exists($src)) {
+                $dst = $path.DIRECTORY_SEPARATOR.$this->forms['code'].".json";
+                rename($src, $dst);
+            }
 
             $this->scanMenuFiles();
         }

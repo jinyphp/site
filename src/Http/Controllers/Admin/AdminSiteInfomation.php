@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * 사이트의 정보를 관리합니다.
+ */
 use Jiny\Config\Http\Controllers\ConfigController;
 class AdminSiteInfomation extends ConfigController
 {
@@ -19,7 +22,7 @@ class AdminSiteInfomation extends ConfigController
         $this->setVisit($this);
 
         ##
-        $this->actions['filename'] = "jiny/site/infomation"; // 설정파일명(경로)
+        $this->actions['filename'] = "jiny/site/info"; // 설정파일명(경로)
 
         $this->actions['view']['form'] = "jiny-site::admin.infomation.form";
         $this->actions['view']['main'] = "jiny-site::admin.infomation.layout";
