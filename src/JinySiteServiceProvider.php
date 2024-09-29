@@ -26,6 +26,23 @@ class JinySiteServiceProvider extends ServiceProvider
         // 데이터베이스
         $this->loadMigrationsFrom(__DIR__.'/../databases/migrations');
 
+
+        ## 배포
+        $this->publishes([
+            __DIR__.'/../resources/demo' => resource_path('www/slot1'),
+        ], 'site');
+
+        if (!is_dir(resource_path('www/slot1'))) {
+            mkdir(resource_path('www/slot1'), 0755, true);
+        }
+
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Jiny\Site\Console\Commands\SiteSlot::class
+            ]);
+        }
+
         $this->resourceSetting();
 
         Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
