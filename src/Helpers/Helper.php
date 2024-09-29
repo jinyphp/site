@@ -126,6 +126,6 @@ function getViewPath($viewName) {
     }
 }
 
-include_once("view.php");
+// include_once("view.php");
 
-include_once("info.php");
+// include_once("info.php");
