@@ -34,9 +34,17 @@ php artisan site:slot slot1
 ```
 > slot 기능에 대한 보다 자세한 부분은 공식 문서를 참고해 주세요
 
+### 관리자 등록
+웹사이트 관리를 위하여 admin 페이지를 제공합니다. admin 접속을 하기 위해서는 회원가입과 관리자 등급 변경을 해주어야 합니다. 관리자 설정을 위한 콘솔 명령을 제공합니다.
+
+```bash
+php artisan user:admin 이메일 --enable
+php artisan user:super 이메일 --enable
+```
+
 ## 주요기능
 
-
+### 가상뷰
 
 ### 리소스
 레이아웃의 리소스들들 `_layouts` 폴더 안에 지정합니다.

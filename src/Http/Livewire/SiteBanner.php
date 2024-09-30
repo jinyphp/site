@@ -68,11 +68,17 @@ class SiteBanner extends Component
     public function render()
     {
         $rows = $this->banners();
-        //dd($rows);
+        if(count($rows)>0) {
+            return view($this->viewFile,[
+                'rows'=> $rows
+            ]);
+        }
 
-        return view($this->viewFile,[
-            'rows'=> $rows
-        ]);
+        $body = <<<EOD
+<!-- site banner -->
+EOD;
+        return $body;
+
     }
 
     private function banners()

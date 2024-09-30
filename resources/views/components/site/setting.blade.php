@@ -28,8 +28,9 @@
         aria-controls="offcanvas-right-site-setting"
     style="font-size: .625rem; letter-spacing: .05rem;"
     role="button" aria-controls="customizer">
-        Setting <i class="ci-settings fs-base ms-1 me-n2 animate-target"></i>
-</button>
+        Setting
+        <i class="ci-settings fs-base ms-1 me-n2 animate-target"></i>
+    </button>
 </div>
 
 
