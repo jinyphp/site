@@ -3,12 +3,14 @@ namespace Jiny\Site\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * 사이트의 국가를 변경합니다.
+ */
 class SiteCountry extends Component
 {
     public $actions;
@@ -42,6 +44,7 @@ class SiteCountry extends Component
             $this->country = $country;
         }
 
+        //dd($this->country);
     }
 
 

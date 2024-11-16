@@ -23,7 +23,7 @@
                     {{$actions['route']['uri']}}
                 </x-breadcrumb-item>
 
-                {{-- <div class="d-flex justify-content-end gap-2">
+                <div class="d-flex justify-content-end gap-2">
                     <x-btn-video>
                         Video
                     </x-btn-video>
@@ -31,7 +31,7 @@
                     <x-btn-manual>
                         Manual
                     </x-btn-manual>
-                </div> --}}
+                </div>
             </div>
 
         </x-flex-between>

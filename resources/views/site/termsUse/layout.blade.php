@@ -2,6 +2,7 @@
     <x-www-layout>
         <x-www-main>
 
+            {{-- 약관 --}}
             @livewire('site-terms-use',[
                 'slug' => $slug
             ])

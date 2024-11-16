@@ -60,21 +60,25 @@
                 </x-flex-between>
             </div>
             <div class="card-body">
-                <a href="#">
+                <a href="/admin/site/manager">
                     <x-badge-secondary>관리자</x-badge-secondary>
                 </a>
 
-                <a href="#">
+                <a href="/admin/site/roles">
                     <x-badge-secondary>역할</x-badge-secondary>
                 </a>
 
+                {{--
                 <a href="#">
                     <x-badge-secondary>작업기록</x-badge-secondary>
                 </a>
+                --}}
 
             </div>
         </div>
     </div>
+
+
 
     <!-- -->
     <div class="col-3 mb-4">
@@ -83,11 +87,11 @@
                 <x-flex-between>
                     <div>
                         <h5 class="card-title">
-                            리소스
+                            로케일 설정
 
                         </h5>
                         <h6 class="card-subtitle text-muted">
-                            사이트 정적 리소스 및 설정을 관리합니다.
+                            사이트 운영에 필요한 국가 및 지역정보를 관리합니다.
                         </h6>
                     </div>
                     <div>
@@ -96,21 +100,19 @@
                 </x-flex-between>
             </div>
             <div class="card-body">
-                <a href="/admin/site/routes">
-                    <x-badge-secondary>라우트</x-badge-secondary>
+                <a href="/admin/site/language">
+                    <x-badge-secondary>언어</x-badge-secondary>
                 </a>
 
-                <a href="/admin/site/resources">
-                    <x-badge-secondary>리소스</x-badge-secondary>
+                <a href="/admin/site/country">
+                    <x-badge-secondary>국가</x-badge-secondary>
                 </a>
 
-                <a href="/admin/site/actions">
-                    <x-badge-secondary>Actions</x-badge-secondary>
+                <a href="/admin/site/location">
+                    <x-badge-secondary>지역</x-badge-secondary>
                 </a>
 
-                <a href="/admin/site/images">
-                    <x-badge-secondary>images</x-badge-secondary>
-                </a>
+
 
             </div>
         </div>

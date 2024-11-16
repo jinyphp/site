@@ -1,6 +1,9 @@
 <?php
 namespace Jiny\Site;
 
+/**
+ * 사이트 정보 관리
+ */
 class SiteInfo
 {
     private static $Instance;
@@ -8,7 +11,7 @@ class SiteInfo
     /**
      * 싱글턴 인스턴스를 생성합니다.
      */
-    public static function instance($jname)
+    public static function instance($jname="info")
     {
         if (!isset(self::$Instance)) {
             // 자기 자신의 인스턴스를 생성합니다.
@@ -44,6 +47,9 @@ class SiteInfo
         return $this;
     }
 
+    /**
+     * 정보 반환
+     */
     public function get($key=null)
     {
         if($key) {

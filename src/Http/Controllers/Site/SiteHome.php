@@ -17,69 +17,71 @@ class SiteHome extends SiteController
     {
         parent::__construct();
         $this->setVisit($this);
-
-        ##
-        /*
-        $this->actions['filename'] = "jiny/site/footers"; // 설정파일명(경로)
-
-        $this->actions['view']['form'] = "jiny-site::admin.footers.form";
-        $this->actions['view']['main'] = "jiny-site::admin.footers.layout";
-
-        $this->actions['title'] = "Site 하단";
-        $this->actions['subtitle'] = "사이트를 하단의 디자인을 설정합니다.";
-        */
     }
 
     public function index(Request $request)
     {
-
         $this->log();
 
-        $slot = www_slot();
-        if($slot) {
-            ## 우선순위1
-            $view = "www::".$slot.".index";
-            if(view()->exists($view)) {
-                return view($view,[
-                    'actions' => $this->actions
-                ]);
-            }
-        } else {
-            ## 우선순위2
-            $view = "www::index";
-            if(view()->exists($view)) {
-                return view($view,[
-                    'actions' => $this->actions
-                ]);
-            }
+        // 처음 index를 반환
+        $this->actions['view']['layout'] = "index";
+        if($res = parent::index($request)) {
+            return $res;
         }
 
-        ## 우선순위3 : 테마
-        $theme = getThemeName();
-        if($theme) {
-            $view = "theme::".$theme.".index";
-
-            if(view()->exists($view)) {
-                return view($view,[
-                    'actions' => $this->actions
-                ]);
-            }
-        }
-
-        ## 우선순위4: 기본리소스 웰컴
-        $view = "welcome";
-        if(view()->exists($view)) {
-            return view($view,[
-                'actions' => $this->actions
+        return view('jiny-wire-table'."::errors.no_layout",[
+                'message' => "기본 Layout view가 지정되어 있지 않습니다.",
+                'actions'=>$this->actions
             ]);
-        }
+
+
+
+
+        // $slot = Slot()->name;
+        // if($slot) {
+        //     ## 우선순위1
+        //     $view = "www::".$slot.".index";
+        //     if(view()->exists($view)) {
+        //         return view($view,[
+        //             'actions' => $this->actions
+        //         ]);
+        //     }
+        // } else {
+        //     ## 우선순위2
+        //     $view = "www::index";
+        //     if(view()->exists($view)) {
+        //         return view($view,[
+        //             'actions' => $this->actions
+        //         ]);
+        //     }
+        // }
+
+        // ## 우선순위3 : 테마
+        // $theme = getThemeName();
+        // if($theme) {
+        //     $view = "theme::".$theme.".index";
+
+        //     if(view()->exists($view)) {
+        //         return view($view,[
+        //             'actions' => $this->actions
+        //         ]);
+        //     }
+        // }
+
+        // ## 우선순위4: 기본리소스 웰컴
+        // $view = "welcome";
+        // if(view()->exists($view)) {
+        //     return view($view,[
+        //         'actions' => $this->actions
+        //     ]);
+        // }
 
         ## 오류
         return false;
 
 
 
-        //return parent::index($request);
+
     }
 
     private function log()
@@ -90,6 +92,7 @@ class SiteHome extends SiteController
                 ->where('month',$date[1])
                 ->where('day',$date[2])
                 ->first();
+
         if($log) {
             DB::table('site_log')
                 ->where('year',$date[0])

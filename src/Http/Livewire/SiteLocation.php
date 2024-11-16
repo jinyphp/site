@@ -3,7 +3,6 @@ namespace Jiny\Site\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
@@ -11,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 use Livewire\Attributes\On;
 
+/**
+ * 선택한 국가의 세부 지역을 선택합니다.
+ */
 class SiteLocation extends Component
 {
     public $actions;
@@ -35,6 +37,8 @@ class SiteLocation extends Component
             $this->rows = [];
             $this->location = null;
         }
+
+        //dd($this->rows);
     }
 
 
@@ -49,23 +53,26 @@ class SiteLocation extends Component
             ->get();
 
             $this->rows = [];
-            foreach($rows as $item) {
-                $code = $item->id;
-                $temp = [];
-                foreach($item as $key => $value) {
-                    $temp[$key] = $value;
-                }
-                $this->rows[$code] = $temp;
-            }
+            if(count($rows)>0) {
 
-            // 세션 값 가져오기
-            $location = session()->get('location');
-            if(!$location) {
-                if($rows) {
-                    $this->location = $rows[0]->id;
+                foreach($rows as $item) {
+                    $code = $item->id;
+                    $temp = [];
+                    foreach($item as $key => $value) {
+                        $temp[$key] = $value;
+                    }
+                    $this->rows[$code] = $temp;
                 }
-            } else {
-                $this->location = $location;
+
+                // 세션 값 가져오기
+                $location = session()->get('location');
+                if(!$location) {
+                    if(isset($rows[0])) {
+                        $this->location = $rows[0]->id;
+                    }
+                } else {
+                    $this->location = $location;
+                }
             }
         }
     }

@@ -35,7 +35,8 @@
 
         @livewire('site-setting',[
             'actions' => $actions,
-            'jsonName' => "site_setting"
+            //'jsonName' => "site_setting"
+            'jsonName' => "setting"
         ])
 
 

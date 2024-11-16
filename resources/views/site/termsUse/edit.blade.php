@@ -19,8 +19,6 @@
             ->setAttribute('rows',30)
         !!}
     </div>
-
-
 @else
     @includeIf("jiny-site::site.termsUse.condition")
 @endif

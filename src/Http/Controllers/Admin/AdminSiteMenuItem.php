@@ -22,9 +22,6 @@ class AdminSiteMenuItem extends WireDashController
 
         $this->actions['title'] = "Site Menu";
         $this->actions['subtitle'] = "사이트 메뉴를 관리합니다.";
-
-        //setMenu('menus/site.json');
-        setTheme("admin.hyper");
     }
 
 
@@ -35,7 +32,7 @@ class AdminSiteMenuItem extends WireDashController
         ];
 
         $viewFile = $this->getViewFileLayout($default=null);
-        return view($viewFile,$data);
+        return view($viewFile, $data);
         // return parent::index($request);
     }
 

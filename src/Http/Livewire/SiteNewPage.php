@@ -120,4 +120,92 @@ class SiteNewPage extends Component
 
         return false;
     }
+
+    public function markdown()
+    {
+        // 현재 슬롯 가져오기
+        $this->slot = www_slot();
+        if (!$this->slot) {
+            return;
+        }
+
+        // 리소스 경로 설정
+        $path = resource_path('www');
+        $target = $path . DIRECTORY_SEPARATOR . $this->slot;
+        $target .= DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->uri);
+
+        // 폴더가 없으면 생성
+        if (!is_dir($target)) {
+            mkdir($target, 0777, true);
+        }
+
+        // index.md 파일 생성
+        $target .= DIRECTORY_SEPARATOR . "index.md";
+
+        // 기본 문구가 포함된 마크다운 파일 생성
+        $content = "# " . basename($this->uri) . "\n\n404로 생성된 마크다운 페이지입니다. 편집을 통하여 내용을 수정해 주세요.";
+        if (file_put_contents($target, $content)) {
+            $this->dispatch('page-realod');
+        }
+    }
+
+    public function html()
+    {
+        // 현재 슬롯 가져오기
+        $this->slot = www_slot();
+        if (!$this->slot) {
+            return;
+        }
+
+        // 리소스 경로 설정
+        $path = resource_path('www');
+        $target = $path . DIRECTORY_SEPARATOR . $this->slot;
+        $target .= DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->uri);
+
+        // 폴더가 없으면 생성
+        if (!is_dir($target)) {
+            mkdir($target, 0777, true);
+        }
+
+        // index.md 파일 생성
+        $target .= DIRECTORY_SEPARATOR . "index.html";
+
+        // 기본 문구가 포함된 Html 파일 생성
+        $content = "<h1>" . basename($this->uri) . "</h1>\n\n<p>404로 생성된 HTML 페이지입니다. 편집을 통하여 내용을 수정해 주세요.</p>";
+        if (file_put_contents($target, $content)) {
+            $this->dispatch('page-realod');
+        }
+    }
+
+    public function blade()
+    {
+        // 현재 슬롯 가져오기
+        $this->slot = www_slot();
+        if (!$this->slot) {
+            return;
+        }
+
+        // 리소스 경로 설정
+        $path = resource_path('www');
+        $target = $path . DIRECTORY_SEPARATOR . $this->slot;
+        $target .= DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->uri);
+
+        // 폴더가 없으면 생성
+        if (!is_dir($target)) {
+            mkdir($target, 0777, true);
+        }
+
+        // index.blade.php 파일 생성
+        $target .= DIRECTORY_SEPARATOR . "index.blade.php";
+
+        // 기본 문구가 포함된 Blade 파일 생성
+        $content = "<x-www-app>\n<x-www-layout>\n<x-www-main>\n";
+        $content .= "<h1>" . basename($this->uri) .
+        "</h1>\n\n<p>404로 생성된 Blade 페이지입니다. 편집을 통하여 내용을 수정해 주세요.</p>";
+        $content .= "</x-www-main>\n</x-www-layout>\n</x-www-app>";
+
+        if (file_put_contents($target, $content)) {
+            $this->dispatch('page-realod');
+        }
+    }
 }

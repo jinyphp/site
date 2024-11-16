@@ -10,7 +10,6 @@ use Livewire\Attributes\On;
 use Jiny\Widgets\Http\Livewire\Widget;
 class SiteWidgetMenu extends Widget
 {
-
     public $uri;
 
     public $widget_id;      // 위젯 아디이
@@ -23,6 +22,7 @@ class SiteWidgetMenu extends Widget
     // public $code;
     public $code; // 메뉴코드
     public $code_key;
+    public $key;
     public $menus=[]; //
 
     public $upload_path;
@@ -63,8 +63,14 @@ class SiteWidgetMenu extends Widget
             //dd($this->actions);
         }
 
+        //dd($this->actions);
+
         // action 설정값에 적용된 메뉴를 설정
         // 코드키
+        if($this->key) {
+            $this->code_key = $this->key;
+        }
+
         if($this->code_key) {
             //dd($this->code_key);
             $code_key = $this->code_key;

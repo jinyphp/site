@@ -22,7 +22,6 @@ return new class extends Migration
 
             $table->string('slug')->nullable();
             $table->string('title')->nullable();
-
             $table->string('blade')->nullable();
 
 

@@ -4,11 +4,24 @@ use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
 use Illuminate\Support\Facades\DB;
 
-
-
-function country() {
-    return DB::table('site_country')->get();
+if(!function_exists("isDesign")) {
+    function isDesign() {
+        return request()->has('mode') && request()->get('mode') == 'design';
+    }
 }
+
+/**
+ * 사이트 정보 반환
+ * /resources/www/info.json
+ */
+if(!function_exists("info")) {
+    function info($key = null) {
+        $obj = \Jiny\Site\SiteInfo::instance("info");
+        return $obj->get($key);
+    }
+}
+
+
 
 if(!function_exists("www_view")) {
     function www_view($path, $args=[]) {

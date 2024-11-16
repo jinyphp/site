@@ -18,7 +18,18 @@ class AdminSiteActions extends WireTablePopupForms
         parent::__construct();
         $this->setVisit($this);
 
-        //$this->actions['view']['main'] = "jiny-site::admin.files.main";
+        $this->actions['view']['layout'] = "jiny-site::admin.actions.layout";
+
+        $this->actions['title'] = "Action json";
+        $this->actions['subtitle'] = "Action json 파일 관리";
+    }
+
+    public function index(Request $request)
+    {
+        $subPath = $request->path ?? '';
+
+        $this->params['path'] = $subPath;
+        return parent::index($request);
     }
 
 

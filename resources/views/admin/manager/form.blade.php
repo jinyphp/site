@@ -16,12 +16,18 @@
             </x-form-item>
         </x-form-hor>
 
+
         <x-form-hor>
-            <x-form-label>역할</x-form-label>
+            <x-form-label>
+                <a class="btn btn-sm btn-primary" href="/admin/site/roles">
+                    역할
+                </a>
+            </x-form-label>
             <x-form-item>
-                {!! xInputText()
+                {!! xSelect()
+                    ->table('site_roles','role')
                     ->setWire('model.defer',"forms.role")
-                    ->setWidth("standard")
+                    ->setWidth("medium")
                 !!}
             </x-form-item>
         </x-form-hor>

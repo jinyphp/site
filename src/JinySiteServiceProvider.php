@@ -43,6 +43,13 @@ class JinySiteServiceProvider extends ServiceProvider
             ]);
         }
 
+
+
+        // $auth = Auth::user();
+        // dd($auth);
+
+
+
         $this->resourceSetting();
 
         Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
@@ -82,6 +89,7 @@ class JinySiteServiceProvider extends ServiceProvider
         Blade::component(\Jiny\Site\View\Components\Footer::class, "site-footer");
         Blade::component(\Jiny\Site\View\Components\Header::class, "site-header");
         Blade::component(\Jiny\Site\View\Components\Menu::class, "site-menu");
+
 
         Blade::component("www::" . www_slot() . "._layouts.preview", "www-preview");
         Blade::component("www::" . www_slot() . "._layouts.sidebarLink", "www-sidebarlink");
@@ -369,6 +377,28 @@ class JinySiteServiceProvider extends ServiceProvider
 
             Livewire::component('site-terms-use',
                 \Jiny\Site\Http\Livewire\SiteTermsUse::class);
+
+            // 위젯 컴포넌트
+            Livewire::component('site-widget',
+                \Jiny\Site\Http\Livewire\SiteWidget::class);
+
+            Livewire::component('admin-site-images',
+                \Jiny\Site\Http\Livewire\AdminSiteImages::class);
+
+            Livewire::component('admin-site-actions',
+                \Jiny\Site\Http\Livewire\AdminSiteActions::class);
+
+            // 캘린더
+            Livewire::component('site-calender',
+                \Jiny\Site\Http\Livewire\SiteCalender::class);
+
+            // 사이트 컨덴츠 검색창
+            Livewire::component('site-screen',
+                \Jiny\Site\Http\Livewire\SiteScreen::class);
+
+            // 이미지 업로드
+            Livewire::component('site-upload-image',
+                \Jiny\Site\Http\Livewire\SiteUploadImage::class);
 
         });
     }

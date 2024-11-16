@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 
 class SiteTermsUse extends Component
 {
+    private $tablename = "user_agreement";
     public $actions = [];
 
     public $slug;
@@ -15,7 +16,6 @@ class SiteTermsUse extends Component
     public $termBlade;
 
     use \Jiny\Widgets\Http\Trait\DesignMode;
-
 
     public $popupForm = false;
     public $popupWindowWidth = "4xl";
@@ -35,17 +35,20 @@ class SiteTermsUse extends Component
 
         if($terms = $this->fetch()) {
             // 처음 데이터 선택
-            $this->termBlade = "www::shop_fashion-v1.terms.".$terms[0]->slug;
+            if(isset($terms[0])) {
+                //$this->termBlade = "www::shop_fashion-v1.terms.".$terms[0]->slug;
+                $this->termBlade = inSlot("terms").".".$terms[0]->slug;
+            }
         }
 
         if($this->slug) {
-            $this->termBlade = "www::shop_fashion-v1.terms.".$this->slug;
+            $this->termBlade = inSlot("terms").".".$this->slug;
         }
     }
 
     private function fetch()
     {
-        $terms = DB::table('site_terms')->get();
+        $terms = DB::table($this->tablename)->get();
         if($terms) {
             $this->terms = [];
             foreach($terms as $item){
@@ -111,7 +114,7 @@ class SiteTermsUse extends Component
 
         $this->forms['created_at'] = date("Y-m-d H:i:s");
         $this->forms['updated_at'] = date("Y-m-d H:i:s");
-        DB::table('site_terms')->insert($this->forms);
+        DB::table($this->tablename)->insert($this->forms);
 
 
         //$this->terms []= $this->forms;
@@ -125,7 +128,7 @@ class SiteTermsUse extends Component
             $this->actions['id'] = $id;
         }
 
-        $row = DB::table('site_terms')->where('id', $id)->first();
+        $row = DB::table($this->tablename)->where('id', $id)->first();
         $this->forms = [];
         foreach($row as $key => $val) {
             $this->forms[$key] = $val;
@@ -137,7 +140,7 @@ class SiteTermsUse extends Component
     public function update()
     {
         $id = $this->forms['id'];
-        DB::table('site_terms')->where('id', $id)->update($this->forms);
+        DB::table($this->tablename)->where('id', $id)->update($this->forms);
 
         $this->forms = [];
         $this->popupForm = false;
@@ -165,7 +168,7 @@ class SiteTermsUse extends Component
         $this->popupForm = false;
 
         // 데이터 삭제
-        DB::table('site_terms')
+        DB::table($this->tablename)
         ->where('id', $this->actions['id'])
         ->delete();
 

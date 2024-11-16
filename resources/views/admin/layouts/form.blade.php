@@ -18,17 +18,27 @@
             </x-form-hor>
 
             <x-form-hor>
-                <x-form-label>테그</x-form-label>
+                <x-form-label>
+                    <a href="/admin/site/layout/tag">
+                        테그 +
+                    </a>
+                </x-form-label>
                 <x-form-item>
-                    {!! xInputText()
+                    {!! xSelect()
+                        ->table('site_layouts_tag','tag')
+                        ->setWire('model.defer',"forms.tag")
+                        ->setWidth("medium")
+                    !!}
+
+                    {{-- {!! xInputText()
                         ->setWire('model.defer',"forms.tag")
                         ->setWidth("standard")
-                    !!}
+                    !!} --}}
                 </x-form-item>
             </x-form-hor>
 
             <x-form-hor>
-                <x-form-label>이름</x-form-label>
+                <x-form-label>_layouts/이름</x-form-label>
                 <x-form-item>
                     {!! xInputText()
                         ->setWire('model.defer',"forms.name")

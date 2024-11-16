@@ -3,10 +3,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
-## Site Root Index
+/**
+ * Site Root Index
+ */
 Route::middleware(['web'])->group(function(){
-    ## root
+    ## index
     Route::get('/', [
         \Jiny\Site\Http\Controllers\Site\SiteHome::class,
         "index"]);
@@ -14,23 +15,16 @@ Route::middleware(['web'])->group(function(){
 
 
 Route::middleware(['web'])->group(function(){
-    ## about 기능
+    ## 동의서
     Route::get('/terms/{any?}', [
         \Jiny\Site\Http\Controllers\Site\SiteTermsUse::class,
         "index"])->where('any', '.*');
 
+});
+
+Route::middleware(['web'])->group(function(){
     ## about 기능
-    Route::get('/about', [
-        \Jiny\Site\Http\Controllers\Site\SiteAbout::class,
-        "index"]);
-
-    ## contact 기능
-    Route::get('/contact', [
-            \Jiny\Site\Http\Controllers\Site\SitePartialsView::class,
-            "index"]);
-
-    ## help 기능
-    Route::get('/help', [
-        \Jiny\Site\Http\Controllers\Site\SitePartialsView::class,
-        "index"]);
+    // Route::get('/about', [
+    //     \Jiny\Site\Http\Controllers\Site\SiteAbout::class,
+    //     "index"]);
 });
