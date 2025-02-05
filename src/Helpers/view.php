@@ -106,14 +106,20 @@ if(!function_exists("inSlot")) {
     }
 }
 
+
 // 슬롯안에 뷰가 있는지 검사
-function inSlotView($viewFile, $prefix = "www")
+// 순차적으로 검사, slot -> www -> default
+function inSlotView($viewFile, $default = null)
 {
-    //$slot = www_slot();
-    $slot = Slot()->name;
+    // 페키지 경로를 모두 포함해서 검사함
+    if (strpos($viewFile, '::') !== false) {
+        return $viewFile;
+    }
 
     // 페키지 경로가 없는 겨우에는 slot에서 검색
-    // 먼저 슬롯 안에 있는지 검사
+    // 먼저 슬롯 안에 있는지
+    $prefix = "www";
+    $slot = Slot()->name;
     if($slot) {
         if(View::exists($prefix."::".$slot.".".$viewFile)) {
             return $prefix."::".$slot.".".$viewFile;
@@ -124,6 +130,11 @@ function inSlotView($viewFile, $prefix = "www")
         if(View::exists($prefix."::".$viewFile)) {
             return $prefix."::".$viewFile;
         }
+    }
+
+    // 기본 리소스가 있는 경우
+    if($default) {
+        return $default;
     }
 
     return false;

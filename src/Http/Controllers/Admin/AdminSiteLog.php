@@ -19,7 +19,7 @@ class AdminSiteLog extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_log";
+        $this->actions['table']['name'] = "site_log";
 
         $this->actions['view']['list'] = "jiny-site::admin.log.list";
         $this->actions['view']['form'] = "jiny-site::admin.log.form";

@@ -26,6 +26,8 @@ class SiteUploadImage extends Component
 
     public $popupWindowWidth = "2xl";
 
+    use \Jiny\Widgets\Http\Trait\DesignMode;
+
     public function mount()
     {
         if(!$this->viewFile) {

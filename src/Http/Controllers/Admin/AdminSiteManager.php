@@ -17,7 +17,7 @@ class AdminSiteManager extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_manager";
+        $this->actions['table']['name'] = "site_manager";
 
         $this->actions['view']['list'] = "jiny-site::admin.manager.list";
         $this->actions['view']['form'] = "jiny-site::admin.manager.form";

@@ -21,7 +21,7 @@ class AdminRouteController extends WireTablePopupForms
         $this->setVisit($this);
 
         ##
-        $this->actions['table'] = "jiny_route"; // 테이블 정보
+        $this->actions['table']['name'] = "jiny_route"; // 테이블 정보
         $this->actions['paging'] = 10; // 페이지 기본값
 
         $this->actions['view']['list'] = "jiny-site::admin.route.list";

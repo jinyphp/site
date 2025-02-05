@@ -19,7 +19,7 @@ class AdminSiteLayout extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_layouts";
+        $this->actions['table']['name'] = "site_layouts";
         $this->actions['paging'] = 20;
 
         $this->actions['view']['list'] = "jiny-site::admin.layouts.list";

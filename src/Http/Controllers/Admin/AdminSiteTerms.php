@@ -19,7 +19,7 @@ class AdminSiteTerms extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_terms";
+        $this->actions['table']['name'] = "site_terms";
 
         $this->actions['view']['list'] = "jiny-site::admin.terms.list";
         $this->actions['view']['form'] = "jiny-site::admin.terms.form";

@@ -19,7 +19,7 @@ class AdminSiteMenuCode extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_menus";
+        $this->actions['table']['name'] = "site_menus";
 
         $this->actions['view']['list'] = "jiny-site::admin.menu.list";
         $this->actions['view']['form'] = "jiny-site::admin.menu.form";

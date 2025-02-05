@@ -19,7 +19,7 @@ class AdminSiteCountry extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_country";
+        $this->actions['table']['name'] = "site_country";
 
         $this->actions['view']['list'] = "jiny-site::admin.country.list";
         $this->actions['view']['form'] = "jiny-site::admin.country.form";

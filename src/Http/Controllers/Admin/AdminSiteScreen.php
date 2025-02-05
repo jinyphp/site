@@ -22,7 +22,7 @@ class AdminSiteScreen extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_screen";
+        $this->actions['table']['name'] = "site_screen";
 
         $this->actions['view']['list'] = "jiny-site::admin.screen.list";
         $this->actions['view']['form'] = "jiny-site::admin.screen.form";

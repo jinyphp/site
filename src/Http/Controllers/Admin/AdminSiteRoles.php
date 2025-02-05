@@ -19,7 +19,7 @@ class AdminSiteRoles extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_roles";
+        $this->actions['table']['name'] = "site_roles";
 
         $this->actions['view']['list'] = "jiny-site::admin.roles.list";
         $this->actions['view']['form'] = "jiny-site::admin.roles.form";

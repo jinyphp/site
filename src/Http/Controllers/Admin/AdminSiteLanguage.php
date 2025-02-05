@@ -22,7 +22,7 @@ class AdminSiteLanguage extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_language";
+        $this->actions['table']['name'] = "site_language";
 
         $this->actions['view']['list'] = "jiny-site::admin.language.list";
         $this->actions['view']['form'] = "jiny-site::admin.language.form";

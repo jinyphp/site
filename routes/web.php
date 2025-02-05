@@ -22,6 +22,8 @@ Route::middleware(['web'])->group(function(){
 
 });
 
+
+
 Route::middleware(['web'])->group(function(){
     ## about 기능
     // Route::get('/about', [

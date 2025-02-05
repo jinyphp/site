@@ -19,7 +19,7 @@ class AdminSiteSeo extends WireTablePopupForms
         $this->setVisit($this);
 
         ## 테이블 정보
-        $this->actions['table'] = "site_seo";
+        $this->actions['table']['name'] = "site_seo";
 
         $this->actions['view']['list'] = "jiny-site::admin.seo.list";
         $this->actions['view']['form'] = "jiny-site::admin.seo.form";

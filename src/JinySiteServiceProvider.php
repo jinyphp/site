@@ -400,6 +400,8 @@ class JinySiteServiceProvider extends ServiceProvider
             Livewire::component('site-upload-image',
                 \Jiny\Site\Http\Livewire\SiteUploadImage::class);
 
+
+            
         });
     }
 }
