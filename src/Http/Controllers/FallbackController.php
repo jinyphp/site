@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\DB;
 /**
  * 동적 페이지 반환
  */
-use Jiny\WireTable\Http\Controllers\LiveController;
-class FallbackController extends LiveController
+class FallbackController extends Controller
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->setVisit($this);
+        // parent::__construct();
+        // $this->setVisit($this);
     }
 
     ## 페이지 반환

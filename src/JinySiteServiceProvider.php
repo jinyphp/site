@@ -52,6 +52,15 @@ class JinySiteServiceProvider extends ServiceProvider
 
         $this->resourceSetting();
 
+        // 뷰 컴포저 등록 - 게시판 뷰에 통합 인증 정보 제공
+        $this->app['view']->composer(
+            [
+                'jiny-site::www.board.*',
+                'www::*'
+            ],
+            \Jiny\Site\Http\ViewComposers\AuthComposer::class
+        );
+
         Blade::component($this->package.'::components.'.'site.setting', 'site-setting');
 
         Blade::component($this->package.'::layouts.'.'container-fluid', 'site-container-fluid');
@@ -156,6 +165,23 @@ class JinySiteServiceProvider extends ServiceProvider
         });
 
 
+        // JWT/세션 통합 인증 지시문
+        Blade::directive('authUnified', function () {
+            return "<?php if(\$isAuthenticated ?? false): ?>";
+        });
+
+        Blade::directive('endauthUnified', function () {
+            return "<?php endif; ?>";
+        });
+
+        Blade::directive('guestUnified', function () {
+            return "<?php if(!(\$isAuthenticated ?? false)): ?>";
+        });
+
+        Blade::directive('endguestUnified', function () {
+            return "<?php endif; ?>";
+        });
+
         // 디렉티브
         Blade::directive('blocks', function ($expression) {
             // Parse the expression to extract the view name and variables
@@ -195,11 +221,11 @@ class JinySiteServiceProvider extends ServiceProvider
 
         $partPath = $path.DIRECTORY_SEPARATOR."_partials";
         if(!is_dir($partPath)) {
-            mkdir($partPath,0777,true);
+            @mkdir($partPath,0777,true);
         }
 
         if(!is_dir($path."/slot1")) {
-            mkdir($path."/slot1",0777,true);
+            @mkdir($path."/slot1",0777,true);
         }
         $this->loadViewsFrom($path."/slot1", 'www1');
     }

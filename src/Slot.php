@@ -20,10 +20,12 @@ class Slot
             self::$Instance = new self();
 
             // 정보를 읽어 옵니다.
-            $user = user(); // 싱글턴 객체
-            //dump($user);
-            //dump("slot load");
-            self::$Instance->reload();
+            if (function_exists('user')) {
+                $user = user(); // 싱글턴 객체
+                //dump($user);
+                //dump("slot load");
+                self::$Instance->reload();
+            }
 
             return self::$Instance;
         } else {
