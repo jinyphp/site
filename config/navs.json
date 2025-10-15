@@ -1,0 +1,47 @@
+[
+    {
+        "nav_key": "jiny-site::components.nav.main",
+        "name": "Main Navigation",
+        "description": "Primary site navigation menu",
+        "template": "jiny-site::components.nav.main",
+        "type": "horizontal",
+        "dropdown": true,
+        "mobile_responsive": true
+    },
+    {
+        "nav_key": "jiny-site::components.nav.admin",
+        "name": "Admin Navigation",
+        "description": "Admin panel navigation menu",
+        "template": "jiny-site::components.nav.admin",
+        "type": "vertical",
+        "dropdown": false,
+        "mobile_responsive": true
+    },
+    {
+        "nav_key": "jiny-site::components.nav.breadcrumb",
+        "name": "Breadcrumb Navigation",
+        "description": "Breadcrumb navigation trail",
+        "template": "jiny-site::components.nav.breadcrumb",
+        "type": "horizontal",
+        "dropdown": false,
+        "mobile_responsive": false
+    },
+    {
+        "nav_key": "jiny-site::components.nav.footer",
+        "name": "Footer Navigation",
+        "description": "Footer navigation links",
+        "template": "jiny-site::components.nav.footer",
+        "type": "horizontal",
+        "dropdown": false,
+        "mobile_responsive": true
+    },
+    {
+        "nav_key": "jiny-site::components.nav.tabs",
+        "name": "Tab Navigation",
+        "description": "Tab-style navigation for content sections",
+        "template": "jiny-site::components.nav.tabs",
+        "type": "horizontal",
+        "dropdown": false,
+        "mobile_responsive": true
+    }
+]

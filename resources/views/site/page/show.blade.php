@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('jiny-site::layouts.admin.sidebar')
 
 @section('title', $page['title'] ?? '페이지')
 

@@ -2,44 +2,98 @@
 
 namespace Jiny\Site\Http\Controllers\Admin\Banners;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Banner;
+use Carbon\Carbon;
 
 /**
- * 배너 관리 컨트롤러
+ * 베너 목록 표시 컨트롤러
  *
  * 진입 경로:
- * Route::get('admin/site/banners') → IndexController::__invoke()
+ * Route::get('admin/site/banner') → IndexController::__invoke()
  */
-class IndexController extends Controller
+class IndexController extends BaseController
 {
-    protected $config;
 
-    public function __construct()
+    /**
+     * 베너 목록 표시 (메인 진입점)
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function __invoke(Request $request)
     {
-        $this->loadConfig();
+        // 통계 데이터 생성
+        $stats = $this->generateStats();
+
+        // 필터링된 베너 목록 조회
+        $banners = $this->getFilteredBanners($request);
+
+        $indexConfig = $this->getConfig('index', []);
+
+        return view($indexConfig['view'] ?? 'jiny-site::admin.banners.index', [
+            'banners' => $banners,
+            'config' => $indexConfig,
+            'stats' => $stats,
+        ]);
     }
 
-    protected function loadConfig()
+    /**
+     * 통계 데이터 생성
+     *
+     * @return array
+     */
+    protected function generateStats()
     {
-        $this->config = [
-            'table' => 'site_banner',
-            'view' => config('site.admin.banners.view', 'jiny-site::admin.banners.index'),
-            'title' => '배너 관리',
-            'subtitle' => '사이트 상단에 알림 배너를 관리합니다.',
+        return [
+            'total' => Banner::count(),
+            'active' => Banner::where('enable', true)->count(),
+            'inactive' => Banner::where('enable', false)->count(),
+            'expired' => Banner::where('end_date', '<', Carbon::now())->count(),
         ];
     }
 
-    public function __invoke(Request $request)
+    /**
+     * 필터링된 베너 목록 조회
+     *
+     * @param Request $request
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    protected function getFilteredBanners(Request $request)
     {
-        $banners = DB::table($this->config['table'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Banner::query();
 
-        return view($this->config['view'], [
-            'banners' => $banners,
-            'config' => $this->config,
-        ]);
+        // 검색 필터
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
+        // 활성화 상태 필터
+        if ($request->has('enable') && $request->get('enable') !== 'all') {
+            $query->where('enable', $request->get('enable') == '1');
+        }
+
+        // 타입 필터
+        if ($request->has('type') && $request->get('type') !== 'all') {
+            $query->where('type', $request->get('type'));
+        }
+
+        // JSON 설정에서 기본 정렬 정보 가져오기
+        $defaultSort = $this->getConfig('table.sort', ['column' => 'display_order', 'order' => 'asc']);
+        $sortBy = $request->get('sort_by', $defaultSort['column']);
+        $order = $request->get('order', $defaultSort['order']);
+
+        if ($sortBy === 'display_order') {
+            $query->orderBy('display_order', $order)->orderBy('id', 'desc');
+        } else {
+            $query->orderBy($sortBy, $order);
+        }
+
+        // JSON 설정에서 페이지당 항목 수 가져오기
+        $perPage = $this->getConfig('index.pagination.per_page', 15);
+        return $query->paginate($perPage);
     }
 }

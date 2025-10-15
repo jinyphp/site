@@ -2,7 +2,7 @@
 
 namespace Jiny\Site\Api\Controllers\Upload;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Jiny\Site\Services\ClipboardUploadService;
 

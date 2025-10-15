@@ -1,4 +1,4 @@
-@extends('jiny-site::layouts.admin.sidebar')
+@extends($layout ?? 'jiny-site::layouts.admin.sidebar')
 
 @section('title', isset($item) ? '관련글 수정' : '관련글 등록')
 

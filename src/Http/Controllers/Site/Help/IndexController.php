@@ -2,7 +2,7 @@
 
 namespace Jiny\Site\Http\Controllers\Site\Help;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,7 +25,7 @@ class IndexController extends Controller
     {
         $this->config = [
             'table' => 'site_help',
-            'view' => config('site.help.view', 'jiny-site::site.help.index'),
+            'view' => config('site.help.view', 'jiny-site::www.help.index'),
             'per_page' => config('site.help.per_page', 20),
         ];
     }
@@ -34,12 +34,12 @@ class IndexController extends Controller
     {
         $categories = DB::table('site_help_cate')
             ->where('enable', true)
-            ->orderBy('pos')
+            ->orderBy('order')
             ->get();
 
         $helps = DB::table($this->config['table'])
             ->where('enable', true)
-            ->orderBy('pos')
+            ->orderBy('order')
             ->paginate($this->config['per_page']);
 
         return view($this->config['view'], [

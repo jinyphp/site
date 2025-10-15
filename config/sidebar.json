@@ -1,0 +1,38 @@
+[
+    {
+        "sidebar_key": "jiny-site::components.sidebar.admin",
+        "name": "Admin Sidebar",
+        "description": "Admin panel navigation sidebar",
+        "template": "jiny-site::components.sidebar.admin",
+        "position": "left",
+        "collapsible": true,
+        "fixed": true
+    },
+    {
+        "sidebar_key": "jiny-site::components.sidebar.about",
+        "name": "About Sidebar",
+        "description": "About page sidebar with navigation",
+        "template": "jiny-site::components.sidebar.about",
+        "position": "right",
+        "collapsible": false,
+        "fixed": false
+    },
+    {
+        "sidebar_key": "jiny-site::components.sidebar.docs",
+        "name": "Documentation Sidebar",
+        "description": "Documentation navigation sidebar",
+        "template": "jiny-site::components.sidebar.docs",
+        "position": "left",
+        "collapsible": true,
+        "fixed": true
+    },
+    {
+        "sidebar_key": "jiny-site::components.sidebar.shop",
+        "name": "Shop Sidebar",
+        "description": "E-commerce filter sidebar",
+        "template": "jiny-site::components.sidebar.shop",
+        "position": "left",
+        "collapsible": false,
+        "fixed": false
+    }
+]

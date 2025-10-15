@@ -23,10 +23,11 @@ class SiteMenu extends Model
      * @var array
      */
     protected $fillable = [
+        'enable',
         'code',
-        'name',
         'description',
-        'enabled',
+        'blade',
+        'manager',
     ];
 
     /**
@@ -35,7 +36,7 @@ class SiteMenu extends Model
      * @var array
      */
     protected $casts = [
-        'enabled' => 'boolean',
+        'enable' => 'boolean',
     ];
 
     /**

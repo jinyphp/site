@@ -22,10 +22,16 @@ class SiteLanguage extends Model
      * @var array
      */
     protected $fillable = [
-        'code',
+        'enable',
+        'lang',
         'name',
         'native_name',
-        'enabled',
+        'locale',
+        'description',
+        'flag',
+        'manager',
+        'order',
+        'is_default',
     ];
 
     /**
@@ -34,7 +40,9 @@ class SiteLanguage extends Model
      * @var array
      */
     protected $casts = [
-        'enabled' => 'boolean',
+        'enable' => 'boolean',
+        'is_default' => 'boolean',
+        'order' => 'integer',
     ];
 
     /**
@@ -43,6 +51,8 @@ class SiteLanguage extends Model
      * @var array
      */
     protected $attributes = [
-        'enabled' => true,
+        'enable' => true,
+        'is_default' => false,
+        'order' => 0,
     ];
 }

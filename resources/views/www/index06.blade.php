@@ -1,4 +1,4 @@
-@extends('jiny-site::layouts.app')
+@extends($layout ?? 'jiny-site::layouts.app')
 
 @section('title', 'Job | Geeks - Academy Admin Template')
 

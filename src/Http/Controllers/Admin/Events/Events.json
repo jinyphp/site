@@ -1,0 +1,149 @@
+{
+    "table": {
+        "name": "site_event",
+        "model": "Jiny\\Site\\Models\\SiteEvent",
+        "where": {},
+        "sort": {
+            "column": "created_at",
+            "order": "desc"
+        }
+    },
+    "index": {
+        "title": "Event 관리",
+        "subtitle": "사이트 이벤트를 관리합니다",
+        "view": "jiny-site::admin.events.index",
+        "route": "admin.site.event.index",
+        "filter": {
+            "search": true,
+            "enable": true,
+            "status": true
+        },
+        "pagination": {
+            "per_page": 15
+        }
+    },
+    "show": {
+        "title": "Event 상세",
+        "subtitle": "이벤트 정보 조회",
+        "view": "jiny-site::admin.events.show",
+        "route": "admin.site.event.show"
+    },
+    "create": {
+        "title": "Event 생성",
+        "subtitle": "새로운 이벤트 추가",
+        "view": "jiny-site::admin.events.create",
+        "route": "admin.site.event.create"
+    },
+    "edit": {
+        "title": "Event 수정",
+        "subtitle": "이벤트 정보 수정",
+        "view": "jiny-site::admin.events.edit",
+        "route": "admin.site.event.edit"
+    },
+    "store": {
+        "route": "admin.site.event.store",
+        "redirect": {
+            "success": "admin.site.event.index",
+            "error": "admin.site.event.create"
+        },
+        "validation": {
+            "title": "required|string|max:255",
+            "code": "required|string|max:100|unique:site_event",
+            "description": "nullable|string|max:1000",
+            "status": "required|in:active,inactive,planned,completed",
+            "manager": "nullable|string|max:255",
+            "blade": "nullable|string|max:255",
+            "enable": "boolean",
+            "allow_participation": "boolean",
+            "max_participants": "nullable|integer|min:1",
+            "participation_start_date": "nullable|date",
+            "participation_end_date": "nullable|date|after_or_equal:participation_start_date",
+            "approval_type": "nullable|in:auto,manual",
+            "participation_description": "nullable|string|max:1000"
+        }
+    },
+    "update": {
+        "route": "admin.site.event.update",
+        "redirect": {
+            "success": "admin.site.event.index",
+            "error": "admin.site.event.edit"
+        },
+        "validation": {
+            "title": "required|string|max:255",
+            "code": "required|string|max:100|unique:site_event,code,{id}",
+            "description": "nullable|string|max:1000",
+            "status": "required|in:active,inactive,planned,completed",
+            "manager": "nullable|string|max:255",
+            "blade": "nullable|string|max:255",
+            "enable": "boolean",
+            "allow_participation": "boolean",
+            "max_participants": "nullable|integer|min:1",
+            "participation_start_date": "nullable|date",
+            "participation_end_date": "nullable|date|after_or_equal:participation_start_date",
+            "approval_type": "nullable|in:auto,manual",
+            "participation_description": "nullable|string|max:1000"
+        }
+    },
+    "delete": {
+        "route": "admin.site.event.destroy",
+        "redirect": {
+            "success": "admin.site.event.index"
+        },
+        "confirmation": {
+            "title": "이벤트 삭제",
+            "message": "선택한 이벤트를 삭제하시겠습니까?"
+        }
+    },
+    "fields": {
+        "title": {
+            "type": "text",
+            "label": "제목",
+            "required": true,
+            "help": "이벤트 제목을 입력하세요"
+        },
+        "code": {
+            "type": "text",
+            "label": "코드",
+            "required": true,
+            "help": "고유한 이벤트 코드를 입력하세요"
+        },
+        "description": {
+            "type": "textarea",
+            "label": "설명",
+            "rows": 4,
+            "help": "이벤트에 대한 설명을 입력하세요"
+        },
+        "image": {
+            "type": "file",
+            "label": "이미지",
+            "accept": "image/*",
+            "help": "이벤트 대표 이미지를 업로드하세요"
+        },
+        "status": {
+            "type": "select",
+            "label": "상태",
+            "options": {
+                "active": "활성",
+                "inactive": "비활성",
+                "planned": "계획중",
+                "completed": "완료"
+            },
+            "default": "active"
+        },
+        "enable": {
+            "type": "checkbox",
+            "label": "활성화",
+            "default": true
+        },
+        "manager": {
+            "type": "text",
+            "label": "담당자",
+            "help": "이벤트 담당자를 입력하세요"
+        },
+        "blade": {
+            "type": "text",
+            "label": "블레이드 파일",
+            "help": "커스텀 블레이드 파일명을 입력하세요"
+        }
+    }
+}

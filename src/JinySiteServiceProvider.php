@@ -26,6 +26,9 @@ class JinySiteServiceProvider extends ServiceProvider
         // 데이터베이스
         $this->loadMigrationsFrom(__DIR__.'/../databases/migrations');
 
+        // Observer 등록
+        $this->registerObservers();
+
 
         ## 배포
         $this->publishes([
@@ -39,7 +42,8 @@ class JinySiteServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \Jiny\Site\Console\Commands\SiteSlot::class
+                \Jiny\Site\Console\Commands\SiteSlot::class,
+                \Jiny\Site\Console\Commands\UpdateExchangeRates::class
             ]);
         }
 
@@ -356,11 +360,28 @@ class JinySiteServiceProvider extends ServiceProvider
         }
     }
 
-
-
+    /**
+     * Observer 등록
+     */
+    private function registerObservers()
+    {
+        \Jiny\Site\Models\SiteSupport::observe(\Jiny\Site\Observers\SiteSupportObserver::class);
+    }
 
     public function register()
     {
+        // 환율 서비스 등록
+        $this->app->singleton(\Jiny\Site\Services\ExchangeRateService::class);
+
+        // Footer 서비스 등록
+        $this->app->singleton('footer-service', \Jiny\Site\Services\FooterService::class);
+
+        // Header 서비스 등록
+        $this->app->singleton('jiny.site.header', \Jiny\Site\Services\HeaderService::class);
+
+        // 템플릿 설정 병합 (JSON 파일에서 로드)
+        $this->loadTemplateConfigsFromJson();
+
         /* 라이브와이어 컴포넌트 등록 */
         $this->app->afterResolving(BladeCompiler::class, function () {
             Livewire::component('site-setting',
@@ -429,5 +450,42 @@ class JinySiteServiceProvider extends ServiceProvider
 
             
         });
+    }
+
+    /**
+     * JSON 파일에서 템플릿 설정을 로드하여 config에 병합
+     */
+    private function loadTemplateConfigsFromJson()
+    {
+        // 레이아웃 설정 로드
+        $this->loadJsonConfig('layouts');
+
+        // 헤더 설정 로드
+        $this->loadJsonConfig('headers');
+
+        // 푸터 설정 로드
+        $this->loadJsonConfig('footers');
+
+        // 사이드바 설정 로드
+        $this->loadJsonConfig('sidebar');
+
+        // 네비게이션 설정 로드
+        $this->loadJsonConfig('navs');
+    }
+
+    /**
+     * 특정 JSON 파일에서 설정을 로드하여 config에 병합
+     */
+    private function loadJsonConfig($configName)
+    {
+        $jsonPath = __DIR__.'/../config/'.$configName.'.json';
+
+        if (file_exists($jsonPath)) {
+            $json = file_get_contents($jsonPath);
+            $config = json_decode($json, true) ?? [];
+
+            // config에 설정
+            $this->app['config']->set('site.'.$configName, $config);
+        }
     }
 }

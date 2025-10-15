@@ -1,0 +1,155 @@
+{
+    "table": {
+        "name": "inventory_items",
+        "model": "App\\Models\\InventoryItem",
+        "where": {},
+        "sort": {
+            "column": "created_at",
+            "order": "desc"
+        }
+    },
+    "index": {
+        "title": "재고 관리",
+        "subtitle": "상품 재고 현황 및 관리",
+        "view": "jiny-site::admin.inventory.index",
+        "route": "admin.cms.ecommerce.inventory.dashboard",
+        "filter": {
+            "search": true,
+            "location": true,
+            "low_stock": true
+        },
+        "pagination": {
+            "per_page": 20
+        },
+        "breadcrumbs": [
+            {"title": "대시보드", "route": "admin.cms.dashboard"},
+            {"title": "이커머스", "route": "admin.cms.ecommerce.dashboard"},
+            {"title": "재고 관리", "active": true}
+        ]
+    },
+    "stock_in": {
+        "title": "입고 관리",
+        "subtitle": "상품 입고 처리 및 기록",
+        "view": "jiny-site::admin.inventory.stock-in",
+        "route": "admin.cms.ecommerce.inventory.stock-in",
+        "breadcrumbs": [
+            {"title": "대시보드", "route": "admin.cms.dashboard"},
+            {"title": "이커머스", "route": "admin.cms.ecommerce.dashboard"},
+            {"title": "재고 관리", "route": "admin.cms.ecommerce.inventory.dashboard"},
+            {"title": "입고 관리", "active": true}
+        ],
+        "transaction_type": "in",
+        "reasons": [
+            {"value": "purchase", "label": "구매"},
+            {"value": "return", "label": "반품"},
+            {"value": "adjustment", "label": "조정"},
+            {"value": "transfer", "label": "이동"},
+            {"value": "production", "label": "생산"}
+        ]
+    },
+    "stock_out": {
+        "title": "출고 관리",
+        "subtitle": "상품 출고 처리 및 기록",
+        "view": "jiny-site::admin.inventory.stock-out",
+        "route": "admin.cms.ecommerce.inventory.stock-out",
+        "breadcrumbs": [
+            {"title": "대시보드", "route": "admin.cms.dashboard"},
+            {"title": "이커머스", "route": "admin.cms.ecommerce.dashboard"},
+            {"title": "재고 관리", "route": "admin.cms.ecommerce.inventory.dashboard"},
+            {"title": "출고 관리", "active": true}
+        ],
+        "transaction_type": "out",
+        "reasons": [
+            {"value": "sale", "label": "판매"},
+            {"value": "return", "label": "반품"},
+            {"value": "adjustment", "label": "조정"},
+            {"value": "transfer", "label": "이동"},
+            {"value": "damaged", "label": "손상"},
+            {"value": "expired", "label": "만료"}
+        ]
+    },
+    "alerts": {
+        "title": "재고 알림 관리",
+        "subtitle": "재고 부족, 품절 등 알림 관리",
+        "view": "jiny-site::admin.inventory.alerts",
+        "route": "admin.cms.ecommerce.inventory.alerts",
+        "breadcrumbs": [
+            {"title": "대시보드", "route": "admin.cms.dashboard"},
+            {"title": "이커머스", "route": "admin.cms.ecommerce.dashboard"},
+            {"title": "재고 관리", "route": "admin.cms.ecommerce.inventory.dashboard"},
+            {"title": "재고 알림", "active": true}
+        ],
+        "pagination": {
+            "per_page": 20
+        },
+        "filter": {
+            "severity": ["critical", "high", "medium", "low"],
+            "type": ["low_stock", "out_of_stock", "overstock", "expiry_warning"],
+            "status": ["active", "acknowledged", "resolved"]
+        }
+    },
+    "models": {
+        "inventory_item": "App\\Models\\InventoryItem",
+        "inventory_transaction": "App\\Models\\InventoryTransaction",
+        "stock_alert": "App\\Models\\StockAlert",
+        "product": "App\\Models\\Product"
+    },
+    "validation": {
+        "stock_transaction": {
+            "inventory_item_id": "required|integer|exists:inventory_items,id",
+            "quantity": "required|integer|min:1",
+            "unit_cost": "nullable|numeric|min:0",
+            "reason": "required|string|max:50",
+            "reference_number": "nullable|string|max:100",
+            "notes": "nullable|string|max:500"
+        },
+        "alert_action": {
+            "user_id": "required|integer|exists:users,id",
+            "notes": "nullable|string|max:500"
+        }
+    },
+    "messages": {
+        "stock_in": {
+            "success": "입고 처리가 완료되었습니다.",
+            "error": "입고 처리에 실패했습니다.",
+            "insufficient_data": "입고 정보가 부족합니다."
+        },
+        "stock_out": {
+            "success": "출고 처리가 완료되었습니다.",
+            "error": "출고 처리에 실패했습니다.",
+            "insufficient_stock": "재고가 부족합니다.",
+            "invalid_quantity": "출고 수량이 잘못되었습니다."
+        },
+        "alerts": {
+            "acknowledged": "알림이 확인되었습니다.",
+            "resolved": "알림이 해결되었습니다.",
+            "error": "알림 처리에 실패했습니다."
+        }
+    },
+    "actions": {
+        "stock_in": {
+            "route": "admin.cms.ecommerce.inventory.stock-in.process",
+            "method": "POST"
+        },
+        "stock_out": {
+            "route": "admin.cms.ecommerce.inventory.stock-out.process",
+            "method": "POST"
+        },
+        "alert_acknowledge": {
+            "route": "admin.cms.ecommerce.inventory.alerts.acknowledge",
+            "method": "POST"
+        },
+        "alert_resolve": {
+            "route": "admin.cms.ecommerce.inventory.alerts.resolve",
+            "method": "POST"
+        }
+    },
+    "settings": {
+        "low_stock_threshold": 10,
+        "critical_stock_threshold": 5,
+        "default_location": "main_warehouse",
+        "auto_create_alerts": true,
+        "track_cost": true,
+        "require_approval": false
+    }
+}

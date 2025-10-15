@@ -1,7 +1,7 @@
 <?php
 namespace Jiny\Site\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -26,6 +26,12 @@ class FallbackController extends Controller
         $url = $request->path();
         $urlPath = str_replace('/',DIRECTORY_SEPARATOR, $url);
         //dd($url);
+
+        // route0. CMS 동적 페이지 체크 (최우선)
+        // /admin/cms/pages에서 등록한 페이지들을 가장 먼저 처리
+        if($res = $this->route_cms_pages($url)) {
+            return $res;
+        }
 
         // route1. 컨트롤러 동작 처리
         // uri에 대한 actions 설정값이 있는 경우,
@@ -74,7 +80,6 @@ class FallbackController extends Controller
         if($res = $this->route_board_slug($_SERVER['REQUEST_URI'])) {
             return $res;
         }
-
 
         // route6. 오류 페이지 출력
         if($res = $this->page404($activeSlot)) {
@@ -224,7 +229,8 @@ class FallbackController extends Controller
      * 테마에서 지정된 동적라우트가 있는지 검사
      */
     private function route_dynamic_theme($uri) {
-        $theme = xTheme()->getTheme();
+        // xTheme() 함수가 삭제되었으므로 세션에서 테마 확인
+        $theme = session('theme', null);
         //// 세션에서 현재 테마이름을 읽기
         //$theme = session()->get('theme');
         if($theme) {
@@ -463,6 +469,95 @@ class FallbackController extends Controller
             ]);
         }
 
+    }
+
+    /**
+     * CMS 동적 페이지 체크
+     * /admin/cms/pages에서 등록한 페이지들을 처리
+     */
+    private function route_cms_pages($uri)
+    {
+        // URI에서 앞뒤 슬래시 제거하여 slug 추출
+        $slug = trim($uri, '/');
+
+        // 빈 slug는 처리하지 않음 (홈페이지는 별도 처리)
+        if (empty($slug)) {
+            return null;
+        }
+
+        // DB에서 페이지 검색
+        try {
+            $page = DB::table('site_pages')
+                ->where('slug', $slug)
+                ->where('status', 'published')
+                ->where(function($query) {
+                    $query->whereNull('published_at')
+                          ->orWhere('published_at', '<=', now());
+                })
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$page) {
+                return null;
+            }
+
+            // 페이지 템플릿 결정
+            $template = $this->getPageTemplate($page);
+
+            // 템플릿이 존재하지 않으면 null 반환
+            if (!$template || !View::exists($template)) {
+                \Illuminate\Support\Facades\Log::warning('CMS Page template not found', [
+                    'uri' => $uri,
+                    'slug' => $slug,
+                    'template' => $template
+                ]);
+                return null;
+            }
+
+            // 조회수 증가
+            DB::table('site_pages')
+                ->where('id', $page->id)
+                ->increment('view_count');
+
+            // 페이지 뷰 반환
+            return view($template, compact('page'));
+
+        } catch (\Exception $e) {
+            // 예외 발생 시 로그 기록 후 null 반환
+            \Illuminate\Support\Facades\Log::warning('CMS Page processing error', [
+                'uri' => $uri,
+                'slug' => $slug,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * 페이지 템플릿 결정
+     */
+    private function getPageTemplate($page)
+    {
+        $template = $page->template ?: 'index';
+
+        // 템플릿 파일 우선순위
+        $templates = [
+            "jiny-site::www.pages.{$template}",  // 패키지의 www.pages 템플릿
+            "jiny-site::pages.{$template}",  // 패키지의 pages 템플릿
+            "pages.{$template}",  // 프로젝트의 커스텀 템플릿
+            'jiny-site::www.pages.index',  // 기본 www.pages.index 템플릿
+            'errors.404',  // 404 에러 페이지
+        ];
+
+        // 존재하는 첫 번째 템플릿 반환
+        foreach ($templates as $tmpl) {
+            if (View::exists($tmpl)) {
+                return $tmpl;
+            }
+        }
+
+        // 모든 템플릿이 없으면 null 반환 (안전장치)
+        return null;
     }
 
     /**

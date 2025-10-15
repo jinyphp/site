@@ -14,13 +14,7 @@ class App extends SiteView
         if($name) {
             $this->name = $name;
         } else {
-            // Action 설정값 읽기
-            $val = Action()->get('layouts.app');
-            if($val) {
-                $this->name = $val;
-            } else {
-                $this->name = "app"; // 기본값
-            }
+            $this->name = "app"; // 기본값
         }
 
         $this->data = $data;

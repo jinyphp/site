@@ -1,4 +1,4 @@
-@extends('jiny-site::layouts.admin.sidebar')
+@extends($layout ?? 'jiny-site::layouts.admin.sidebar')
 
 @section('title', $config['title'] ?? '게시글 목록')
 

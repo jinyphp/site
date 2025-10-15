@@ -1,11 +1,11 @@
 <div>
-    <x-flex-center class="gap-2">
+    <div class="d-flex justify-content-center align-items-center gap-2">
         <a class="btn btn-primary" href="/">Home</a>
 
         <x-click class="btn btn-secondary" wire:click="create()">
             페이지 추가
         </x-click>
-    </x-flex-center>
+    </div>
 
     <!-- 팝업 데이터 수정창 -->
     @if ($popupForm)

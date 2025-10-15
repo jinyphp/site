@@ -4,6 +4,15 @@ use Illuminate\Support\Facades\View;
 use Illuminate\View\ViewException;
 use Illuminate\Support\Facades\DB;
 
+
+function footer()
+{
+
+}
+
+
+
+
 if(!function_exists("isDesign")) {
     function isDesign() {
         return request()->has('mode') && request()->get('mode') == 'design';
@@ -139,6 +148,6 @@ function getViewPath($viewName) {
     }
 }
 
-// include_once("view.php");
+include_once("view.php");
 
 // include_once("info.php");

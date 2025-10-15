@@ -1,0 +1,94 @@
+{
+    "table": {
+        "name": "banners",
+        "model": "App\\Models\\Banner",
+        "sort": {
+            "column": "display_order",
+            "order": "asc"
+        }
+    },
+    "index": {
+        "title": "베너 관리",
+        "subtitle": "사이트 상단 베너를 관리합니다.",
+        "view": "jiny-site::admin.banners.index",
+        "route": "admin.site.banner.index",
+        "pagination": {
+            "per_page": 15
+        }
+    },
+    "create": {
+        "title": "베너 추가",
+        "subtitle": "새로운 베너를 추가합니다.",
+        "view": "jiny-site::admin.banners.create",
+        "route": "admin.site.banner.create",
+        "validation": {
+            "title": "required|string|max:255",
+            "message": "required|string",
+            "type": "required|in:info,warning,success,danger,primary,secondary",
+            "link_url": "nullable|url",
+            "link_text": "nullable|string|max:100",
+            "icon": "nullable|string|max:100",
+            "background_color": "nullable|string|max:20",
+            "text_color": "nullable|string|max:20",
+            "start_date": "nullable|date",
+            "end_date": "nullable|date|after:start_date",
+            "cookie_days": "required|integer|min:1|max:365"
+        }
+    },
+    "edit": {
+        "title": "베너 수정",
+        "subtitle": "베너 정보를 수정합니다.",
+        "view": "jiny-site::admin.banners.edit",
+        "route": "admin.site.banner.edit"
+    },
+    "show": {
+        "title": "베너 상세보기",
+        "subtitle": "베너 정보를 확인합니다.",
+        "view": "jiny-site::admin.banners.show",
+        "route": "admin.site.banner.show"
+    },
+    "store": {
+        "route": "admin.site.banner.store",
+        "redirect": {
+            "success": "admin.site.banner.index",
+            "error": "admin.site.banner.create"
+        },
+        "messages": {
+            "success": "베너가 성공적으로 생성되었습니다.",
+            "error": "베너 생성에 실패했습니다."
+        }
+    },
+    "update": {
+        "route": "admin.site.banner.update",
+        "validation": {
+            "title": "required|string|max:255",
+            "message": "required|string",
+            "type": "required|in:info,warning,success,danger,primary,secondary",
+            "link_url": "nullable|url",
+            "link_text": "nullable|string|max:100",
+            "icon": "nullable|string|max:100",
+            "background_color": "nullable|string|max:20",
+            "text_color": "nullable|string|max:20",
+            "start_date": "nullable|date",
+            "end_date": "nullable|date|after:start_date",
+            "cookie_days": "required|integer|min:1|max:365"
+        },
+        "redirect": {
+            "success": "admin.site.banner.index",
+            "error": "admin.site.banner.edit"
+        },
+        "messages": {
+            "success": "베너가 성공적으로 수정되었습니다.",
+            "error": "베너 수정에 실패했습니다."
+        }
+    },
+    "destroy": {
+        "redirect": {
+            "success": "admin.site.banner.index"
+        },
+        "messages": {
+            "success": "베너가 성공적으로 삭제되었습니다.",
+            "error": "베너 삭제에 실패했습니다."
+        }
+    }
+}

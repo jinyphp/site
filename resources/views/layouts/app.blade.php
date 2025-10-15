@@ -29,9 +29,10 @@
 
     <!-- Header -->
     @hasSection('header')
+        {{-- blade에서 직접 header 섹션을 추가하는 경우 --}}
         @yield('header')
     @else
-        @includeIf('jiny-site::partials.headers.' . ($header ?? 'header-default'))
+        @includeIf($header ?? 'jiny-site::partials.headers.' . ($header ?? 'header-default'))
     @endif
 
     <!-- Main Content -->
@@ -39,6 +40,7 @@
 
     <!-- Footer -->
     @hasSection('footer')
+        {{-- blade에서 직접 footer 섹션을 추가하는 경우 --}}
         @yield('footer')
     @else
         @includeIf($footer ?? 'jiny-site::partials.footers.footer')
@@ -55,6 +57,37 @@
 
     <!-- Theme JS -->
     <script src="{{ asset('assets/js/theme.min.js') }}"></script>
+
+    <!-- Global Cart Functionality -->
+    <script>
+        // 전역 장바구니 기능
+        function updateCartCount() {
+            fetch('/cart/count')
+                .then(response => response.json())
+                .then(data => {
+                    const cartCountElement = document.querySelector('.cart-count');
+                    if (cartCountElement) {
+                        cartCountElement.textContent = data.count;
+                        if (data.count > 0) {
+                            cartCountElement.style.display = 'inline-block';
+                        } else {
+                            cartCountElement.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart count:', error);
+                });
+        }
+
+        // 페이지 로드 시 장바구니 개수 업데이트
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+
+        // 전역에서 사용할 수 있는 장바구니 카운트 업데이트 함수
+        window.updateCartCount = updateCartCount;
+    </script>
 
     @stack('scripts')
 </body>

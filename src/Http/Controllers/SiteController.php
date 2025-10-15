@@ -1,7 +1,7 @@
 <?php
 namespace Jiny\Site\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
 use Jiny\WireTable\Http\Controllers\LiveController;

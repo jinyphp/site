@@ -23,14 +23,22 @@ class SiteMenuItem extends Model
      * @var array
      */
     protected $fillable = [
+        'code',
         'menu_id',
+        'enable',
+        'header',
         'title',
-        'url',
-        'target',
+        'name',
         'icon',
-        'order',
-        'parent_id',
-        'enabled',
+        'href',
+        'target',
+        'selected',
+        'submenu',
+        'ref',
+        'level',
+        'pos',
+        'description',
+        'user_id',
     ];
 
     /**
@@ -39,8 +47,12 @@ class SiteMenuItem extends Model
      * @var array
      */
     protected $casts = [
-        'enabled' => 'boolean',
-        'order' => 'integer',
+        'enable' => 'boolean',
+        'level' => 'integer',
+        'pos' => 'integer',
+        'ref' => 'integer',
+        'menu_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
     /**
@@ -60,7 +72,7 @@ class SiteMenuItem extends Model
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(SiteMenuItem::class, 'parent_id');
+        return $this->belongsTo(SiteMenuItem::class, 'ref');
     }
 
     /**
@@ -70,6 +82,43 @@ class SiteMenuItem extends Model
      */
     public function children()
     {
-        return $this->hasMany(SiteMenuItem::class, 'parent_id');
+        return $this->hasMany(SiteMenuItem::class, 'ref', 'id')->orderBy('pos');
+    }
+
+    /**
+     * 메뉴 아이템을 트리 구조로 가져오기
+     *
+     * @param int $menuId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getTree($menuId = null)
+    {
+        $query = self::with('children')
+            ->where('ref', 0)
+            ->orderBy('pos');
+
+        if ($menuId) {
+            $query->where('menu_id', $menuId);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * 다음 위치 값 가져오기
+     *
+     * @param int $ref
+     * @param int $menuId
+     * @return int
+     */
+    public static function getNextPosition($ref = 0, $menuId = null)
+    {
+        $query = self::where('ref', $ref);
+
+        if ($menuId) {
+            $query->where('menu_id', $menuId);
+        }
+
+        return $query->max('pos') + 1;
     }
 }

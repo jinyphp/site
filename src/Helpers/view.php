@@ -143,9 +143,11 @@ function inSlotView($viewFile, $default = null)
 
 function inThemeView($viewFile)
 {
-    $theme = trim(xTheme()->getName(),'"');
-    $theme = str_replace('/','.',$theme);
-    if($theme) {
+    // xTheme() 함수가 삭제되었으므로 세션에서 테마 확인
+    $theme = session('theme', null);
+    if ($theme) {
+        $theme = trim($theme, '"');
+        $theme = str_replace('/', '.', $theme);
         // 테마 리소스가 있는 경우
         if (View::exists("theme::".$theme.".".$viewFile)) {
             return "theme::".$theme.".".$viewFile;

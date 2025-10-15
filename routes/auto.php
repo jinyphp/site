@@ -17,9 +17,10 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 //     }
 // }
 
-// // 인증된 사용자를 처리하는 라우트 그룹
-// Route::middleware(['web'])->group(function () {
-//     Route::fallback([
-//         \Jiny\Site\Http\Controllers\FallbackController::class,
-//         'index']);
-// });
+// 모든 라우트가 매칭되지 않을 때 실행되는 Fallback 라우트
+// CMS 동적 페이지, 슬롯 파일, 테마 파일 등을 처리
+Route::middleware(['web'])->group(function () {
+    Route::fallback([
+        \Jiny\Site\Http\Controllers\FallbackController::class,
+        'index']);
+});

@@ -25,10 +25,11 @@
 
 namespace Jiny\Site\Http\Controllers\Welcome;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jiny\Site\Services\SiteService;
+use App\Models\Banner;
 
 /**
  * Class WelcomeController
@@ -148,13 +149,55 @@ class WelcomeController extends Controller
             $this->incrementVisitLog();
         }
 
+        // [1.5단계] 베너 데이터 가져오기
+        // 활성화되고 유효한 베너들을 가져옴
+        $banners = $this->getBanners($request);
+
         // [2단계] 뷰 우선순위 해석
         // 설정에 따라 가장 적합한 뷰 경로를 결정
         $viewPath = $this->resolveView();
 
         // [3단계] 뷰 렌더링 및 반환
-        // 결정된 뷰에 $config 데이터를 전달하여 렌더링
-        return $this->renderView($viewPath);
+        // 결정된 뷰에 $config 데이터와 베너 데이터를 전달하여 렌더링
+        return $this->renderView($viewPath, $banners);
+    }
+
+    /**
+     * [1.5단계] 활성화된 베너 데이터 가져오기
+     *
+     * @description
+     * 메인 페이지에 표시할 베너들을 가져옵니다.
+     * 쿠키를 확인하여 사용자가 이미 닫은 베너는 제외합니다.
+     *
+     * @param Request $request HTTP 요청 객체 (쿠키 확인용)
+     *
+     * @return \Illuminate\Database\Eloquent\Collection 표시할 베너 컬렉션
+     *
+     * @conditions 베너 표시 조건
+     * - enable = true (활성화됨)
+     * - 현재 시점이 start_date ~ end_date 범위 내
+     * - 사용자가 쿠키로 닫지 않은 베너
+     *
+     * @workflow
+     * 1. 활성화되고 유효한 베너 조회
+     * 2. 쿠키로 닫힌 베너 필터링
+     * 3. 표시 순서로 정렬하여 반환
+     */
+    protected function getBanners(Request $request)
+    {
+        // 활성화되고 현재 유효한 베너들을 가져옴
+        $banners = Banner::active()
+            ->valid()
+            ->ordered()
+            ->get();
+
+        // 쿠키로 닫힌 베너들을 필터링
+        $visibleBanners = $banners->filter(function ($banner) use ($request) {
+            $cookieName = "banner_closed_{$banner->id}";
+            return !$request->cookie($cookieName);
+        });
+
+        return $visibleBanners;
     }
 
     /**
@@ -394,9 +437,10 @@ class WelcomeController extends Controller
      *
      * @description
      * resolveView()에서 결정된 뷰 경로를 사용하여 실제 뷰를 렌더링합니다.
-     * 뷰 파일에서 사용할 수 있도록 설정 데이터를 함께 전달합니다.
+     * 뷰 파일에서 사용할 수 있도록 설정 데이터와 베너 데이터를 함께 전달합니다.
      *
      * @param string $viewPath 렌더링할 뷰 경로
+     * @param \Illuminate\Database\Eloquent\Collection $banners 표시할 베너 컬렉션
      *
      * @return \Illuminate\View\View Laravel 뷰 객체
      *
@@ -405,6 +449,7 @@ class WelcomeController extends Controller
      * - $config['theme']       : ?string - 테마 이름
      * - $config['slot']        : ?string - 슬롯 이름
      * - $config['log_enabled'] : bool    - 로그 활성화 여부
+     * - $banners              : Collection - 표시할 베너 컬렉션
      *
      * @example 뷰 파일에서 사용 예시
      * // resources/views/www/index.blade.php
@@ -414,6 +459,36 @@ class WelcomeController extends Controller
      *     <title>{{ config('app.name') }}</title>
      * </head>
      * <body>
+     *     <!-- 베너 표시 영역 -->
+     *     @if($banners->count() > 0)
+     *         @foreach($banners as $banner)
+     *             <div class="alert alert-{{ $banner->type }} banner-notification"
+     *                  data-banner-id="{{ $banner->id }}"
+     *                  data-cookie-days="{{ $banner->cookie_days }}"
+     *                  @if($banner->style) style="{{ $banner->style }}" @endif>
+     *                 <div class="container d-flex align-items-center">
+     *                     @if($banner->icon)
+     *                         <i class="{{ $banner->icon }} me-2"></i>
+     *                     @endif
+     *                     <div class="flex-grow-1">
+     *                         <strong>{{ $banner->title }}</strong>
+     *                         <span class="ms-2">{{ $banner->message }}</span>
+     *                         @if($banner->link_url)
+     *                             <a href="{{ $banner->link_url }}" class="btn btn-sm btn-outline-light ms-3">
+     *                                 {{ $banner->link_text ?: '자세히 보기' }}
+     *                             </a>
+     *                         @endif
+     *                     </div>
+     *                     @if($banner->is_closable)
+     *                         <button type="button" class="btn-close btn-close-white"
+     *                                 onclick="closeBanner({{ $banner->id }}, {{ $banner->cookie_days }})"
+     *                                 aria-label="Close"></button>
+     *                     @endif
+     *                 </div>
+     *             </div>
+     *         @endforeach
+     *     @endif
+     *
      *     <div class="layout-{{ $config['layout'] }}">
      *         @if($config['theme'])
      *             <p>현재 테마: {{ $config['theme'] }}</p>
@@ -425,11 +500,26 @@ class WelcomeController extends Controller
      *
      *         <h1>환영합니다!</h1>
      *     </div>
+     *
+     *     <script>
+     *     function closeBanner(bannerId, cookieDays) {
+     *         // 베너를 숨김
+     *         const banner = document.querySelector(`[data-banner-id="${bannerId}"]`);
+     *         if (banner) {
+     *             banner.style.display = 'none';
+     *         }
+     *
+     *         // 쿠키 설정
+     *         const expires = new Date();
+     *         expires.setDate(expires.getDate() + cookieDays);
+     *         document.cookie = `banner_closed_${bannerId}=1; expires=${expires.toUTCString()}; path=/`;
+     *     }
+     *     </script>
      * </body>
      * </html>
      *
      * @workflow
-     * view($viewPath, ['config' => $this->config])
+     * view($viewPath, ['config' => $this->config, 'banners' => $banners])
      *     ↓
      * Laravel View Factory
      *     ↓
@@ -437,11 +527,12 @@ class WelcomeController extends Controller
      *     ↓
      * HTML 응답 반환
      */
-    protected function renderView($viewPath)
+    protected function renderView($viewPath, $banners)
     {
-        // 뷰 경로와 설정 데이터를 함께 전달하여 렌더링
+        // 뷰 경로와 설정 데이터, 베너 데이터를 함께 전달하여 렌더링
         return view($viewPath, [
             'config' => $this->config,
+            'banners' => $banners,
         ]);
     }
 }

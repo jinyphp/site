@@ -1,4 +1,4 @@
-@extends('jiny-site::layouts.app')
+@extends($layout ?? 'jiny-site::layouts.app')
 
 @section('content')
 <div class="container py-5">

@@ -1,4 +1,20 @@
 <!-- Sidebar -->
+<style>
+.navbar-heading {
+    color: #8a94a6 !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 0.5rem !important;
+    padding: 0.75rem 1.5rem 0.25rem 1.5rem !important;
+}
+
+.navbar-vertical .navbar-nav .navbar-heading:not(:first-child) {
+    margin-top: 2rem !important;
+}
+</style>
+
 <nav class="navbar-vertical navbar">
     <div class="vh-100" data-simplebar>
         <!-- Brand logo -->
@@ -33,85 +49,370 @@
                 </a>
             </li>
 
+
+            <li class="nav-item">
+                <div class="navbar-heading">영업지원</div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.contact.index') }}">
+                    <i class="nav-icon fe fe-grid me-2"></i>
+                    상담요청
+                </a>
+            </li>
+
+            {{-- 커머스 --}}
+            <li class="nav-item">
+                <div class="navbar-heading">커머스</div>
+            </li>
+
+            {{-- 이커머스 대시보드 --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.ecommerce.dashboard') }}">
+                    <i class="nav-icon fe fe-shopping-cart me-2"></i>
+                    이커머스 대시보드
+                </a>
+            </li>
+
+            {{-- 주문 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.ecommerce.orders.index') }}">
+                    <i class="nav-icon fe fe-file-text me-2"></i>
+                    주문 관리
+                </a>
+            </li>
+
+            {{-- 상품 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navProducts" aria-expanded="false" aria-controls="navProducts">
+                    <i class="nav-icon fe fe-package me-2"></i>
+                    상품 관리
+                </a>
+                <div id="navProducts" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.site.products.index') }}">
+                                <i class="bi bi-list me-2"></i>
+                                상품 목록
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.site.products.categories.index') }}">
+                                <i class="bi bi-tags me-2"></i>
+                                상품 카테고리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- 장바구니 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.cart.index') }}">
+                    <i class="nav-icon fe fe-shopping-cart me-2"></i>
+                    장바구니 관리
+                </a>
+            </li>
+
+            {{-- 배송 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navShipping" aria-expanded="false" aria-controls="navShipping">
+                    <i class="nav-icon fe fe-truck me-2"></i>
+                    배송 관리
+                </a>
+                <div id="navShipping" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.shipping.index') }}">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                배송 대시보드
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.shipping.zones.index') }}">
+                                <i class="bi bi-globe2 me-2"></i>
+                                배송 지역 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.shipping.methods.index') }}">
+                                <i class="bi bi-truck me-2"></i>
+                                배송 방식 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.shipping.rates.index') }}">
+                                <i class="bi bi-currency-dollar me-2"></i>
+                                배송 요금 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.shipping.calculator.index') }}">
+                                <i class="bi bi-calculator me-2"></i>
+                                배송비 계산기
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- 결제 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navPayment" aria-expanded="false" aria-controls="navPayment">
+                    <i class="nav-icon fe fe-credit-card me-2"></i>
+                    결제 관리
+                </a>
+                <div id="navPayment" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="alert('준비 중입니다.')">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                결제 대시보드
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="alert('준비 중입니다.')">
+                                <i class="bi bi-credit-card me-2"></i>
+                                결제 수단 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="alert('준비 중입니다.')">
+                                <i class="bi bi-receipt me-2"></i>
+                                결제 내역
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="alert('준비 중입니다.')">
+                                <i class="bi bi-arrow-return-left me-2"></i>
+                                환불 관리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- 프로모션 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navPromotion" aria-expanded="false" aria-controls="navPromotion">
+                    <i class="nav-icon fe fe-tag me-2"></i>
+                    프로모션
+                </a>
+                <div id="navPromotion" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.coupons.index') }}">
+                                <i class="bi bi-ticket-perforated me-2"></i>
+                                쿠폰 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.promotions.index') }}">
+                                <i class="bi bi-percent me-2"></i>
+                                할인 정책
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.events.index') }}">
+                                <i class="bi bi-gift me-2"></i>
+                                이벤트 관리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- 재고 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navInventory" aria-expanded="false" aria-controls="navInventory">
+                    <i class="nav-icon fe fe-package me-2"></i>
+                    재고 관리
+                </a>
+                <div id="navInventory" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.inventory.dashboard') }}">
+                                <i class="bi bi-boxes me-2"></i>
+                                재고 현황
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.inventory.stock-in') }}">
+                                <i class="bi bi-arrow-down-square me-2"></i>
+                                입고 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.inventory.stock-out') }}">
+                                <i class="bi bi-arrow-up-square me-2"></i>
+                                출고 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.ecommerce.inventory.alerts') }}">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                품절 알림
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             {{-- ============================================
                 고객지원
             ============================================ --}}
             <li class="nav-item">
+                <div class="navbar-heading">고객지원</div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.help.dashboard') }}">
+                    <i class="nav-icon fe fe-grid me-2"></i>
+                    Help Center
+                </a>
+            </li>
+
+            {{-- Help 관리 --}}
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                    data-bs-target="#navCustomerSupport" aria-expanded="false" aria-controls="navCustomerSupport">
+                    data-bs-target="#navHelp" aria-expanded="false" aria-controls="navHelp">
+                    <i class="nav-icon fe fe-life-buoy me-2"></i>
+                    Help 문서
+                </a>
+                <div id="navHelp" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.help.categories.index') }}">
+                                <i class="fe fe-folder me-2"></i>
+                                카테고리 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.help.docs.index') }}">
+                                <i class="fe fe-file-text me-2"></i>
+                                Help 문서
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
+            {{-- FAQ 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navFaq" aria-expanded="false" aria-controls="navFaq">
+                    <i class="nav-icon fe fe-help-circle me-2"></i>
+                    FAQ 관리
+                </a>
+                <div id="navFaq" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.faq.categories.index') }}">
+                                <i class="bi bi-folder me-2"></i>
+                                카테고리 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.faq.faqs.index') }}">
+                                <i class="bi bi-chat-square-text me-2"></i>
+                                FAQ 목록
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- 지원 요청 관리 --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navSupport" aria-expanded="false" aria-controls="navSupport">
                     <i class="nav-icon fe fe-headphones me-2"></i>
-                    고객지원
+                    지원 요청 관리
                 </a>
-                <div id="navCustomerSupport" class="collapse" data-bs-parent="#sideNavbar">
+                <div id="navSupport" class="collapse" data-bs-parent="#sideNavbar">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.contact.index') }}">
-                                <i class="bi bi-envelope me-2"></i>
-                                Contact
+                            <a class="nav-link" href="{{ route('admin.cms.support.index') }}">
+                                <i class="fe fe-pie-chart me-2"></i>
+                                대시보드
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.faq.index') }}">
-                                <i class="bi bi-question-circle me-2"></i>
-                                FAQ
+                            <a class="nav-link" href="{{ route('admin.cms.support.requests.index') }}">
+                                <i class="fe fe-list me-2"></i>
+                                지원 요청 관리
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.help.index') }}">
-                                <i class="bi bi-life-preserver me-2"></i>
-                                Help
+                            <a class="nav-link" href="{{ route('admin.cms.support.types.index') }}">
+                                <i class="fe fe-settings me-2"></i>
+                                지원 유형 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.support.templates.index') }}">
+                                <i class="fe fe-file-text me-2"></i>
+                                응답 템플릿
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.support.export') }}">
+                                <i class="fe fe-download me-2"></i>
+                                데이터 내보내기
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
-            {{-- ============================================
-                마케팅
-            ============================================ --}}
+            {{-- 계시물 관리 --}}
+            <li class="nav-item">
+                <div class="navbar-heading">컨덴츠</div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.pages.index') }}">
+                    <i class="nav-icon fe fe-grid me-2"></i>
+                    Pages
+                </a>
+            </li>
+
+            {{-- About 관리 --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                    data-bs-target="#navMarketing" aria-expanded="false" aria-controls="navMarketing">
-                    <i class="nav-icon fe fe-trending-up me-2"></i>
-                    마케팅
+                    data-bs-target="#navAbout" aria-expanded="false" aria-controls="navAbout">
+                    <i class="nav-icon fe fe-info me-2"></i>
+                    회사 소개
                 </a>
-                <div id="navMarketing" class="collapse" data-bs-parent="#sideNavbar">
+                <div id="navAbout" class="collapse" data-bs-parent="#sideNavbar">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.sliders.index') }}">
-                                <i class="bi bi-images me-2"></i>
-                                Sliders
+                            <a class="nav-link" href="{{ route('admin.cms.about.history.index') }}">
+                                <i class="bi bi-clock-history me-2"></i>
+                                회사 연혁
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.banner.index') }}">
-                                <i class="bi bi-megaphone me-2"></i>
-                                Banner
+                            <a class="nav-link" href="{{ route('admin.cms.about.location.index') }}">
+                                <i class="bi bi-geo-alt me-2"></i>
+                                위치 정보
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.site.event.index') }}">
-                                <i class="bi bi-calendar-event me-2"></i>
-                                Event
+                            <a class="nav-link" href="{{ route('admin.cms.about.organization.index') }}">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                조직 정보
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
 
-            {{-- ============================================
-                알림
-            ============================================ --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.site.notification.index') }}">
-                    <i class="nav-icon fe fe-bell me-2"></i>
-                    Notification
-                </a>
-            </li>
-
-            {{-- ============================================
-                게시판
-            ============================================ --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                     data-bs-target="#navBoard" aria-expanded="false" aria-controls="navBoard">
@@ -155,6 +456,95 @@
             </li>
 
             {{-- ============================================
+                서비스
+            ============================================ --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navServices" aria-expanded="false" aria-controls="navServices">
+                    <i class="bi bi-briefcase me-2"></i>
+                    Services
+                </a>
+                <div id="navServices" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.site.services.index') }}">
+                                <i class="bi bi-list me-2"></i>
+                                서비스 목록
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.site.services.categories.index') }}">
+                                <i class="bi bi-tags me-2"></i>
+                                서비스 카테고리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.site.testimonials.index') }}">
+                    <i class="bi bi-chat-quote me-2"></i>
+                    리뷰
+                </a>
+            </li>
+
+
+
+
+            {{-- 마케팅 --}}
+            <li class="nav-item">
+                <div class="navbar-heading">마케팅</div>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navMarketing" aria-expanded="false" aria-controls="navMarketing">
+                    <i class="nav-icon fe fe-trending-up me-2"></i>
+                    마케팅
+                </a>
+                <div id="navMarketing" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.site.sliders.index') }}">
+                                <i class="bi bi-images me-2"></i>
+                                Sliders
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.site.banner.index') }}">
+                    <i class="bi bi-megaphone me-2"></i>
+                    Banner
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.site.event.index') }}">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    Event
+                </a>
+            </li>
+
+
+
+
+            {{-- ============================================
+                알림
+            ============================================ --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.site.notification.index') }}">
+                    <i class="nav-icon fe fe-bell me-2"></i>
+                    Notification
+                </a>
+            </li>
+
+
+
+            {{-- ============================================
                 분석
             ============================================ --}}
             <li class="nav-item">
@@ -180,6 +570,110 @@
                     </ul>
                 </div>
             </li>
+
+            {{-- ============================================
+                설정
+            ============================================ --}}
+            <li class="nav-item">
+                <div class="navbar-heading">설정</div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navSettings" aria-expanded="false" aria-controls="navSettings">
+                    <i class="nav-icon fe fe-settings me-2"></i>
+                    시스템 설정
+                </a>
+                <div id="navSettings" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.language.index') }}">
+                                <i class="bi bi-translate me-2"></i>
+                                언어 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.country.index') }}">
+                                <i class="bi bi-globe2 me-2"></i>
+                                국가 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.currencies.index') }}">
+                                <i class="fe fe-dollar-sign me-2"></i>
+                                통화 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.exchange-rates.index') }}">
+                                <i class="fe fe-trending-up me-2"></i>
+                                환율 관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.tax.index') }}">
+                                <i class="fe fe-percent me-2"></i>
+                                세율 관리
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            {{-- ============================================
+                템플릿 관리
+            ============================================ --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#navTemplates" aria-expanded="false" aria-controls="navTemplates">
+                    <i class="nav-icon fe fe-layout me-2"></i>
+                    템플릿 관리
+                </a>
+                <div id="navTemplates" class="collapse" data-bs-parent="#sideNavbar">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.templates.layout.index') }}">
+                                <i class="bi bi-grid-3x3 me-2"></i>
+                                레이아웃
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.templates.header.index') }}">
+                                <i class="bi bi-layout-text-window-reverse me-2"></i>
+                                헤더
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.templates.footer.index') }}">
+                                <i class="bi bi-layout-text-window me-2"></i>
+                                푸터
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.templates.sidebar.index') }}">
+                                <i class="bi bi-layout-sidebar-inset me-2"></i>
+                                사이드바
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.cms.templates.nav.index') }}">
+                                <i class="bi bi-list me-2"></i>
+                                네비게이션
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+
+            {{-- menu --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.menu.index') }}">
+                    <i class="bi bi-menu-button-wide me-2"></i>
+                    메뉴 관리
+                </a>
+            </li>
+
 
             <li class="nav-item">
                 <div class="nav-divider"></div>

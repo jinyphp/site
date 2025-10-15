@@ -5,6 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/favicon/favicon.ico') }}" />
@@ -29,7 +30,7 @@
     <!-- Wrapper -->
     <main id="db-wrapper">
         <!-- Sidebar -->
-        @include('jiny-site::partials.admin.sidebar')
+        @include($layoutSidebar ?? 'jiny-site::partials.admin.sidebar')
 
         <!-- Page Content -->
         <section id="page-content">
@@ -37,7 +38,7 @@
             @hasSection('header')
                 @yield('header')
             @else
-                @include('jiny-site::partials.admin.header')
+                @include($layoutHeader ?? 'jiny-site::partials.admin.header')
             @endif
 
             <!-- Content -->

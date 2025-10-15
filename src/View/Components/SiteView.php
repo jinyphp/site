@@ -41,7 +41,7 @@ class SiteView extends Component
             $viewFile = "www::".$slot.".".$this->layout_path.".".$name;
             if(View::exists($viewFile)) {
                 return view($viewFile,[
-                    'actions' => Action()->data
+                    'actions' => []
                 ]);
             }
 
@@ -49,7 +49,7 @@ class SiteView extends Component
             $viewFile = "www::".$this->layout_path.".".$name;
             if(View::exists($viewFile)) {
                 return view($viewFile,[
-                    'actions' => Action()->data
+                    'actions' => []
                 ]);
             }
         }
@@ -62,20 +62,20 @@ class SiteView extends Component
      */
     private function themeView($name)
     {
-        $theme_name = xTheme()->getName();
-        $theme_name = trim($theme_name,'"');
+        // xTheme() 함수가 삭제되었으므로 세션에서 테마 확인
+        $theme_name = session('theme', null);
+        $theme_name = $theme_name ? trim($theme_name, '"') : null;
         if ($theme_name) {
 
             $viewFile = $theme_name.".".$this->layout_path.".".$name;
             if (View::exists("theme::".$viewFile)) {
                 return view("theme::".$viewFile,[
-                    'actions' => Action()->data
+                    'actions' => []
                 ]);
             }
 
-            // 테마 리소스가 없는 경우
-            $msg = $theme_name." 테마에 _layouts.".$name.".blade.php 파일을 찾을 수 없습니다.";
-            return $this->errorView($msg);
+            // 테마 리소스가 없는 경우 - 오류 대신 false 반환
+            return false;
         }
 
         return false;
@@ -89,7 +89,7 @@ class SiteView extends Component
         $viewFile = $this->layout_path.".".$name;
         if(View::exists($viewFile)) {
             return view($viewFile,[
-                'actions' => Action()->data
+                'actions' => []
             ]);
         }
 
@@ -98,7 +98,7 @@ class SiteView extends Component
 
     private function errorView($message)
     {
-        return view("jinytheme::errors.alert",[
+        return view("jiny-site::errors.alert",[
             'message'=>$message
         ]);
     }

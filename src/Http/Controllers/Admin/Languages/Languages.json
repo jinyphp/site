@@ -1,0 +1,134 @@
+{
+    "table": {
+        "name": "site_language",
+        "model": "Jiny\\Site\\Models\\SiteLanguage",
+        "where": {},
+        "sort": {
+            "column": "order",
+            "order": "asc"
+        }
+    },
+    "index": {
+        "title": "언어 관리",
+        "subtitle": "사이트에서 제공 가능한 언어 목록",
+        "view": "jiny-site::admin.languages.index",
+        "route": "admin.cms.language.index",
+        "filter": {
+            "search": true,
+            "enable": true,
+            "is_default": true
+        },
+        "pagination": {
+            "per_page": 15
+        }
+    },
+    "show": {
+        "title": "언어 상세",
+        "subtitle": "언어 정보 조회",
+        "view": "jiny-site::admin.languages.show",
+        "route": "admin.cms.language.show"
+    },
+    "create": {
+        "title": "언어 생성",
+        "subtitle": "새로운 언어 추가",
+        "view": "jiny-site::admin.languages.create",
+        "route": "admin.cms.language.create"
+    },
+    "edit": {
+        "title": "언어 수정",
+        "subtitle": "언어 정보 수정",
+        "view": "jiny-site::admin.languages.edit",
+        "route": "admin.cms.language.edit"
+    },
+    "store": {
+        "route": "admin.cms.language.store",
+        "redirect": {
+            "success": "admin.cms.language.index",
+            "error": "admin.cms.language.create"
+        },
+        "validation": {
+            "lang": "required|string|max:10|unique:site_language",
+            "name": "required|string|max:100",
+            "native_name": "nullable|string|max:100",
+            "description": "nullable|string",
+            "manager": "nullable|string|max:100",
+            "enable": "required|boolean",
+            "is_default": "nullable|boolean",
+            "order": "nullable|integer|min:0",
+            "flag": "nullable|string|max:10",
+            "locale": "nullable|string|max:10"
+        },
+        "defaults": {
+            "enable": true,
+            "is_default": false,
+            "order": 0
+        },
+        "messages": {
+            "success": "언어가 성공적으로 생성되었습니다.",
+            "error": "언어 생성에 실패했습니다."
+        }
+    },
+    "update": {
+        "route": "admin.cms.language.update",
+        "redirect": {
+            "success": "admin.cms.language.show",
+            "error": "admin.cms.language.edit"
+        },
+        "validation": {
+            "lang": "required|string|max:10",
+            "name": "required|string|max:100",
+            "native_name": "nullable|string|max:100",
+            "description": "nullable|string",
+            "manager": "nullable|string|max:100",
+            "enable": "required|boolean",
+            "is_default": "nullable|boolean",
+            "order": "nullable|integer|min:0",
+            "flag": "nullable|string|max:10",
+            "locale": "nullable|string|max:10"
+        },
+        "messages": {
+            "success": "언어가 성공적으로 업데이트되었습니다.",
+            "error": "언어 업데이트에 실패했습니다."
+        }
+    },
+    "delete": {
+        "title": "언어 삭제",
+        "subtitle": "언어 삭제 확인",
+        "route": "admin.cms.language.destroy",
+        "redirect": {
+            "success": "admin.cms.language.index"
+        },
+        "validation": {
+            "check_default": true
+        },
+        "messages": {
+            "success": "언어가 성공적으로 삭제되었습니다.",
+            "error": "언어 삭제에 실패했습니다.",
+            "is_default": "기본 언어는 삭제할 수 없습니다."
+        }
+    },
+    "actions": {
+        "toggle": {
+            "route": "admin.cms.language.toggle",
+            "messages": {
+                "success": "언어 상태가 변경되었습니다.",
+                "error": "언어 상태 변경에 실패했습니다."
+            }
+        },
+        "set_default": {
+            "route": "admin.cms.language.set-default",
+            "messages": {
+                "success": "기본 언어가 설정되었습니다.",
+                "error": "기본 언어 설정에 실패했습니다."
+            }
+        },
+        "bulk": {
+            "route": "admin.cms.language.bulk-action",
+            "actions": ["enable", "disable", "delete"],
+            "messages": {
+                "success": "일괄 작업이 완료되었습니다.",
+                "error": "일괄 작업에 실패했습니다."
+            }
+        }
+    }
+}

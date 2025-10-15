@@ -1,0 +1,156 @@
+{
+    "copyright":"JinyPHP 채용플랫폼. All Rights Reserved.",
+    "logo":"/assets/images/brand/logo/logo.svg",
+    "company": {
+        "name": "JinyPHP",
+        "description": "개발자들을 위한 풍부한 기능과 아름다운 Bootstrap UIKit을 제공하는 반응형 채용플랫폼입니다.",
+        "email": "support@jinyphp.com",
+        "phone": "+82 02-1234-5678",
+        "address": "서울시 강남구 테헤란로 123",
+        "hours": "오전 9시 ~ 오후 6시 (한국 시간)"
+    },
+    "social": [
+        {
+            "name": "facebook",
+            "url": "https://facebook.com/jinyphp",
+            "icon": "bi-facebook"
+        },
+        {
+            "name": "twitter",
+            "url": "https://twitter.com/jinyphp",
+            "icon": "bi-twitter"
+        },
+        {
+            "name": "instagram",
+            "url": "https://instagram.com/jinyphp",
+            "icon": "bi-instagram"
+        },
+        {
+            "name": "github",
+            "url": "https://github.com/jinyphp",
+            "icon": "bi-github"
+        }
+    ],
+    "menu_sections": {
+        "company": {
+            "title": "회사",
+            "links": [
+                {"title": "회사소개", "href": "/about"},
+                {"title": "채용", "href": "/jobs"},
+                {"title": "문의하기", "href": "/contact"},
+                {"title": "뉴스 및 블로그", "href": "/blog"},
+                {"title": "투자자", "href": "/investors"}
+            ]
+        },
+        "community": {
+            "title": "커뮤니티",
+            "links": [
+                {"title": "도움말 및 지원", "href": "/help"},
+                {"title": "제휴", "href": "/partners"},
+                {"title": "블로그", "href": "/blog"},
+                {"title": "개발자 커뮤니티", "href": "/community"}
+            ]
+        },
+        "education": {
+            "title": "교육",
+            "links": [
+                {"title": "강사 지원", "href": "/instructor"},
+                {"title": "가이드", "href": "/guide"},
+                {"title": "문서", "href": "/docs"},
+                {"title": "튜토리얼", "href": "/tutorials"}
+            ]
+        },
+        "legal": {
+            "title": "법적 고지",
+            "links": [
+                {"title": "이용약관", "href": "/terms"},
+                {"title": "개인정보처리방침", "href": "/privacy"},
+                {"title": "쿠키 정책", "href": "/cookies"}
+            ]
+        }
+    },
+
+    "template": [
+        {
+            "footer_key": "jiny-site::partials.footers.footer",
+            "name": "기본 푸터",
+            "description": "표준 웹사이트 푸터",
+            "template": "jiny-site::partials.footers.footer",
+            "copyright": true,
+            "links": true,
+            "social": true,
+            "footer_links": [
+                {
+                    "title": "개인정보 처리방침",
+                    "href": "/privacy"
+                },
+                {
+                    "title": "이용약관",
+                    "href": "/terms"
+                },
+                {
+                    "title": "고객지원",
+                    "href": "/help"
+                },
+                {
+                    "title": "피드백",
+                    "href": "/feedback"
+                }
+            ]
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-default",
+            "name": "기본 디폴트 푸터",
+            "description": "기본 디폴트 스타일 푸터",
+            "template": "jiny-site::partials.footers.footer-default",
+            "copyright": true,
+            "links": true,
+            "social": false
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-simple",
+            "name": "심플 푸터",
+            "description": "간단한 스타일의 푸터",
+            "template": "jiny-site::partials.footers.footer-simple",
+            "copyright": true,
+            "links": false,
+            "social": false
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-center-link",
+            "name": "센터 링크 푸터",
+            "description": "중앙 정렬 링크가 있는 푸터",
+            "template": "jiny-site::partials.footers.footer-center-link",
+            "copyright": true,
+            "links": true,
+            "social": true
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-4-column-language",
+            "name": "4컬럼 언어 푸터",
+            "description": "4컬럼 레이아웃과 언어 선택이 있는 푸터",
+            "template": "jiny-site::partials.footers.footer-4-column-language",
+            "copyright": true,
+            "links": true,
+            "social": true
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-mentor",
+            "name": "멘토 푸터",
+            "description": "멘토링 사이트용 푸터",
+            "template": "jiny-site::partials.footers.footer-mentor",
+            "copyright": true,
+            "links": true,
+            "social": true
+        },
+        {
+            "footer_key": "jiny-site::partials.footers.footer-simple-centerd",
+            "name": "심플 센터 푸터",
+            "description": "중앙 정렬된 심플 푸터",
+            "template": "jiny-site::partials.footers.footer-simple-centerd",
+            "copyright": true,
+            "links": false,
+            "social": false
+        }
+    ]
+}
