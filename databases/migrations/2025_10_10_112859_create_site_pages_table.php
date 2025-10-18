@@ -36,6 +36,10 @@ return new class extends Migration
 
             // 레이아웃 및 템플릿
             $table->string('template')->nullable(); // 사용할 템플릿
+            $table->string('layout')->nullable(); // 레이아웃
+            $table->string('header')->nullable(); // 헤더
+            $table->string('footer')->nullable(); // 푸터
+            $table->string('sidebar')->nullable(); // 사이드바
             $table->json('custom_fields')->nullable(); // 커스텀 필드 (JSON)
 
             // 발행 관리
