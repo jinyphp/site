@@ -200,7 +200,7 @@ Route::middleware('web')->prefix('contact')->group(function () {
 
 Route::middleware('web')->prefix('product')->name('product.')->group(function () {
     // Product viewing with dynamic routing
-    Route::get('/{segment1}/{segment2?}', \Jiny\Store\Http\Controllers\Site\Products\Product::class)
+    Route::get('/{segment1}/{segment2?}', \Jiny\Store\Http\Controllers\Store\Products\Product::class)
         ->name('show')
         ->where([
             'segment1' => '[a-zA-Z0-9\-_]+',
@@ -260,21 +260,21 @@ Route::middleware('web')->group(function () {
 */
 Route::prefix('cart')->name('cart.')->middleware('web')->group(function () {
     // 장바구니 페이지
-    Route::get('/', \Jiny\Store\Http\Controllers\Site\Cart\IndexController::class)->name('index');
+    Route::get('/', \Jiny\Store\Http\Controllers\Store\Cart\IndexController::class)->name('index');
 
     // 장바구니에 상품 추가
-    Route::post('/add', \Jiny\Store\Http\Controllers\Site\Cart\AddController::class)->name('add');
+    Route::post('/add', \Jiny\Store\Http\Controllers\Store\Cart\AddController::class)->name('add');
 
     // 장바구니 수량 업데이트
-    Route::put('/{cartId}', \Jiny\Store\Http\Controllers\Site\Cart\UpdateController::class)
+    Route::put('/{cartId}', \Jiny\Store\Http\Controllers\Store\Cart\UpdateController::class)
         ->name('update')
         ->where('cartId', '[0-9]+');
 
     // 장바구니에서 상품 제거
-    Route::delete('/{cartId}', \Jiny\Store\Http\Controllers\Site\Cart\RemoveController::class)
+    Route::delete('/{cartId}', \Jiny\Store\Http\Controllers\Store\Cart\RemoveController::class)
         ->name('remove')
         ->where('cartId', '[0-9]+');
 
     // 장바구니 아이템 개수 조회 (AJAX)
-    Route::get('/count', \Jiny\Store\Http\Controllers\Site\Cart\CountController::class)->name('count');
+    Route::get('/count', \Jiny\Store\Http\Controllers\Store\Cart\CountController::class)->name('count');
 });
