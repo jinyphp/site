@@ -3,7 +3,7 @@
 namespace Jiny\Site\Http\Controllers\Admin\Banners;
 
 use Illuminate\Http\Request;
-use App\Models\Banner;
+use Jiny\Site\Models\Banner;
 
 /**
  * 베너 활성화/비활성화 토글 컨트롤러

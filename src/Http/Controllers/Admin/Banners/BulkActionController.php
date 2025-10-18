@@ -3,7 +3,7 @@
 namespace Jiny\Site\Http\Controllers\Admin\Banners;
 
 use Illuminate\Http\Request;
-use App\Models\Banner;
+use Jiny\Site\Models\Banner;
 
 /**
  * 베너 일괄 작업 처리 컨트롤러

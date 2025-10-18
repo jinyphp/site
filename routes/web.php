@@ -10,7 +10,7 @@ Route::get('/', \Jiny\Site\Http\Controllers\Welcome\WelcomeController::class)->n
 // 베너 컴포넌트 데모 페이지
 Route::get('/banner-demo', function () {
     try {
-        $banners = \App\Models\Banner::active()->valid()->ordered()->get();
+        $banners = \Jiny\Site\Models\Banner::active()->valid()->ordered()->get();
         return view('banner-component-demo', compact('banners'));
     } catch (\Exception $e) {
         return response("Error: " . $e->getMessage() . " | " . $e->getFile() . ":" . $e->getLine(), 500);
@@ -19,7 +19,7 @@ Route::get('/banner-demo', function () {
 
 // 간단한 테스트 라우트
 Route::get('/test-banner', function () {
-    return response("Test route works! Banner count: " . \App\Models\Banner::count());
+    return response("Test route works! Banner count: " . \Jiny\Site\Models\Banner::count());
 });
 
 

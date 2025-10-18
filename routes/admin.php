@@ -106,25 +106,13 @@ Route::prefix('admin/cms/contact')->name('admin.cms.contact.')->middleware(['web
 });
 
 /**
- * Cart (장바구니) 관리 라우트
+ * Cart (장바구니) 관리 라우트 - MOVED TO JINY/STORE
  *
  * @description
- * 고객 장바구니 내역을 관리하는 라우트입니다.
- * Single Action Controllers 방식으로 구현됨
+ * 장바구니 관련 기능은 jiny/store 패키지로 이동되었습니다.
+ * /admin/store 경로를 통해 접근 가능합니다.
  */
-Route::prefix('admin/cms/cart')->name('admin.cms.cart.')->middleware(['web', 'admin'])->group(function () {
-    // 장바구니 목록
-    Route::get('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Cart\IndexController::class)->name('index');
-
-    // 장바구니 아이템 삭제
-    Route::delete('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Cart\DestroyController::class)->name('destroy')->where(['id' => '[0-9]+']);
-
-    // 일괄 작업 (대량 삭제 등)
-    Route::post('/bulk-action', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Cart\BulkActionController::class)->name('bulkAction');
-
-    // 장바구니 통계 (AJAX) - 추후 구현 예정
-    // Route::get('/stats', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Cart\StatsController::class)->name('stats');
-});
+// Moved to jiny/store package - access via /admin/store
 
 // Sliders 관리
 Route::prefix('admin/site/sliders')->name('admin.site.sliders.')->group(function () {
@@ -535,54 +523,13 @@ Route::prefix('admin/cms/pages')->name('admin.cms.pages.')->middleware(['web', '
 
 
 /**
- * Products 관리 라우트
+ * Products 관리 라우트 - MOVED TO JINY/STORE
  *
  * @description
- * 상품 관리 시스템을 위한 라우트입니다.
- * 상품 CRUD 기능을 제공합니다.
+ * 상품 관리 기능은 jiny/store 패키지로 이동되었습니다.
+ * /admin/store 경로를 통해 접근 가능합니다.
  */
-Route::prefix('admin/site/products')->middleware(['web', 'admin'])->name('admin.site.products.')->group(function () {
-    Route::get('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\IndexController::class)->name('index');
-    Route::get('/create', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\CreateController::class)->name('create');
-    Route::post('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\StoreController::class)->name('store');
-    Route::get('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\ShowController::class)->name('show')->where(['id' => '[0-9]+']);
-    Route::get('/{id}/edit', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\EditController::class)->name('edit')->where(['id' => '[0-9]+']);
-    Route::put('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\UpdateController::class)->name('update')->where(['id' => '[0-9]+']);
-    Route::delete('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\DestroyController::class)->name('destroy')->where(['id' => '[0-9]+']);
-
-    // Product Categories 관리
-    Route::prefix('categories')->name('categories.')->group(function () {
-        Route::get('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\IndexController::class)->name('index');
-        Route::get('/create', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\CreateController::class)->name('create');
-        Route::post('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\StoreController::class)->name('store');
-        Route::get('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\ShowController::class)->name('show')->where(['id' => '[0-9]+']);
-        Route::get('/{id}/edit', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\EditController::class)->name('edit')->where(['id' => '[0-9]+']);
-        Route::put('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\UpdateController::class)->name('update')->where(['id' => '[0-9]+']);
-        Route::delete('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Categories\DestroyController::class)->name('destroy')->where(['id' => '[0-9]+']);
-    });
-
-    // Product Images 관리
-    Route::prefix('{productId}/images')->name('images.')->where(['productId' => '[0-9]+'])->group(function () {
-        Route::get('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\IndexController::class)->name('index');
-        Route::post('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\StoreController::class)->name('store');
-        Route::get('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\ShowController::class)->name('show')->where(['id' => '[0-9]+']);
-        Route::put('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\UpdateController::class)->name('update')->where(['id' => '[0-9]+']);
-        Route::delete('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\DestroyController::class)->name('destroy')->where(['id' => '[0-9]+']);
-        Route::post('/reorder', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\ReorderController::class)->name('reorder');
-        Route::post('/{id}/toggle-featured', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\ToggleFeaturedController::class)->name('toggle-featured')->where(['id' => '[0-9]+']);
-        Route::post('/{id}/toggle-enable', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Images\ToggleEnableController::class)->name('toggle-enable')->where(['id' => '[0-9]+']);
-    });
-
-    // Product Pricing 관리
-    Route::prefix('{productId}/pricing')->name('pricing.')->where(['productId' => '[0-9]+'])->group(function () {
-        Route::get('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\IndexController::class)->name('index');
-        Route::get('/create', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\CreateController::class)->name('create');
-        Route::post('/', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\StoreController::class)->name('store');
-        Route::get('/{id}/edit', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\EditController::class)->name('edit')->where(['id' => '[0-9]+']);
-        Route::put('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\UpdateController::class)->name('update')->where(['id' => '[0-9]+']);
-        Route::delete('/{id}', \Jiny\Store\Http\Controllers\Admin\Ecommerce\Products\Pricing\DestroyController::class)->name('destroy')->where(['id' => '[0-9]+']);
-    });
-});
+// Moved to jiny/store package - access via /admin/store
 
 
 /**

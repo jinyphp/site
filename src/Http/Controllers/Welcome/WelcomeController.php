@@ -29,7 +29,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jiny\Site\Services\SiteService;
-use App\Models\Banner;
+use Jiny\Site\Models\Banner;
 
 /**
  * Class WelcomeController

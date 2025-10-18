@@ -61,7 +61,7 @@ class BaseController extends Controller
         return [
             'table' => [
                 'name' => 'banners',
-                'model' => 'App\Models\Banner',
+                'model' => 'Jiny\Site\Models\Banner',
                 'sort' => [
                     'column' => 'display_order',
                     'order' => 'asc'
