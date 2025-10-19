@@ -38,14 +38,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="header_key" class="form-label">헤더 키 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('header_key') is-invalid @enderror"
-                                           id="header_key" name="header_key" value="{{ old('header_key') }}"
-                                           placeholder="예: jiny-site::components.header.custom" required>
+                                    <label for="path" class="form-label">헤더 경로 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('path') is-invalid @enderror"
+                                           id="path" name="path" value="{{ old('path') }}"
+                                           placeholder="예: jiny-site::partials.headers.header-custom" required>
                                     <div class="form-text">
-                                        고유한 키 형식을 사용하세요. 예: 'jiny-site::components.header.사용자정의명'
+                                        고유한 경로 형식을 사용하세요. 예: 'jiny-site::partials.headers.header-사용자정의명'
                                     </div>
-                                    @error('header_key')
+                                    @error('path')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -53,11 +53,11 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">헤더 이름 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                           id="name" name="name" value="{{ old('name') }}"
+                                    <label for="title" class="form-label">헤더 제목 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                           id="title" name="title" value="{{ old('title') }}"
                                            placeholder="예: 사용자 정의 헤더" required>
-                                    @error('name')
+                                    @error('title')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -96,6 +96,32 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
+                                    <label class="form-label">헤더 상태</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="enable" name="enable"
+                                               {{ old('enable', true) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="enable">
+                                            활성화 (사용 가능)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="active" name="active"
+                                               {{ old('active') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="active">
+                                            사용중 (현재 적용)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="default" name="default"
+                                               {{ old('default') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="default">
+                                            기본 헤더로 설정
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
                                     <label class="form-label">헤더 옵션</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="navbar" name="navbar"
@@ -126,8 +152,8 @@
                             <i class="fas fa-info-circle"></i>
                             <strong>팁:</strong>
                             <ul class="mb-0 mt-2">
-                                <li>헤더 키는 <code>package::components.header.name</code> 패턴을 따라야 합니다</li>
-                                <li>템플릿 경로는 기존 Blade 컴포넌트를 참조해야 합니다</li>
+                                <li>헤더 경로는 <code>package::partials.headers.header-name</code> 패턴을 따라야 합니다</li>
+                                <li>템플릿 경로는 기존 Blade 템플릿을 참조해야 합니다</li>
                                 <li>필요하지 않은 옵션은 체크하지 않으셔도 됩니다</li>
                                 <li>모든 헤더는 설정 파일이나 이 인터페이스에서 관리할 수 있습니다</li>
                             </ul>
@@ -152,12 +178,12 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-generate key from name
-    const nameInput = document.getElementById('name');
-    const keyInput = document.getElementById('header_key');
+    // Auto-generate path from title
+    const titleInput = document.getElementById('title');
+    const pathInput = document.getElementById('path');
 
-    nameInput.addEventListener('input', function() {
-        if (!keyInput.value || keyInput.dataset.autoGenerated === 'true') {
+    titleInput.addEventListener('input', function() {
+        if (!pathInput.value || pathInput.dataset.autoGenerated === 'true') {
             const slug = this.value
                 .toLowerCase()
                 .replace(/[^a-z0-9\s-]/g, '')
@@ -166,41 +192,63 @@ document.addEventListener('DOMContentLoaded', function() {
                 .trim('-');
 
             if (slug) {
-                keyInput.value = `jiny-site::components.header.${slug}`;
-                keyInput.dataset.autoGenerated = 'true';
+                pathInput.value = `jiny-site::partials.headers.header-${slug}`;
+                pathInput.dataset.autoGenerated = 'true';
             }
         }
     });
 
-    keyInput.addEventListener('input', function() {
+    pathInput.addEventListener('input', function() {
         this.dataset.autoGenerated = 'false';
+    });
+
+    // Enable/Active dependency
+    const enableInput = document.getElementById('enable');
+    const activeInput = document.getElementById('active');
+    const defaultInput = document.getElementById('default');
+
+    enableInput.addEventListener('change', function() {
+        if (!this.checked) {
+            activeInput.checked = false;
+            defaultInput.checked = false;
+            activeInput.disabled = true;
+        } else {
+            activeInput.disabled = false;
+        }
+    });
+
+    defaultInput.addEventListener('change', function() {
+        if (this.checked) {
+            enableInput.checked = true;
+            activeInput.checked = true;
+        }
     });
 
     // Form validation
     const form = document.querySelector('form');
     form.addEventListener('submit', function(e) {
-        const key = keyInput.value.trim();
-        const name = nameInput.value.trim();
+        const path = pathInput.value.trim();
+        const title = titleInput.value.trim();
 
-        if (!key) {
+        if (!path) {
             e.preventDefault();
-            alert('헤더 키는 필수입니다');
-            keyInput.focus();
+            alert('헤더 경로는 필수입니다');
+            pathInput.focus();
             return;
         }
 
-        if (!name) {
+        if (!title) {
             e.preventDefault();
-            alert('헤더 이름은 필수입니다');
-            nameInput.focus();
+            alert('헤더 제목은 필수입니다');
+            titleInput.focus();
             return;
         }
 
-        // Validate key format
-        if (!key.includes('::') || !key.includes('components.header.')) {
+        // Validate path format
+        if (!path.includes('::') || !path.includes('partials.headers.')) {
             e.preventDefault();
-            alert('헤더 키는 package::components.header.name 형식이어야 합니다');
-            keyInput.focus();
+            alert('헤더 경로는 package::partials.headers.header-name 형식이어야 합니다');
+            pathInput.focus();
             return;
         }
     });

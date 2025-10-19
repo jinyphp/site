@@ -80,12 +80,22 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="brand_name" class="form-label">브랜드명</label>
-                                    <input type="text" class="form-control @error('brand_name') is-invalid @enderror"
-                                           id="brand_name" name="brand_name"
-                                           value="{{ old('brand_name', $headerConfig['brand_name']) }}"
+                                    <label for="brand" class="form-label">브랜드명</label>
+                                    <input type="text" class="form-control @error('brand') is-invalid @enderror"
+                                           id="brand" name="brand"
+                                           value="{{ old('brand', $headerConfig['brand']) }}"
                                            placeholder="예: JinyPHP 채용플랫폼">
-                                    @error('brand_name')
+                                    @error('brand')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="search" class="form-label">검색 설정</label>
+                                    <input type="text" class="form-control @error('search') is-invalid @enderror"
+                                           id="search" name="search"
+                                           value="{{ old('search', $headerConfig['search']) }}"
+                                           placeholder="예: 검색 플레이스홀더 텍스트">
+                                    @error('search')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -1,6 +1,6 @@
 {
-    "copyright":"JinyPHP 채용플랫폼. All Rights Reserved.",
-    "logo":"/assets/images/brand/logo/logo.svg",
+    "copyright": "JinyPHP 채용플랫폼. All Rights Reserved.",
+    "logo": "/assets/images/brand/logo/logo.svg",
     "company": {
         "name": "JinyPHP",
         "description": "개발자들을 위한 풍부한 기능과 아름다운 Bootstrap UIKit을 제공하는 반응형 채용플랫폼입니다.",
@@ -35,47 +35,96 @@
         "company": {
             "title": "회사",
             "links": [
-                {"title": "회사소개", "href": "/about"},
-                {"title": "채용", "href": "/jobs"},
-                {"title": "문의하기", "href": "/contact"},
-                {"title": "뉴스 및 블로그", "href": "/blog"},
-                {"title": "투자자", "href": "/investors"}
+                {
+                    "title": "회사소개",
+                    "href": "/about"
+                },
+                {
+                    "title": "채용",
+                    "href": "/jobs"
+                },
+                {
+                    "title": "문의하기",
+                    "href": "/contact"
+                },
+                {
+                    "title": "뉴스 및 블로그",
+                    "href": "/blog"
+                },
+                {
+                    "title": "투자자",
+                    "href": "/investors"
+                }
             ]
         },
         "community": {
             "title": "커뮤니티",
             "links": [
-                {"title": "도움말 및 지원", "href": "/help"},
-                {"title": "제휴", "href": "/partners"},
-                {"title": "블로그", "href": "/blog"},
-                {"title": "개발자 커뮤니티", "href": "/community"}
+                {
+                    "title": "도움말 및 지원",
+                    "href": "/help"
+                },
+                {
+                    "title": "제휴",
+                    "href": "/partners"
+                },
+                {
+                    "title": "블로그",
+                    "href": "/blog"
+                },
+                {
+                    "title": "개발자 커뮤니티",
+                    "href": "/community"
+                }
             ]
         },
         "education": {
             "title": "교육",
             "links": [
-                {"title": "강사 지원", "href": "/instructor"},
-                {"title": "가이드", "href": "/guide"},
-                {"title": "문서", "href": "/docs"},
-                {"title": "튜토리얼", "href": "/tutorials"}
+                {
+                    "title": "강사 지원",
+                    "href": "/instructor"
+                },
+                {
+                    "title": "가이드",
+                    "href": "/guide"
+                },
+                {
+                    "title": "문서",
+                    "href": "/docs"
+                },
+                {
+                    "title": "튜토리얼",
+                    "href": "/tutorials"
+                }
             ]
         },
         "legal": {
             "title": "법적 고지",
             "links": [
-                {"title": "이용약관", "href": "/terms"},
-                {"title": "개인정보처리방침", "href": "/privacy"},
-                {"title": "쿠키 정책", "href": "/cookies"}
+                {
+                    "title": "이용약관",
+                    "href": "/terms"
+                },
+                {
+                    "title": "개인정보처리방침",
+                    "href": "/privacy"
+                },
+                {
+                    "title": "쿠키 정책",
+                    "href": "/cookies"
+                }
             ]
         }
     },
-
     "template": [
         {
-            "footer_key": "jiny-site::partials.footers.footer",
-            "name": "기본 푸터",
-            "description": "표준 웹사이트 푸터",
-            "template": "jiny-site::partials.footers.footer",
+            "path": "jiny-site::partials.footers.footer-default",
+            "title": "Default Footer",
+            "description": "Standard default footer layout",
+            "enable": false,
+            "active": false,
+            "default": false,
             "copyright": true,
             "links": true,
             "social": true,
@@ -99,55 +148,56 @@
             ]
         },
         {
-            "footer_key": "jiny-site::partials.footers.footer-default",
-            "name": "기본 디폴트 푸터",
-            "description": "기본 디폴트 스타일 푸터",
-            "template": "jiny-site::partials.footers.footer-default",
+            "path": "jiny-site::partials.footers.footer-4-column-language",
+            "title": "4 Column Language Footer",
+            "description": "Footer with 4 columns and language selection",
+            "enable": true,
+            "active": true,
+            "default": false,
             "copyright": true,
             "links": true,
-            "social": false
+            "social": true
         },
         {
-            "footer_key": "jiny-site::partials.footers.footer-simple",
-            "name": "심플 푸터",
-            "description": "간단한 스타일의 푸터",
-            "template": "jiny-site::partials.footers.footer-simple",
+            "path": "jiny-site::partials.footers.footer-center-link",
+            "title": "Center Link Footer",
+            "description": "Footer with centered links",
+            "enable": true,
+            "active": false,
+            "default": false,
+            "copyright": true,
+            "links": true,
+            "social": true
+        },
+        {
+            "path": "jiny-site::partials.footers.footer-mentor",
+            "title": "Mentor Footer",
+            "description": "Footer layout for mentor pages",
+            "enable": true,
+            "active": true,
+            "default": false,
+            "copyright": true,
+            "links": true,
+            "social": true
+        },
+        {
+            "path": "jiny-site::partials.footers.footer-simple",
+            "title": "Simple Footer",
+            "description": "Minimalist simple footer layout",
+            "enable": true,
+            "active": true,
+            "default": true,
             "copyright": true,
             "links": false,
             "social": false
         },
         {
-            "footer_key": "jiny-site::partials.footers.footer-center-link",
-            "name": "센터 링크 푸터",
-            "description": "중앙 정렬 링크가 있는 푸터",
-            "template": "jiny-site::partials.footers.footer-center-link",
-            "copyright": true,
-            "links": true,
-            "social": true
-        },
-        {
-            "footer_key": "jiny-site::partials.footers.footer-4-column-language",
-            "name": "4컬럼 언어 푸터",
-            "description": "4컬럼 레이아웃과 언어 선택이 있는 푸터",
-            "template": "jiny-site::partials.footers.footer-4-column-language",
-            "copyright": true,
-            "links": true,
-            "social": true
-        },
-        {
-            "footer_key": "jiny-site::partials.footers.footer-mentor",
-            "name": "멘토 푸터",
-            "description": "멘토링 사이트용 푸터",
-            "template": "jiny-site::partials.footers.footer-mentor",
-            "copyright": true,
-            "links": true,
-            "social": true
-        },
-        {
-            "footer_key": "jiny-site::partials.footers.footer-simple-centerd",
-            "name": "심플 센터 푸터",
-            "description": "중앙 정렬된 심플 푸터",
-            "template": "jiny-site::partials.footers.footer-simple-centerd",
+            "path": "jiny-site::partials.footers.footer-simple-centerd",
+            "title": "Simple Centered Footer",
+            "description": "Simple footer with centered content",
+            "enable": false,
+            "active": false,
+            "default": false,
             "copyright": true,
             "links": false,
             "social": false

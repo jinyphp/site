@@ -1,65 +1,111 @@
 {
-    "logo": "/assets/images/brand/logo/logo.svg",
-    "brand_name": "JinyPHP 채용플랫폼",
-    "brand_tagline": "개발자들을 위한 최고의 채용 플랫폼",
-    "navigation": {
-        "primary": [
-            {"title": "홈", "href": "/", "active": true},
-            {"title": "채용공고", "href": "/jobs", "active": true},
-            {"title": "회사", "href": "/companies", "active": true},
-            {"title": "개발자", "href": "/developers", "active": true},
-            {"title": "블로그", "href": "/blog", "active": true}
-        ],
-        "secondary": [
-            {"title": "로그인", "href": "/login", "active": true},
-            {"title": "회원가입", "href": "/register", "active": true},
-            {"title": "기업서비스", "href": "/enterprise", "active": true}
-        ]
-    },
-    "settings": {
-        "search_enabled": true,
-        "notifications_enabled": true,
-        "user_menu_enabled": true,
-        "dark_mode_toggle": false,
-        "sticky_header": true,
-        "mobile_menu_style": "sidebar"
-    },
+    "logo": "",
+    "brand": "",
+    "search": "",
     "template": [
         {
-            "header_key": "jiny-site::components.header.app",
-            "name": "App Header",
-            "description": "Main application header",
-            "template": "jiny-site::components.header.app",
-            "navbar": true,
-            "logo": true,
-            "search": false
+            "path": "jiny-site::partials.headers.header-default",
+            "title": "Default Header",
+            "description": "Standard default header layout",
+            "enable": true,
+            "active": true,
+            "default": false
         },
         {
-            "header_key": "jiny-site::components.header.home",
-            "name": "Home Header",
-            "description": "Homepage header with hero section",
-            "template": "jiny-site::components.header.home",
-            "navbar": true,
-            "logo": true,
-            "search": true
+            "path": "jiny-site::partials.headers.header-classic",
+            "title": "Classic Header",
+            "description": "Classic style header layout",
+            "enable": true,
+            "active": true,
+            "default": false
         },
         {
-            "header_key": "jiny-site::components.header.admin",
-            "name": "Admin Header",
-            "description": "Admin panel header",
-            "template": "jiny-site::components.header.admin",
-            "navbar": true,
-            "logo": false,
-            "search": false
+            "path": "jiny-site::partials.headers.header-doc",
+            "title": "Documentation Header",
+            "description": "Header for documentation pages",
+            "enable": false,
+            "active": false,
+            "default": false
         },
         {
-            "header_key": "jiny-site::components.header.about",
-            "name": "About Header",
-            "description": "About page header",
-            "template": "jiny-site::components.header.about",
-            "navbar": true,
-            "logo": true,
-            "search": false
+            "path": "jiny-site::partials.headers.header-horizontal",
+            "title": "Horizontal Header",
+            "description": "Horizontal navigation header layout",
+            "enable": true,
+            "active": true,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-instructor",
+            "title": "Instructor Header",
+            "description": "Header layout for instructor pages",
+            "enable": false,
+            "active": false,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-job",
+            "title": "Job Header",
+            "description": "Header layout for job/career pages",
+            "enable": true,
+            "active": true,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-login",
+            "title": "Login Header",
+            "description": "Header layout for login pages",
+            "enable": true,
+            "active": true,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-mentor",
+            "title": "Mentor Header",
+            "description": "Header layout for mentor pages",
+            "enable": true,
+            "active": true,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-second",
+            "title": "Secondary Header",
+            "description": "Alternative secondary header layout",
+            "enable": true,
+            "active": false,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-simple",
+            "title": "Simple Header",
+            "description": "Minimalist simple header layout",
+            "enable": true,
+            "active": true,
+            "default": true
+        },
+        {
+            "path": "jiny-site::partials.headers.header-student",
+            "title": "Student Header",
+            "description": "Header layout for student pages",
+            "enable": false,
+            "active": false,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-vertical",
+            "title": "Vertical Header",
+            "description": "Vertical navigation header layout",
+            "enable": false,
+            "active": false,
+            "default": false
+        },
+        {
+            "path": "jiny-site::partials.headers.header-vertical-compact",
+            "title": "Vertical Compact Header",
+            "description": "Compact vertical navigation header layout",
+            "enable": false,
+            "active": false,
+            "default": false
         }
     ]
 }

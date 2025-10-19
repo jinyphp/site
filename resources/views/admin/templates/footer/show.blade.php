@@ -4,19 +4,36 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-gray-800">푸터 상세보기</h1>
+                    <p class="mb-0 text-muted">
+                        <strong>{{ $footer['title'] ?? $footer['name'] ?? '이름 없음' }}</strong> 푸터의 상세 정보를 확인할 수 있습니다
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ route('admin.cms.templates.footer.config') }}" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-gear me-1"></i> 푸터 설정
+                    </a>
+                    <a href="{{ route('admin.cms.templates.footer.edit', $footer['id']) }}" class="btn btn-primary me-2">
+                        <i class="bi bi-pencil-square me-1"></i> 수정
+                    </a>
+                    <a href="{{ route('admin.cms.templates.footer.index') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> 목록으로
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">푸터 상세: <code>{{ $footer['footer_key'] }}</code></h5>
-                    <div>
-                        <a href="{{ route('admin.cms.templates.footer.edit', $footer['id']) }}" class="btn btn-primary">
-                            <i class="bi bi-pencil-square"></i> 수정
-                        </a>
-                        <a href="{{ route('admin.cms.templates.footer.index') }}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> 목록으로
-                        </a>
-                    </div>
+                <div class="card-header">
+                    <h5 class="card-title mb-0">푸터 상세: <code>{{ $footer['path'] ?? $footer['footer_key'] ?? 'N/A' }}</code></h5>
                 </div>
 
                 <div class="card-body">
@@ -28,12 +45,12 @@
                                 <table class="table table-borderless">
                                     <tbody>
                                         <tr>
-                                            <td class="fw-bold" style="width: 150px;">푸터 키:</td>
-                                            <td><code class="fs-6">{{ $footer['footer_key'] }}</code></td>
+                                            <td class="fw-bold" style="width: 150px;">푸터 경로:</td>
+                                            <td><code class="fs-6">{{ $footer['path'] ?? $footer['footer_key'] ?? 'N/A' }}</code></td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">이름:</td>
-                                            <td>{{ $footer['name'] ?? '이름 없음' }}</td>
+                                            <td class="fw-bold">제목:</td>
+                                            <td>{{ $footer['title'] ?? $footer['name'] ?? '제목 없음' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">설명:</td>
@@ -49,57 +66,38 @@
                                                 @endif
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td class="fw-bold">활성화 상태:</td>
+                                            <td>
+                                                @if($footer['enable'] ?? true)
+                                                    <span class="badge bg-success">활성화</span>
+                                                @else
+                                                    <span class="badge bg-danger">비활성화</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">사용 상태:</td>
+                                            <td>
+                                                @if($footer['active'] ?? false)
+                                                    <span class="badge bg-primary">사용중</span>
+                                                @else
+                                                    <span class="badge bg-secondary">대기중</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">기본 푸터:</td>
+                                            <td>
+                                                @if($footer['default'] ?? false)
+                                                    <span class="badge bg-success">기본</span>
+                                                @else
+                                                    <span class="badge bg-secondary">일반</span>
+                                                @endif
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                            </div>
-
-                            <h6 class="text-muted mb-3 mt-4">푸터 옵션</h6>
-
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <div class="card border-primary">
-                                        <div class="card-header bg-primary text-white py-2">
-                                            <h6 class="mb-0"><i class="fas fa-copyright"></i> 저작권</h6>
-                                        </div>
-                                        <div class="card-body py-3 text-center">
-                                            @if(!empty($footer['copyright']))
-                                                <span class="badge bg-success fs-6">Yes</span>
-                                            @else
-                                                <span class="badge bg-secondary fs-6">No</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <div class="card border-secondary">
-                                        <div class="card-header bg-secondary text-white py-2">
-                                            <h6 class="mb-0"><i class="fas fa-link"></i> 링크</h6>
-                                        </div>
-                                        <div class="card-body py-3 text-center">
-                                            @if(!empty($footer['links']))
-                                                <span class="badge bg-success fs-6">Yes</span>
-                                            @else
-                                                <span class="badge bg-secondary fs-6">No</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <div class="card border-info">
-                                        <div class="card-header bg-info text-white py-2">
-                                            <h6 class="mb-0"><i class="fas fa-share-alt"></i> 소셜</h6>
-                                        </div>
-                                        <div class="card-body py-3 text-center">
-                                            @if(!empty($footer['social']))
-                                                <span class="badge bg-success fs-6">Yes</span>
-                                            @else
-                                                <span class="badge bg-secondary fs-6">No</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -139,8 +137,8 @@
                                             <i class="bi bi-trash"></i> 푸터 삭제
                                         </button>
                                         <button type="button" class="btn btn-outline-secondary btn-sm"
-                                                onclick="copyToClipboard('{{ $footer['footer_key'] }}')">
-                                            <i class="bi bi-copy"></i> 키 복사
+                                                onclick="copyToClipboard('{{ $footer['path'] ?? $footer['footer_key'] ?? '' }}')">
+                                            <i class="bi bi-copy"></i> 경로 복사
                                         </button>
                                     </div>
                                 </div>
@@ -155,10 +153,9 @@
                             <div class="alert alert-info">
                                 <h6><i class="fas fa-code"></i> Blade 템플릿에서 사용</h6>
                                 <p class="mb-2">Blade 템플릿에서 이 푸터를 다음과 같이 사용할 수 있습니다:</p>
-                                <pre><code class="language-blade">@<!-- -->component('{{ $footer['footer_key'] }}')
-@<!-- -->endcomponent</code></pre>
-                                <p class="mb-2 mt-3">또는 짧은 문법으로:</p>
-                                <pre><code class="language-blade">&lt;x-dynamic-component :component="'{{ $footer['footer_key'] }}'" /&gt;</code></pre>
+                                <pre><code class="language-blade">@<!-- -->include('{{ $footer['path'] ?? $footer['footer_key'] ?? '' }}')</code></pre>
+                                <p class="mb-2 mt-3">또는 컴포넌트로:</p>
+                                <pre><code class="language-blade">&lt;x-dynamic-component :component="'{{ $footer['path'] ?? $footer['footer_key'] ?? '' }}'" /&gt;</code></pre>
                             </div>
 
                             <div class="alert alert-secondary">
@@ -166,8 +163,8 @@
                                 <p class="mb-2">프로그래밍 방식으로 푸터 설정에 접근:</p>
                                 <pre><code class="language-php">// JSON 파일에서 모든 푸터 가져오기
 $footers = json_decode(file_get_contents(base_path('vendor/jiny/site/config/footers.json')), true);
-// 키로 푸터 찾기
-$footer = collect($footers)->firstWhere('footer_key', '{{ addslashes($footer['footer_key']) }}');</code></pre>
+// 경로로 푸터 찾기
+$footer = collect($footers['template'])->firstWhere('path', '{{ addslashes($footer['path'] ?? $footer['footer_key'] ?? '') }}');</code></pre>
                             </div>
 
                             @if(!empty($footer['template']))
@@ -187,7 +184,7 @@ $footer = collect($footers)->firstWhere('footer_key', '{{ addslashes($footer['fo
                                 <pre><code class="language-json">{
   "layout_key": "jiny-site::layouts.custom",
   "header": "jiny-site::components.header.default",
-  "footer": "{{ $footer['footer_key'] }}"
+  "footer": "{{ $footer['path'] ?? $footer['footer_key'] ?? '' }}"
 }</code></pre>
                             </div>
                         </div>
@@ -208,7 +205,7 @@ $footer = collect($footers)->firstWhere('footer_key', '{{ addslashes($footer['fo
             </div>
             <div class="modal-body">
                 <p>이 푸터를 삭제하시겠습니까?</p>
-                <p><strong>푸터 키:</strong> <span id="delete-footer-key"></span></p>
+                <p><strong>푸터 경로:</strong> <span id="delete-footer-key"></span></p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle"></i>
                     <strong>경고:</strong> 이 작업은 되돌릴 수 없습니다. 이 푸터를 사용하는 레이아웃이 손상될 수 있습니다.
@@ -230,9 +227,9 @@ $footer = collect($footers)->firstWhere('footer_key', '{{ addslashes($footer['fo
 @push('scripts')
 <script>
 function confirmDelete(footerId) {
-    // 푸터 키 표시
-    const footerKey = '{{ $footer['footer_key'] }}';
-    document.getElementById('delete-footer-key').textContent = footerKey;
+    // 푸터 경로 표시
+    const footerPath = '{{ $footer['path'] ?? $footer['footer_key'] ?? '' }}';
+    document.getElementById('delete-footer-key').textContent = footerPath;
     document.getElementById('delete-form').action = `/admin/cms/templates/footer/${footerId}`;
 
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));

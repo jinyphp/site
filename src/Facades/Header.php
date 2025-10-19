@@ -33,6 +33,19 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool delete(int $id)
  * @method static array getFullJsonData()
  * @method static bool saveJsonData(array $data)
+ * @method static array|null getDefaultHeader()
+ * @method static bool setDefaultHeader(int $id)
+ * @method static array getTemplateStats()
+ * @method static string getDefaultHeaderPath()
+ * @method static array getEnabledHeaders()
+ * @method static array getActiveHeaders()
+ * @method static bool setActiveHeader(int $id)
+ * @method static bool toggleHeaderEnable(int $id)
+ * @method static string getBrand()
+ * @method static string getSearch()
+ * @method static bool updateLogo(string $logo)
+ * @method static bool updateBrand(string $brand)
+ * @method static bool updateSearch(string $search)
  *
  * @see \Jiny\Site\Services\HeaderService
  */

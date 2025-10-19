@@ -24,8 +24,10 @@ class ConfigController extends Controller
     {
         $headerConfig = [
             'logo' => Header::getLogo(),
+            'brand' => Header::getBrand(),
             'brand_name' => Header::getBrandName(),
             'brand_tagline' => Header::getBrandTagline(),
+            'search' => Header::getSearch(),
             'navigation' => Header::getNavigation(),
             'settings' => Header::getSettings(),
         ];
@@ -40,7 +42,8 @@ class ConfigController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'logo' => 'nullable|string|max:255',
-            'brand_name' => 'nullable|string|max:255',
+            'brand' => 'nullable|string|max:255',
+            'search' => 'nullable|string|max:255',
             'brand_tagline' => 'nullable|string|max:500',
         ]);
 
@@ -50,7 +53,8 @@ class ConfigController extends Controller
 
         $success = $this->headerService->updateConfig([
             'logo' => $request->logo,
-            'brand_name' => $request->brand_name,
+            'brand' => $request->brand,
+            'search' => $request->search,
             'brand_tagline' => $request->brand_tagline,
         ]);
 

@@ -433,6 +433,11 @@ Route::prefix('admin/cms/templates')->name('admin.cms.templates.')->middleware([
         Route::post('/config/update-json', [\Jiny\Site\Http\Controllers\Admin\Templates\Header\ConfigController::class, 'updateJson'])->name('config.update-json');
         Route::post('/config/validate-json', [\Jiny\Site\Http\Controllers\Admin\Templates\Header\ConfigController::class, 'validateJson'])->name('config.validate-json');
 
+        // AJAX 기능들 (동적 라우트보다 먼저 정의)
+        Route::post('/{header}/set-default', \Jiny\Site\Http\Controllers\Admin\Templates\Header\SetDefaultController::class)->name('setDefault');
+        Route::post('/{header}/set-active', \Jiny\Site\Http\Controllers\Admin\Templates\Header\SetActiveController::class)->name('setActive');
+        Route::post('/{header}/toggle-enable', \Jiny\Site\Http\Controllers\Admin\Templates\Header\ToggleEnableController::class)->name('toggleEnable');
+
         // 동적 라우트 (가장 마지막에 정의)
         Route::get('/{header}', \Jiny\Site\Http\Controllers\Admin\Templates\Header\ShowController::class)->name('show');
         Route::get('/{header}/edit', \Jiny\Site\Http\Controllers\Admin\Templates\Header\EditController::class)->name('edit');
@@ -459,11 +464,16 @@ Route::prefix('admin/cms/templates')->name('admin.cms.templates.')->middleware([
         Route::post('/config/update-json', [\Jiny\Site\Http\Controllers\Admin\Templates\Footer\ConfigController::class, 'updateJson'])->name('config.update-json');
         Route::post('/config/validate-json', [\Jiny\Site\Http\Controllers\Admin\Templates\Footer\ConfigController::class, 'validateJson'])->name('config.validate-json');
 
+        // AJAX 기능들 (동적 라우트보다 먼저 정의)
+        Route::post('/{footer}/set-default', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\SetDefaultController::class)->name('setDefault');
+        Route::post('/{footer}/set-active', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\SetActiveController::class)->name('setActive');
+        Route::post('/{footer}/toggle-enable', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\ToggleEnableController::class)->name('toggleEnable');
+
         // 동적 라우트 (가장 마지막에 정의)
         Route::get('/{footer}', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\ShowController::class)->name('show');
         Route::get('/{footer}/edit', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\EditController::class)->name('edit');
         Route::put('/{footer}', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\UpdateController::class)->name('update');
-        Route::delete('/{footer}', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\DestroyController::class)->name('destroy');
+        Route::delete('/{footer}', \Jiny\Site\Http\Controllers\Admin\Templates\Footer\DeleteController::class)->name('destroy');
     });
 
     // Sidebar 관리

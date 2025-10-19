@@ -1,0 +1,65 @@
+{
+    "logo": "/assets/images/brand/logo/logo.svg",
+    "brand_name": "JinyPHP 채용플랫폼",
+    "brand_tagline": "개발자들을 위한 최고의 채용 플랫폼",
+    "navigation": {
+        "primary": [
+            {"title": "홈", "href": "/", "active": true},
+            {"title": "채용공고", "href": "/jobs", "active": true},
+            {"title": "회사", "href": "/companies", "active": true},
+            {"title": "개발자", "href": "/developers", "active": true},
+            {"title": "블로그", "href": "/blog", "active": true}
+        ],
+        "secondary": [
+            {"title": "로그인", "href": "/login", "active": true},
+            {"title": "회원가입", "href": "/register", "active": true},
+            {"title": "기업서비스", "href": "/enterprise", "active": true}
+        ]
+    },
+    "settings": {
+        "search_enabled": true,
+        "notifications_enabled": true,
+        "user_menu_enabled": true,
+        "dark_mode_toggle": false,
+        "sticky_header": true,
+        "mobile_menu_style": "sidebar"
+    },
+    "template": [
+        {
+            "header_key": "jiny-site::components.header.app",
+            "name": "App Header",
+            "description": "Main application header",
+            "template": "jiny-site::components.header.app",
+            "navbar": true,
+            "logo": true,
+            "search": false
+        },
+        {
+            "header_key": "jiny-site::components.header.home",
+            "name": "Home Header",
+            "description": "Homepage header with hero section",
+            "template": "jiny-site::components.header.home",
+            "navbar": true,
+            "logo": true,
+            "search": true
+        },
+        {
+            "header_key": "jiny-site::components.header.admin",
+            "name": "Admin Header",
+            "description": "Admin panel header",
+            "template": "jiny-site::components.header.admin",
+            "navbar": true,
+            "logo": false,
+            "search": false
+        },
+        {
+            "header_key": "jiny-site::components.header.about",
+            "name": "About Header",
+            "description": "About page header",
+            "template": "jiny-site::components.header.about",
+            "navbar": true,
+            "logo": true,
+            "search": false
+        }
+    ]
+}

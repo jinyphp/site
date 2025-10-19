@@ -30,6 +30,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jiny\Site\Services\SiteService;
 use Jiny\Site\Models\Banner;
+use Jiny\Site\Facades\Header;
+use Jiny\Site\Facades\Footer;
 
 /**
  * Class WelcomeController
@@ -153,13 +155,21 @@ class WelcomeController extends Controller
         // 활성화되고 유효한 베너들을 가져옴
         $banners = $this->getBanners($request);
 
+        // [1.7단계] 헤더 경로 가져오기
+        // headers.json에서 기본 헤더 경로를 읽어옴
+        $header = Header::getDefaultHeaderPath();
+
+        // [1.8단계] 푸터 경로 가져오기
+        // footers.json에서 기본 푸터 경로를 읽어옴
+        $footer = Footer::getDefaultFooterPath();
+
         // [2단계] 뷰 우선순위 해석
         // 설정에 따라 가장 적합한 뷰 경로를 결정
         $viewPath = $this->resolveView();
 
         // [3단계] 뷰 렌더링 및 반환
-        // 결정된 뷰에 $config 데이터와 베너 데이터를 전달하여 렌더링
-        return $this->renderView($viewPath, $banners);
+        // 결정된 뷰에 $config 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 전달하여 렌더링
+        return $this->renderView($viewPath, $banners, $header, $footer);
     }
 
     /**
@@ -437,10 +447,12 @@ class WelcomeController extends Controller
      *
      * @description
      * resolveView()에서 결정된 뷰 경로를 사용하여 실제 뷰를 렌더링합니다.
-     * 뷰 파일에서 사용할 수 있도록 설정 데이터와 베너 데이터를 함께 전달합니다.
+     * 뷰 파일에서 사용할 수 있도록 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 함께 전달합니다.
      *
      * @param string $viewPath 렌더링할 뷰 경로
      * @param \Illuminate\Database\Eloquent\Collection $banners 표시할 베너 컬렉션
+     * @param string $header 기본 헤더 경로
+     * @param string $footer 기본 푸터 경로
      *
      * @return \Illuminate\View\View Laravel 뷰 객체
      *
@@ -450,6 +462,8 @@ class WelcomeController extends Controller
      * - $config['slot']        : ?string - 슬롯 이름
      * - $config['log_enabled'] : bool    - 로그 활성화 여부
      * - $banners              : Collection - 표시할 베너 컬렉션
+     * - $header               : string - 기본 헤더 경로 (headers.json에서 읽음)
+     * - $footer               : string - 기본 푸터 경로 (footers.json에서 읽음)
      *
      * @example 뷰 파일에서 사용 예시
      * // resources/views/www/index.blade.php
@@ -519,7 +533,7 @@ class WelcomeController extends Controller
      * </html>
      *
      * @workflow
-     * view($viewPath, ['config' => $this->config, 'banners' => $banners])
+     * view($viewPath, ['config' => $this->config, 'banners' => $banners, 'header' => $header, 'footer' => $footer])
      *     ↓
      * Laravel View Factory
      *     ↓
@@ -527,12 +541,14 @@ class WelcomeController extends Controller
      *     ↓
      * HTML 응답 반환
      */
-    protected function renderView($viewPath, $banners)
+    protected function renderView($viewPath, $banners, $header, $footer)
     {
-        // 뷰 경로와 설정 데이터, 베너 데이터를 함께 전달하여 렌더링
+        // 뷰 경로와 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 함께 전달하여 렌더링
         return view($viewPath, [
             'config' => $this->config,
             'banners' => $banners,
+            'header' => $header,
+            'footer' => $footer,
         ]);
     }
 }

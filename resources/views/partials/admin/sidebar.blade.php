@@ -60,7 +60,8 @@
                 </a>
             </li>
 
-            @includeIf("jiny-store::partials.admin.menu")
+            {{-- @includeIf("jiny-store::partials.admin.menu") --}}
+
 
             {{-- ============================================
                 고객지원

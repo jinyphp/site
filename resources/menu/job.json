@@ -1,0 +1,153 @@
+{
+    "main_menu": [
+        {
+            "type": "link",
+            "title": "Home",
+            "url": "#",
+            "css_class": "nav-link"
+        },
+        {
+            "type": "dropdown",
+            "title": "Listing",
+            "id": "navbarListing",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "List",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Grid",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Single",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Pages",
+            "id": "navbarPages",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow dropdown-menu-end",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "Company List",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "submenu",
+                    "title": "Company Single",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "About",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Reviews",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Jobs",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Benifits",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Photos",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "link",
+                    "title": "Post A Job",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Upload Resume",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "link",
+            "title": "Back to Demo",
+            "url": "#",
+            "css_class": "nav-link"
+        },
+        {
+            "type": "special_dropdown",
+            "id": "navbarDropdown",
+            "css_class": "nav-link",
+            "icon": "fe fe-more-horizontal",
+            "dropdown_class": "dropdown-menu dropdown-menu-md dropdown-menu-end",
+            "children": [
+                {
+                    "type": "list_group",
+                    "items": [
+                        {
+                            "title": "Documentations",
+                            "description": "Browse the all documentation",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-file-text fs-3 text-primary"
+                        },
+                        {
+                            "title": "Snippet",
+                            "description": "Bunch of Snippet",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "bi bi-files fs-3 text-primary"
+                        },
+                        {
+                            "title": "Changelog",
+                            "title_extra": "<span class=\"text-primary ms-1\" id=\"changelog\"></span>",
+                            "description": "See what's new",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-layers fs-3 text-primary"
+                        },
+                        {
+                            "title": "RTL demo",
+                            "description": "RTL Pages",
+                            "url": "https://geeksui.codescandy.com/geeks-rtl/",
+                            "target": "_blank",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-toggle-right fs-3 text-primary"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

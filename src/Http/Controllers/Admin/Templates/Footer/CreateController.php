@@ -3,11 +3,10 @@
 namespace Jiny\Site\Http\Controllers\Admin\Templates\Footer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class CreateController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         return view('jiny-site::admin.templates.footer.create');
     }

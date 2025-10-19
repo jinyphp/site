@@ -2,305 +2,130 @@
 
 namespace Jiny\Site\Services;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Collection;
 
 class FooterService
 {
-    private string $jsonPath;
+    private string $configPath;
+    private ?array $footers = null;
 
     public function __construct()
     {
-        $this->jsonPath = __DIR__ . '/../../config/footers.json';
+        $this->configPath = base_path('vendor/jiny/site/config/footers.json');
     }
 
     /**
-     * Get all footer templates from JSON file
+     * 모든 footer 데이터를 로드
      */
-    public function getAllFooters(): array
+    private function loadFooters(): array
     {
-        if (!File::exists($this->jsonPath)) {
-            return [];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        // 새로운 구조에서 template 배열 반환, 없으면 기존 배열 구조 유지
-        return $data['template'] ?? $data;
-    }
-
-    /**
-     * Get footer configuration (copyright, logo, etc.)
-     */
-    public function getFooterConfig(): array
-    {
-        if (!File::exists($this->jsonPath)) {
-            return [
-                'copyright' => '',
-                'logo' => ''
-            ];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        return [
-            'copyright' => $data['copyright'] ?? '',
-            'logo' => $data['logo'] ?? ''
-        ];
-    }
-
-    /**
-     * Get complete footer information including config and templates
-     */
-    public function getFooterInfo(): array
-    {
-        if (!File::exists($this->jsonPath)) {
-            return [
-                'config' => [
-                    'copyright' => '',
-                    'logo' => ''
-                ],
-                'templates' => []
-            ];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        return [
-            'config' => [
-                'copyright' => $data['copyright'] ?? '',
-                'logo' => $data['logo'] ?? ''
-            ],
-            'templates' => $data['template'] ?? $data
-        ];
-    }
-
-    /**
-     * Get a specific footer by ID (1-indexed)
-     */
-    public function getFooterById(int $id): ?array
-    {
-        $footers = $this->getAllFooters();
-        $index = $id - 1;
-
-        if (!isset($footers[$index]) || $index < 0) {
-            return null;
-        }
-
-        $footer = $footers[$index];
-        $footer['id'] = $id;
-
-        return $footer;
-    }
-
-    /**
-     * Check if a footer key already exists (excluding specific index)
-     */
-    public function isDuplicateKey(string $key, ?int $excludeIndex = null): bool
-    {
-        $footers = $this->getAllFooters();
-
-        foreach ($footers as $index => $footer) {
-            if ($excludeIndex !== null && $index === $excludeIndex) {
-                continue;
+        if ($this->footers === null) {
+            if (!file_exists($this->configPath)) {
+                $this->footers = ['template' => []];
+            } else {
+                $content = file_get_contents($this->configPath);
+                $this->footers = json_decode($content, true) ?? ['template' => []];
             }
-            if ($footer['footer_key'] === $key) {
-                return true;
-            }
+        }
+
+        return $this->footers;
+    }
+
+    /**
+     * footers.json 파일에 저장
+     */
+    private function saveFooters(array $footers): bool
+    {
+        $json = json_encode($footers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $result = file_put_contents($this->configPath, $json);
+
+        if ($result !== false) {
+            $this->footers = $footers; // 캐시 업데이트
+            return true;
         }
 
         return false;
     }
 
     /**
-     * Add a new footer to the JSON file
+     * 모든 footer 목록 반환
      */
-    public function addFooter(array $data): bool
+    public function getAllFooters(): array
     {
-        try {
-            $currentData = $this->getFullJsonDataPrivate();
-            $footers = $currentData['template'] ?? [];
+        $footers = $this->loadFooters();
 
-            // 새 푸터 데이터 준비
-            $newFooter = [
-                'footer_key' => $data['footer_key'],
-                'name' => $data['name'],
-                'description' => $data['description'] ?? '',
-                'template' => $data['template'] ?? '',
-                'copyright' => isset($data['copyright']),
-                'links' => isset($data['links']),
-                'social' => isset($data['social']),
-            ];
-
-            // footer_links가 있다면 추가
-            if (isset($data['footer_links']) && is_array($data['footer_links'])) {
-                $newFooter['footer_links'] = $data['footer_links'];
-            }
-
-            $footers[] = $newFooter;
-            $currentData['template'] = $footers;
-
-            return $this->saveJsonDataPrivate($currentData);
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Update an existing footer
-     */
-    public function updateFooter(int $id, array $data): bool
-    {
-        try {
-            $currentData = $this->getFullJsonDataPrivate();
-            $footers = $currentData['template'] ?? [];
-            $index = $id - 1;
-
-            if (!isset($footers[$index]) || $index < 0) {
-                return false;
-            }
-
-            // 푸터 데이터 업데이트
-            $footers[$index] = [
-                'footer_key' => $data['footer_key'],
-                'name' => $data['name'],
-                'description' => $data['description'] ?? '',
-                'template' => $data['template'] ?? '',
-                'copyright' => isset($data['copyright']),
-                'links' => isset($data['links']),
-                'social' => isset($data['social']),
-            ];
-
-            // footer_links가 있다면 추가
-            if (isset($data['footer_links']) && is_array($data['footer_links'])) {
-                $footers[$index]['footer_links'] = $data['footer_links'];
-            }
-
-            $currentData['template'] = $footers;
-
-            return $this->saveJsonDataPrivate($currentData);
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Delete a footer by ID
-     */
-    public function deleteFooter(int $id): bool
-    {
-        try {
-            $currentData = $this->getFullJsonDataPrivate();
-            $footers = $currentData['template'] ?? [];
-            $index = $id - 1;
-
-            if (!isset($footers[$index]) || $index < 0) {
-                return false;
-            }
-
-            // 순차배열에서 요소 제거 후 재정렬
-            array_splice($footers, $index, 1);
-            $currentData['template'] = $footers;
-
-            return $this->saveJsonDataPrivate($currentData);
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Update footer configuration (copyright, logo)
-     */
-    public function updateConfig(array $config): bool
-    {
-        try {
-            $currentData = $this->getFullJsonDataPrivate();
-
-            if (isset($config['copyright'])) {
-                $currentData['copyright'] = $config['copyright'];
-            }
-
-            if (isset($config['logo'])) {
-                $currentData['logo'] = $config['logo'];
-            }
-
-            return $this->saveJsonDataPrivate($currentData);
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Get the complete JSON data structure (private method for backward compatibility)
-     */
-    private function getFullJsonDataPrivate(): array
-    {
-        if (!File::exists($this->jsonPath)) {
-            return [
-                'copyright' => '',
-                'logo' => '',
-                'template' => []
-            ];
+        // ID 추가 (인덱스 기반)
+        foreach ($footers['template'] as $index => $footer) {
+            $footers['template'][$index]['id'] = $index + 1;
         }
 
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        // Ensure required structure
-        if (!isset($data['template'])) {
-            $data = [
-                'copyright' => $data['copyright'] ?? '',
-                'logo' => $data['logo'] ?? '',
-                'template' => is_array($data) && !isset($data['copyright']) ? $data : []
-            ];
-        }
-
-        return $data;
+        return $footers['template'] ?? [];
     }
 
     /**
-     * Get all footers (alias for getAllFooters)
+     * 특정 ID의 footer 반환
      */
-    public function getAll(): array
-    {
-        return $this->getAllFooters();
-    }
-
-    /**
-     * Get footer configuration (alias for getFooterConfig)
-     */
-    public function getConfig(): array
-    {
-        return $this->getFooterConfig();
-    }
-
-    /**
-     * Get complete footer information (alias for getFooterInfo)
-     */
-    public function getInfo(): array
-    {
-        return $this->getFooterInfo();
-    }
-
-    /**
-     * Get footer by ID (alias for getFooterById)
-     */
-    public function getById(int $id): ?array
-    {
-        return $this->getFooterById($id);
-    }
-
-    /**
-     * Get footer by key
-     */
-    public function getByKey(string $key): ?array
+    public function getFooterById(int $id): ?array
     {
         $footers = $this->getAllFooters();
 
-        foreach ($footers as $index => $footer) {
-            if ($footer['footer_key'] === $key) {
+        // ID는 1부터 시작하므로 인덱스는 ID-1
+        $index = $id - 1;
+
+        if (isset($footers[$index])) {
+            return $footers[$index];
+        }
+
+        return null;
+    }
+
+    /**
+     * 기본 footer 경로 반환
+     */
+    public function getDefaultFooterPath(): string
+    {
+        $footers = $this->loadFooters();
+
+        // 1순위: enable=true, active=true, default=true
+        foreach ($footers['template'] as $footer) {
+            if (($footer['enable'] ?? true) &&
+                ($footer['active'] ?? false) &&
+                ($footer['default'] ?? false)) {
+                return $footer['path'];
+            }
+        }
+
+        // 2순위: enable=true, active=true
+        foreach ($footers['template'] as $footer) {
+            if (($footer['enable'] ?? true) && ($footer['active'] ?? false)) {
+                return $footer['path'];
+            }
+        }
+
+        // 3순위: enable=true
+        foreach ($footers['template'] as $footer) {
+            if ($footer['enable'] ?? true) {
+                return $footer['path'];
+            }
+        }
+
+        // 4순위: 첫 번째 footer
+        if (!empty($footers['template'])) {
+            return $footers['template'][0]['path'];
+        }
+
+        return 'jiny-site::partials.footers.footer-default';
+    }
+
+    /**
+     * 활성 footer 반환
+     */
+    public function getActiveFooter(): ?array
+    {
+        $footers = $this->loadFooters();
+
+        foreach ($footers['template'] as $index => $footer) {
+            if (($footer['enable'] ?? true) && ($footer['active'] ?? false)) {
                 $footer['id'] = $index + 1;
                 return $footer;
             }
@@ -310,14 +135,255 @@ class FooterService
     }
 
     /**
-     * Get footer links from the first footer template that has footer_links
+     * footer 경로 중복 체크
      */
-    public function getLinks(): array
+    public function isDuplicatePath(string $path, ?int $excludeIndex = null): bool
     {
-        $footers = $this->getAllFooters();
+        $footers = $this->loadFooters();
 
-        foreach ($footers as $footer) {
-            if (isset($footer['footer_links']) && is_array($footer['footer_links'])) {
+        foreach ($footers['template'] as $index => $footer) {
+            if ($excludeIndex !== null && $index === $excludeIndex) {
+                continue;
+            }
+
+            if (($footer['path'] ?? $footer['footer_key'] ?? '') === $path) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 새 footer 추가
+     */
+    public function addFooter(array $footerData): bool
+    {
+        $footers = $this->loadFooters();
+
+        // 기본값 설정
+        $footerData = array_merge([
+            'enable' => true,
+            'active' => false,
+            'default' => false,
+        ], $footerData);
+
+        $footers['template'][] = $footerData;
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * footer 업데이트
+     */
+    public function updateFooter(int $id, array $footerData): bool
+    {
+        $footers = $this->loadFooters();
+        $index = $id - 1; // ID는 1부터 시작
+
+        if (!isset($footers['template'][$index])) {
+            return false;
+        }
+
+        // 기존 데이터와 병합
+        $footers['template'][$index] = array_merge(
+            $footers['template'][$index],
+            $footerData
+        );
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * footer 삭제
+     */
+    public function deleteFooter(int $id): bool
+    {
+        $footers = $this->loadFooters();
+        $index = $id - 1; // ID는 1부터 시작
+
+        if (!isset($footers['template'][$index])) {
+            return false;
+        }
+
+        array_splice($footers['template'], $index, 1);
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * 기본 footer 설정
+     */
+    public function setDefaultFooter(int $id): bool
+    {
+        $footers = $this->loadFooters();
+        $index = $id - 1; // ID는 1부터 시작
+
+        if (!isset($footers['template'][$index])) {
+            return false;
+        }
+
+        // 모든 footer의 default를 false로 설정
+        foreach ($footers['template'] as &$footer) {
+            $footer['default'] = false;
+        }
+
+        // 선택한 footer만 default=true, active=true, enable=true 설정
+        $footers['template'][$index]['default'] = true;
+        $footers['template'][$index]['active'] = true;
+        $footers['template'][$index]['enable'] = true;
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * 활성 footer 설정
+     */
+    public function setActiveFooter(int $id): bool
+    {
+        $footers = $this->loadFooters();
+        $index = $id - 1; // ID는 1부터 시작
+
+        if (!isset($footers['template'][$index])) {
+            return false;
+        }
+
+        // footer가 enable 상태인지 확인
+        if (!($footers['template'][$index]['enable'] ?? true)) {
+            return false; // 비활성화된 footer는 active로 설정할 수 없음
+        }
+
+        // 모든 footer의 active를 false로 설정
+        foreach ($footers['template'] as &$footer) {
+            $footer['active'] = false;
+        }
+
+        // 선택한 footer만 active=true 설정
+        $footers['template'][$index]['active'] = true;
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * footer enable 상태 토글
+     */
+    public function toggleFooterEnable(int $id): bool
+    {
+        $footers = $this->loadFooters();
+        $index = $id - 1; // ID는 1부터 시작
+
+        if (!isset($footers['template'][$index])) {
+            return false;
+        }
+
+        $currentEnable = $footers['template'][$index]['enable'] ?? true;
+        $footers['template'][$index]['enable'] = !$currentEnable;
+
+        // enable이 false가 되면 active와 default도 false로 설정
+        if (!$footers['template'][$index]['enable']) {
+            $footers['template'][$index]['active'] = false;
+            $footers['template'][$index]['default'] = false;
+        }
+
+        return $this->saveFooters($footers);
+    }
+
+    /**
+     * footer 통계 반환
+     */
+    public function getFooterStats(): array
+    {
+        $footers = $this->loadFooters();
+        $total = count($footers['template'] ?? []);
+        $enabled = 0;
+        $active = 0;
+        $default = 0;
+
+        foreach ($footers['template'] as $footer) {
+            if ($footer['enable'] ?? true) $enabled++;
+            if ($footer['active'] ?? false) $active++;
+            if ($footer['default'] ?? false) $default++;
+        }
+
+        return [
+            'total' => $total,
+            'enabled' => $enabled,
+            'active' => $active,
+            'default' => $default,
+        ];
+    }
+
+    /**
+     * 회사 정보 반환
+     */
+    public function getCompany(): ?array
+    {
+        $footers = $this->loadFooters();
+        return $footers['company'] ?? null;
+    }
+
+    /**
+     * 저작권 정보 반환
+     */
+    public function getCopyright(): string
+    {
+        $footers = $this->loadFooters();
+        return $footers['copyright'] ?? '';
+    }
+
+    /**
+     * 로고 경로 반환
+     */
+    public function getLogo(): string
+    {
+        $footers = $this->loadFooters();
+        return $footers['logo'] ?? '';
+    }
+
+    /**
+     * 소셜 미디어 링크 반환
+     */
+    public function getSocial(): array
+    {
+        $footers = $this->loadFooters();
+        return $footers['social'] ?? [];
+    }
+
+    /**
+     * 메뉴 섹션 반환
+     */
+    public function getMenuSections(): array
+    {
+        $footers = $this->loadFooters();
+        return $footers['menu_sections'] ?? [];
+    }
+
+    /**
+     * 특정 메뉴 섹션 반환
+     */
+    public function getMenuSection(string $section): ?array
+    {
+        $menuSections = $this->getMenuSections();
+        return $menuSections[$section] ?? null;
+    }
+
+    /**
+     * 푸터 링크 반환 (기본 푸터의)
+     */
+    public function getFooterLinks(): array
+    {
+        $footers = $this->loadFooters();
+
+        // 기본 푸터의 footer_links 찾기
+        foreach ($footers['template'] as $footer) {
+            if (($footer['default'] ?? false) && isset($footer['footer_links'])) {
+                return $footer['footer_links'];
+            }
+        }
+
+        // 기본 푸터가 없으면 활성 푸터에서 찾기
+        foreach ($footers['template'] as $footer) {
+            if (($footer['active'] ?? false) && isset($footer['footer_links'])) {
                 return $footer['footer_links'];
             }
         }
@@ -326,154 +392,52 @@ class FooterService
     }
 
     /**
-     * Get copyright text
+     * 회사 정보 업데이트
      */
-    public function getCopyright(): string
+    public function updateCompany(array $companyData): bool
     {
-        $config = $this->getFooterConfig();
-        return $config['copyright'] ?? '';
+        $footers = $this->loadFooters();
+        $footers['company'] = array_merge($footers['company'] ?? [], $companyData);
+        return $this->saveFooters($footers);
     }
 
     /**
-     * Get logo
+     * 소셜 미디어 정보 업데이트
      */
-    public function getLogo(): string
+    public function updateSocial(array $socialData): bool
     {
-        $config = $this->getFooterConfig();
-        return $config['logo'] ?? '';
+        $footers = $this->loadFooters();
+        $footers['social'] = $socialData;
+        return $this->saveFooters($footers);
     }
 
     /**
-     * Get company information
+     * 메뉴 섹션 업데이트
      */
-    public function getCompany(): array
+    public function updateMenuSections(array $menuSections): bool
     {
-        if (!File::exists($this->jsonPath)) {
-            return [];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        return $data['company'] ?? [];
+        $footers = $this->loadFooters();
+        $footers['menu_sections'] = $menuSections;
+        return $this->saveFooters($footers);
     }
 
     /**
-     * Get social media links
+     * 저작권 정보 업데이트
      */
-    public function getSocial(): array
+    public function updateCopyright(string $copyright): bool
     {
-        if (!File::exists($this->jsonPath)) {
-            return [];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        return $data['social'] ?? [];
+        $footers = $this->loadFooters();
+        $footers['copyright'] = $copyright;
+        return $this->saveFooters($footers);
     }
 
     /**
-     * Get menu sections
+     * 로고 경로 업데이트
      */
-    public function getMenuSections(): array
+    public function updateLogo(string $logo): bool
     {
-        if (!File::exists($this->jsonPath)) {
-            return [];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        return $data['menu_sections'] ?? [];
-    }
-
-    /**
-     * Get specific menu section by key
-     */
-    public function getMenuSection(string $key): array
-    {
-        $menuSections = $this->getMenuSections();
-        return $menuSections[$key] ?? [];
-    }
-
-    /**
-     * Add footer (alias for addFooter)
-     */
-    public function add(array $data): bool
-    {
-        return $this->addFooter($data);
-    }
-
-    /**
-     * Update footer (alias for updateFooter)
-     */
-    public function update(int $id, array $data): bool
-    {
-        return $this->updateFooter($id, $data);
-    }
-
-    /**
-     * Delete footer (alias for deleteFooter)
-     */
-    public function delete(int $id): bool
-    {
-        return $this->deleteFooter($id);
-    }
-
-    /**
-     * Get the complete JSON data structure (public method for ConfigController)
-     */
-    public function getFullJsonData(): array
-    {
-        if (!File::exists($this->jsonPath)) {
-            return [
-                'copyright' => '',
-                'logo' => '',
-                'company' => [],
-                'social' => [],
-                'menu_sections' => [],
-                'template' => []
-            ];
-        }
-
-        $json = File::get($this->jsonPath);
-        $data = json_decode($json, true) ?? [];
-
-        // Ensure required structure
-        if (!isset($data['template'])) {
-            $data = [
-                'copyright' => $data['copyright'] ?? '',
-                'logo' => $data['logo'] ?? '',
-                'company' => $data['company'] ?? [],
-                'social' => $data['social'] ?? [],
-                'menu_sections' => $data['menu_sections'] ?? [],
-                'template' => is_array($data) && !isset($data['copyright']) ? $data : []
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
-     * Save JSON data to file (public method for ConfigController)
-     */
-    public function saveJsonData(array $data): bool
-    {
-        try {
-            $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            File::put($this->jsonPath, $json);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Save JSON data to file (private method - keeping for backward compatibility)
-     */
-    private function saveJsonDataPrivate(array $data): bool
-    {
-        return $this->saveJsonData($data);
+        $footers = $this->loadFooters();
+        $footers['logo'] = $logo;
+        return $this->saveFooters($footers);
     }
 }

@@ -4,14 +4,31 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-gray-800">새 푸터 생성</h1>
+                    <p class="mb-0 text-muted">새로운 푸터 템플릿을 생성하여 사이트에 적용할 수 있습니다</p>
+                </div>
+                <div>
+                    <a href="{{ route('admin.cms.templates.footer.config') }}" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-gear me-1"></i> 푸터 설정
+                    </a>
+                    <a href="{{ route('admin.cms.templates.footer.index') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> 목록으로
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
                     <h5 class="card-title mb-0">새 푸터 생성</h5>
-                    <a href="{{ route('admin.cms.templates.footer.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> 목록으로
-                    </a>
                 </div>
 
                 <div class="card-body">
@@ -21,14 +38,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="footer_key" class="form-label">푸터 키 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('footer_key') is-invalid @enderror"
-                                           id="footer_key" name="footer_key" value="{{ old('footer_key') }}"
-                                           placeholder="예: jiny-site::components.footer.custom" required>
+                                    <label for="path" class="form-label">푸터 경로 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('path') is-invalid @enderror"
+                                           id="path" name="path" value="{{ old('path') }}"
+                                           placeholder="예: jiny-site::partials.footers.footer-custom" required>
                                     <div class="form-text">
-                                        고유한 키 형식을 사용하세요. 예: 'jiny-site::components.footer.사용자정의명'
+                                        고유한 경로 형식을 사용하세요. 예: 'jiny-site::partials.footers.footer-사용자정의명'
                                     </div>
-                                    @error('footer_key')
+                                    @error('path')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -36,11 +53,11 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">푸터 이름 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                           id="name" name="name" value="{{ old('name') }}"
+                                    <label for="title" class="form-label">푸터 제목 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                           id="title" name="title" value="{{ old('title') }}"
                                            placeholder="예: 사용자 정의 푸터" required>
-                                    @error('name')
+                                    @error('title')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -79,26 +96,26 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">푸터 옵션</label>
+                                    <label class="form-label">푸터 상태</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="copyright" name="copyright"
-                                               {{ old('copyright') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="copyright">
-                                            저작권 정보 포함
+                                        <input class="form-check-input" type="checkbox" id="enable" name="enable"
+                                               {{ old('enable', true) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="enable">
+                                            활성화 (사용 가능)
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="links" name="links"
-                                               {{ old('links') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="links">
-                                            링크 메뉴 표시
+                                        <input class="form-check-input" type="checkbox" id="active" name="active"
+                                               {{ old('active') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="active">
+                                            사용중 (현재 적용)
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="social" name="social"
-                                               {{ old('social') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="social">
-                                            소셜 미디어 아이콘 포함
+                                        <input class="form-check-input" type="checkbox" id="default" name="default"
+                                               {{ old('default') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="default">
+                                            기본 푸터로 설정
                                         </label>
                                     </div>
                                 </div>
@@ -109,8 +126,8 @@
                             <i class="fas fa-info-circle"></i>
                             <strong>팁:</strong>
                             <ul class="mb-0 mt-2">
-                                <li>푸터 키는 <code>package::components.footer.name</code> 패턴을 따라야 합니다</li>
-                                <li>템플릿 경로는 기존 Blade 컴포넌트를 참조해야 합니다</li>
+                                <li>푸터 경로는 <code>package::partials.footers.footer-name</code> 패턴을 따라야 합니다</li>
+                                <li>템플릿 경로는 기존 Blade 템플릿을 참조해야 합니다</li>
                                 <li>필요하지 않은 옵션은 체크하지 않으셔도 됩니다</li>
                                 <li>모든 푸터는 설정 파일이나 이 인터페이스에서 관리할 수 있습니다</li>
                             </ul>
@@ -135,12 +152,12 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-generate key from name
-    const nameInput = document.getElementById('name');
-    const keyInput = document.getElementById('footer_key');
+    // Auto-generate path from title
+    const titleInput = document.getElementById('title');
+    const pathInput = document.getElementById('path');
 
-    nameInput.addEventListener('input', function() {
-        if (!keyInput.value || keyInput.dataset.autoGenerated === 'true') {
+    titleInput.addEventListener('input', function() {
+        if (!pathInput.value || pathInput.dataset.autoGenerated === 'true') {
             const slug = this.value
                 .toLowerCase()
                 .replace(/[^a-z0-9\s-]/g, '')
@@ -149,41 +166,63 @@ document.addEventListener('DOMContentLoaded', function() {
                 .trim('-');
 
             if (slug) {
-                keyInput.value = `jiny-site::components.footer.${slug}`;
-                keyInput.dataset.autoGenerated = 'true';
+                pathInput.value = `jiny-site::partials.footers.footer-${slug}`;
+                pathInput.dataset.autoGenerated = 'true';
             }
         }
     });
 
-    keyInput.addEventListener('input', function() {
+    pathInput.addEventListener('input', function() {
         this.dataset.autoGenerated = 'false';
+    });
+
+    // Enable/Active dependency
+    const enableInput = document.getElementById('enable');
+    const activeInput = document.getElementById('active');
+    const defaultInput = document.getElementById('default');
+
+    enableInput.addEventListener('change', function() {
+        if (!this.checked) {
+            activeInput.checked = false;
+            defaultInput.checked = false;
+            activeInput.disabled = true;
+        } else {
+            activeInput.disabled = false;
+        }
+    });
+
+    defaultInput.addEventListener('change', function() {
+        if (this.checked) {
+            enableInput.checked = true;
+            activeInput.checked = true;
+        }
     });
 
     // Form validation
     const form = document.querySelector('form');
     form.addEventListener('submit', function(e) {
-        const key = keyInput.value.trim();
-        const name = nameInput.value.trim();
+        const path = pathInput.value.trim();
+        const title = titleInput.value.trim();
 
-        if (!key) {
+        if (!path) {
             e.preventDefault();
-            alert('푸터 키는 필수입니다');
-            keyInput.focus();
+            alert('푸터 경로는 필수입니다');
+            pathInput.focus();
             return;
         }
 
-        if (!name) {
+        if (!title) {
             e.preventDefault();
-            alert('푸터 이름은 필수입니다');
-            nameInput.focus();
+            alert('푸터 제목은 필수입니다');
+            titleInput.focus();
             return;
         }
 
-        // Validate key format
-        if (!key.includes('::') || !key.includes('components.footer.')) {
+        // Validate path format
+        if (!path.includes('::') || !path.includes('partials.footers.')) {
             e.preventDefault();
-            alert('푸터 키는 package::components.footer.name 형식이어야 합니다');
-            keyInput.focus();
+            alert('푸터 경로는 package::partials.footers.footer-name 형식이어야 합니다');
+            pathInput.focus();
             return;
         }
     });

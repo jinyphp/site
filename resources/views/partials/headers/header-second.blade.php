@@ -1,8 +1,12 @@
+{{-- navbar --}}
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-0">
+
         <div class="d-flex">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/brand/logo/logo.svg') }}"
-                    alt="Geeks" /></a>
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset(Site::logo()) }}" alt="{{ Site::brand() }}" />
+            </a>
+
             <div class="dropdown d-none d-md-block">
                 <button class="btn btn-light-primary text-primary" type="button" id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">

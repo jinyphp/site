@@ -3,7 +3,6 @@
 namespace Jiny\Site\Http\Controllers\Admin\Templates\Footer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Jiny\Site\Services\FooterService;
 
 class ShowController extends Controller
@@ -15,7 +14,7 @@ class ShowController extends Controller
         $this->footerService = $footerService;
     }
 
-    public function __invoke(Request $request, $id)
+    public function __invoke($id)
     {
         $footer = $this->footerService->getFooterById((int) $id);
 

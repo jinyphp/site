@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\AliasLoader;
 use Livewire\Livewire;
 
 class JinySiteServiceProvider extends ServiceProvider
@@ -16,6 +17,10 @@ class JinySiteServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        // Site facade 등록
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Site', \Jiny\Site\Facades\Site::class);
+
         // 모듈: 라우트 설정
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
@@ -373,11 +378,14 @@ class JinySiteServiceProvider extends ServiceProvider
         // 환율 서비스 등록
         $this->app->singleton(\Jiny\Site\Services\ExchangeRateService::class);
 
-        // Footer 서비스 등록
-        $this->app->singleton('footer-service', \Jiny\Site\Services\FooterService::class);
-
         // Header 서비스 등록
         $this->app->singleton('jiny.site.header', \Jiny\Site\Services\HeaderService::class);
+
+        // Footer 서비스 등록
+        $this->app->singleton('jiny.site.footer', \Jiny\Site\Services\FooterService::class);
+
+        // Site 서비스 등록
+        $this->app->singleton('site', \Jiny\Site\Services\SiteService::class);
 
         // 템플릿 설정 병합 (JSON 파일에서 로드)
         $this->loadTemplateConfigsFromJson();

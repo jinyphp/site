@@ -11,7 +11,7 @@
                 <div>
                     <h1 class="h3 mb-0 text-gray-800">헤더 상세보기</h1>
                     <p class="mb-0 text-muted">
-                        <strong>{{ $header['name'] ?? '이름 없음' }}</strong> 헤더의 상세 정보를 확인할 수 있습니다
+                        <strong>{{ $header['title'] ?? $header['name'] ?? '이름 없음' }}</strong> 헤더의 상세 정보를 확인할 수 있습니다
                     </p>
                 </div>
                 <div>
@@ -32,16 +32,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">헤더 상세: <code>{{ $header['header_key'] }}</code></h5>
-                    <div>
-                        <a href="{{ route('admin.cms.templates.header.edit', $header['id']) }}" class="btn btn-primary">
-                            <i class="bi bi-pencil-square"></i> 수정
-                        </a>
-                        <a href="{{ route('admin.cms.templates.header.index') }}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> 목록으로
-                        </a>
-                    </div>
+                <div class="card-header">
+                    <h5 class="card-title mb-0">헤더 상세: <code>{{ $header['path'] ?? $header['header_key'] ?? 'N/A' }}</code></h5>
                 </div>
 
                 <div class="card-body">
@@ -53,12 +45,12 @@
                                 <table class="table table-borderless">
                                     <tbody>
                                         <tr>
-                                            <td class="fw-bold" style="width: 150px;">헤더 키:</td>
-                                            <td><code class="fs-6">{{ $header['header_key'] }}</code></td>
+                                            <td class="fw-bold" style="width: 150px;">헤더 경로:</td>
+                                            <td><code class="fs-6">{{ $header['path'] ?? $header['header_key'] ?? 'N/A' }}</code></td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold">이름:</td>
-                                            <td>{{ $header['name'] ?? '이름 없음' }}</td>
+                                            <td class="fw-bold">제목:</td>
+                                            <td>{{ $header['title'] ?? $header['name'] ?? '제목 없음' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">설명:</td>
@@ -71,6 +63,36 @@
                                                     <code>{{ $header['template'] }}</code>
                                                 @else
                                                     <span class="text-muted">설정되지 않음</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">활성화 상태:</td>
+                                            <td>
+                                                @if($header['enable'] ?? true)
+                                                    <span class="badge bg-success">활성화</span>
+                                                @else
+                                                    <span class="badge bg-danger">비활성화</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">사용 상태:</td>
+                                            <td>
+                                                @if($header['active'] ?? false)
+                                                    <span class="badge bg-primary">사용중</span>
+                                                @else
+                                                    <span class="badge bg-secondary">대기중</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">기본 헤더:</td>
+                                            <td>
+                                                @if($header['default'] ?? false)
+                                                    <span class="badge bg-success">기본</span>
+                                                @else
+                                                    <span class="badge bg-secondary">일반</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -164,8 +186,8 @@
                                             <i class="bi bi-trash"></i> 헤더 삭제
                                         </button>
                                         <button type="button" class="btn btn-outline-secondary btn-sm"
-                                                onclick="copyToClipboard('{{ $header['header_key'] }}')">
-                                            <i class="bi bi-copy"></i> 키 복사
+                                                onclick="copyToClipboard('{{ $header['path'] ?? $header['header_key'] ?? '' }}')">
+                                            <i class="bi bi-copy"></i> 경로 복사
                                         </button>
                                     </div>
                                 </div>
@@ -180,10 +202,9 @@
                             <div class="alert alert-info">
                                 <h6><i class="fas fa-code"></i> Blade 템플릿에서 사용</h6>
                                 <p class="mb-2">Blade 템플릿에서 이 헤더를 다음과 같이 사용할 수 있습니다:</p>
-                                <pre><code class="language-blade">@<!-- -->component('{{ $header['header_key'] }}')
-@<!-- -->endcomponent</code></pre>
-                                <p class="mb-2 mt-3">또는 짧은 문법으로:</p>
-                                <pre><code class="language-blade">&lt;x-dynamic-component :component="'{{ $header['header_key'] }}'" /&gt;</code></pre>
+                                <pre><code class="language-blade">@<!-- -->include('{{ $header['path'] ?? $header['header_key'] ?? '' }}')</code></pre>
+                                <p class="mb-2 mt-3">또는 컴포넌트로:</p>
+                                <pre><code class="language-blade">&lt;x-dynamic-component :component="'{{ $header['path'] ?? $header['header_key'] ?? '' }}'" /&gt;</code></pre>
                             </div>
 
                             <div class="alert alert-secondary">
@@ -191,8 +212,8 @@
                                 <p class="mb-2">프로그래밍 방식으로 헤더 설정에 접근:</p>
                                 <pre><code class="language-php">// JSON 파일에서 모든 헤더 가져오기
 $headers = json_decode(file_get_contents(base_path('vendor/jiny/site/config/headers.json')), true);
-// 키로 헤더 찾기
-$header = collect($headers)->firstWhere('header_key', '{{ addslashes($header['header_key']) }}');</code></pre>
+// 경로로 헤더 찾기
+$header = collect($headers['template'])->firstWhere('path', '{{ addslashes($header['path'] ?? $header['header_key'] ?? '') }}');</code></pre>
                             </div>
 
                             @if(!empty($header['template']))
@@ -211,7 +232,7 @@ $header = collect($headers)->firstWhere('header_key', '{{ addslashes($header['he
                                 <p class="mb-2">레이아웃 설정에서 이 헤더를 참조할 수 있습니다:</p>
                                 <pre><code class="language-json">{
   "layout_key": "jiny-site::layouts.custom",
-  "header": "{{ $header['header_key'] }}",
+  "header": "{{ $header['path'] ?? $header['header_key'] ?? '' }}",
   "footer": "jiny-site::components.footer.default"
 }</code></pre>
                             </div>
@@ -233,7 +254,7 @@ $header = collect($headers)->firstWhere('header_key', '{{ addslashes($header['he
             </div>
             <div class="modal-body">
                 <p>이 헤더를 삭제하시겠습니까?</p>
-                <p><strong>헤더 키:</strong> <span id="delete-header-key"></span></p>
+                <p><strong>헤더 경로:</strong> <span id="delete-header-key"></span></p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle"></i>
                     <strong>경고:</strong> 이 작업은 되돌릴 수 없습니다. 이 헤더를 사용하는 레이아웃이 손상될 수 있습니다.
@@ -255,9 +276,9 @@ $header = collect($headers)->firstWhere('header_key', '{{ addslashes($header['he
 @push('scripts')
 <script>
 function confirmDelete(headerId) {
-    // 헤더 키 표시
-    const headerKey = '{{ $header['header_key'] }}';
-    document.getElementById('delete-header-key').textContent = headerKey;
+    // 헤더 경로 표시
+    const headerPath = '{{ $header['path'] ?? $header['header_key'] ?? '' }}';
+    document.getElementById('delete-header-key').textContent = headerPath;
     document.getElementById('delete-form').action = `/admin/cms/templates/header/${headerId}`;
 
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
