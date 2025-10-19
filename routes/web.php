@@ -230,11 +230,11 @@ Route::middleware('web')->prefix('testimonials')->name('testimonials.')->group(f
 
 
     // 동적 페이지 (Fallback - 마지막에 위치)
-    // cart, product, contact, help, faq, event, testimonials 경로는 제외
+    // cart, product, contact, help, faq, event, testimonials, store 경로는 제외
     // board는 jiny/post 패키지에서 처리됨
     Route::get('/{slug}', [\Jiny\Site\Http\Controllers\PageController::class, 'show'])
         ->name('page.show')
-        ->where('slug', '^(?!cart|product|contact|help|faq|event|testimonials)([a-zA-Z0-9\-_]+)$');
+        ->where('slug', '^(?!cart|product|contact|help|faq|event|testimonials|store)([a-zA-Z0-9\-_]+)$');
 
 // Sitemap & RSS
 Route::middleware('web')->group(function () {
