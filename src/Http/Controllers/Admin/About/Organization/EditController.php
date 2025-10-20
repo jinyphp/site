@@ -3,7 +3,7 @@
 namespace Jiny\Site\Http\Controllers\Admin\About\Organization;
 
 use App\Http\Controllers\Controller;
-use App\Models\SiteAboutOrganization;
+use Jiny\Site\Models\SiteAboutOrganization;
 use Illuminate\Http\Request;
 
 class EditController extends Controller

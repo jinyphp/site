@@ -53,6 +53,19 @@
             </button>
         </div>
 
-        @include('jiny-site::partials.navs.left.top')
+        <!-- Collapse -->
+        @includeIf('jiny-site::partials.navs.nav-default.top', [
+            'menuItems' => Site::menuItems('left'),
+            'alignment' => 'left'
+        ])
+
+        <form class="mt-3 mt-lg-0 ms-lg-3 d-flex align-items-center">
+            <span class="position-absolute ps-3 search-icon">
+                <i class="fe fe-search"></i>
+            </span>
+            <label for="search" class="visually-hidden"></label>
+            <input type="search" id="search" class="form-control ps-6" placeholder="Search Courses" />
+        </form>
+
     </div>
 </nav>

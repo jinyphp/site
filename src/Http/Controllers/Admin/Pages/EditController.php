@@ -56,21 +56,53 @@ class EditController extends Controller
 
     private function getAvailableHeaders()
     {
-        return [
+        $headers = $this->loadConfig('headers.json');
+        $availableHeaders = [];
+
+        if (isset($headers['template']) && is_array($headers['template'])) {
+            foreach ($headers['template'] as $header) {
+                if ($header['enable']) {
+                    $availableHeaders[$header['path']] = $header['title'];
+                }
+            }
+        }
+
+        return $availableHeaders ?: [
             'jiny-site::partials.headers.header-default' => '기본 헤더',
-            'jiny-site::partials.headers.header-transparent' => '투명 헤더',
-            'jiny-site::partials.headers.header-minimal' => '미니멀 헤더',
-            'jiny-site::partials.headers.header-landing' => '랜딩 헤더',
         ];
     }
 
     private function getAvailableFooters()
     {
-        return [
-            'jiny-site::partials.footers.footer' => '기본 푸터',
-            'jiny-site::partials.footers.footer-minimal' => '미니멀 푸터',
-            'jiny-site::partials.footers.footer-corporate' => '기업용 푸터',
+        $footers = $this->loadConfig('footers.json');
+        $availableFooters = [];
+
+        if (isset($footers['template']) && is_array($footers['template'])) {
+            foreach ($footers['template'] as $footer) {
+                if ($footer['enable']) {
+                    $availableFooters[$footer['path']] = $footer['title'];
+                }
+            }
+        }
+
+        return $availableFooters ?: [
+            'jiny-site::partials.footers.footer-simple' => '기본 푸터',
         ];
+    }
+
+    /**
+     * 설정 파일 로드
+     */
+    private function loadConfig($filename)
+    {
+        $configPath = base_path("vendor/jiny/site/config/{$filename}");
+
+        if (file_exists($configPath)) {
+            $content = file_get_contents($configPath);
+            return json_decode($content, true);
+        }
+
+        return [];
     }
 
     private function getAvailableSidebars()

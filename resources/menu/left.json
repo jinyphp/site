@@ -6,7 +6,7 @@
             "id": "navbarBrowse",
             "css_class": "nav-link dropdown-toggle",
             "dropdown_class": "dropdown-menu dropdown-menu-arrow",
-            "data_display": "static",
+            "data_bs_display": "static",
             "children": [
                 {
                     "type": "submenu",

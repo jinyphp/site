@@ -35,6 +35,7 @@
         @includeIf($header ?? 'jiny-site::partials.headers.' . ($header ?? 'header-default'))
     @endif
 
+
     <!-- Main Content -->
     @yield('content')
 

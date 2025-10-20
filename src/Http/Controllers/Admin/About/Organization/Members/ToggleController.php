@@ -3,8 +3,8 @@
 namespace Jiny\Site\Http\Controllers\Admin\About\Organization\Members;
 
 use App\Http\Controllers\Controller;
-use App\Models\SiteAboutOrganization;
-use App\Models\SiteAboutOrganizationMember;
+use Jiny\Site\Models\SiteAboutOrganization;
+use Jiny\Site\Models\SiteAboutOrganizationMember;
 use Illuminate\Http\Request;
 
 class ToggleController extends Controller

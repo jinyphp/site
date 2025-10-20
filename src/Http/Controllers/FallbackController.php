@@ -33,61 +33,64 @@ class FallbackController extends Controller
             return $res;
         }
 
-        // route1. 컨트롤러 동작 처리
-        // uri에 대한 actions 설정값이 있는 경우,
-        // 설정 정보에 따라서 라우트 동작을 처리
+        // // route1. 컨트롤러 동작 처리
+        // // uri에 대한 actions 설정값이 있는 경우,
+        // // 설정 정보에 따라서 라우트 동작을 처리
 
-        $pathAction = resource_path("actions");
-        if(file_exists($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json")) {
-            $this->actions = json_file_decode($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json");
-            if($res = $this->processByActions($request)) {
-                return $res;
-            }
-        }
+        // $pathAction = resource_path("actions");
+        // if(file_exists($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json")) {
+        //     $this->actions = json_file_decode($pathAction.DIRECTORY_SEPARATOR.$urlPath.".json");
+        //     if($res = $this->processByActions($request)) {
+        //         return $res;
+        //     }
+        // }
 
-        // route2. www 절대경로 파일 체크
-        // slot을 포함하는 www 절대경로로 접속하는 경우
-        if($res = $this->wwwFile($url)) {
-            return $res;
-        }
+        // // route2. www 절대경로 파일 체크
+        // // slot을 포함하는 www 절대경로로 접속하는 경우
+        // if($res = $this->wwwFile($url)) {
+        //     return $res;
+        // }
 
-        // route3. slot 리소스 파일 체크
-        // 활성화된 slot 확인
-        $activeSlot = Slot()->name;
-        $path = resource_path('www');
-        $slotPath = $path."/".$activeSlot;
-        if(!is_dir($slotPath)) {
-            return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
-        }
+        // // route3. slot 리소스 파일 체크
+        // // 활성화된 slot 확인
+        // $activeSlot = Slot()->name;
+        // $path = resource_path('www');
+        // $slotPath = $path."/".$activeSlot;
+        // if(!is_dir($slotPath)) {
+        //     return "슬롯 ".$activeSlot." 폴더가 존재하지 않습니다.";
+        // }
 
-        // route4. slot 리소스 파일 체크
-        if(isset($url)) {
-            ## www.slot에서 검색
-            if($res = $this->route_dynamic($url, $activeSlot)) {
-                return $res;
-            }
-        }
+        // // route4. slot 리소스 파일 체크
+        // if(isset($url)) {
+        //     ## www.slot에서 검색
+        //     if($res = $this->route_dynamic($url, $activeSlot)) {
+        //         return $res;
+        //     }
+        // }
 
-        // route5. 테마 리소스 파일 체크
-        if(isset($url)) {
-            if($res = $this->route_dynamic_theme($url)) {
-                return $res;
-            }
-        }
+        // // route5. 테마 리소스 파일 체크
+        // if(isset($url)) {
+        //     if($res = $this->route_dynamic_theme($url)) {
+        //         return $res;
+        //     }
+        // }
 
 
-        // board slug 체크
-        if($res = $this->route_board_slug($_SERVER['REQUEST_URI'])) {
-            return $res;
-        }
+        // // board slug 체크
+        // if($res = $this->route_board_slug($_SERVER['REQUEST_URI'])) {
+        //     return $res;
+        // }
 
-        // route6. 오류 페이지 출력
-        if($res = $this->page404($activeSlot)) {
-            return $res;
-        }
+        // // route6. 오류 페이지 출력
+        // if($res = $this->page404($activeSlot)) {
+        //     return $res;
+        // }
 
-        //return $_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
-        abort(404);
+        // //return $_SERVER['REQUEST_URI']."의 리소스를 찾을 수 없습니다.";
+        // abort(404);
+
+
+        return view("jiny-site::errors.404");
     }
 
     /**
@@ -485,9 +488,9 @@ class FallbackController extends Controller
             return null;
         }
 
-        // DB에서 페이지 검색
+        // DB에서 페이지 존재 여부만 확인 (간단한 검색)
         try {
-            $page = DB::table('site_pages')
+            $pageExists = DB::table('site_pages')
                 ->where('slug', $slug)
                 ->where('status', 'published')
                 ->where(function($query) {
@@ -495,32 +498,17 @@ class FallbackController extends Controller
                           ->orWhere('published_at', '<=', now());
                 })
                 ->whereNull('deleted_at')
-                ->first();
+                ->exists();
 
-            if (!$page) {
+            if (!$pageExists) {
                 return null;
             }
 
-            // 페이지 템플릿 결정
-            $template = $this->getPageTemplate($page);
+            // 페이지가 존재하면 PageController에 위임
+            $pageController = new \Jiny\Site\Http\Controllers\PageController();
+            $request = request();
 
-            // 템플릿이 존재하지 않으면 null 반환
-            if (!$template || !View::exists($template)) {
-                \Illuminate\Support\Facades\Log::warning('CMS Page template not found', [
-                    'uri' => $uri,
-                    'slug' => $slug,
-                    'template' => $template
-                ]);
-                return null;
-            }
-
-            // 조회수 증가
-            DB::table('site_pages')
-                ->where('id', $page->id)
-                ->increment('view_count');
-
-            // 페이지 뷰 반환
-            return view($template, compact('page'));
+            return $pageController->show($request, $slug);
 
         } catch (\Exception $e) {
             // 예외 발생 시 로그 기록 후 null 반환
@@ -533,60 +521,42 @@ class FallbackController extends Controller
         }
     }
 
-    /**
-     * 페이지 템플릿 결정
-     */
-    private function getPageTemplate($page)
-    {
-        $template = $page->template ?: 'index';
-
-        // 템플릿 파일 우선순위
-        $templates = [
-            "jiny-site::www.pages.{$template}",  // 패키지의 www.pages 템플릿
-            "jiny-site::pages.{$template}",  // 패키지의 pages 템플릿
-            "pages.{$template}",  // 프로젝트의 커스텀 템플릿
-            'jiny-site::www.pages.index',  // 기본 www.pages.index 템플릿
-            'errors.404',  // 404 에러 페이지
-        ];
-
-        // 존재하는 첫 번째 템플릿 반환
-        foreach ($templates as $tmpl) {
-            if (View::exists($tmpl)) {
-                return $tmpl;
-            }
-        }
-
-        // 모든 템플릿이 없으면 null 반환 (안전장치)
-        return null;
-    }
 
     /**
      * 계시판 slug 체크
      */
     private function route_board_slug($uri) {
-        // $uris = explode('/',trim($uri,'/'));
-        // //dd($uris);
-
-        // $boards = DB::table('site_board')->get();
-        // foreach($boards as $board) {
-        //     if($board->slug == $uris[0]) {
-        //         return $board;
-        //     }
-        // }
-
-        //$boards = DB::table('site_board')->get();
-        // 계시판 slug 체크
-        $slug = trim($uri,'/');
-        $board = DB::table('site_board')->where('slug',$slug)->first();
-        if($board) {
-            $obj = new \Jiny\Site\Board\Http\Controllers\Site\SiteBoardTable();
-            return $obj->table($board);
-            //return $board;
+        // 계시판은 /board/ prefix를 사용하므로 해당 경우에만 체크
+        if (!str_starts_with($uri, '/board/')) {
+            return null;
         }
 
-        // if($res = $this->route_board_slug($_SERVER['REQUEST_URI'])) {
-        //     return $res;
-        // }
+        // /board/ 이후의 slug 추출
+        $slug = trim(substr($uri, 7), '/'); // '/board/'를 제거
+
+        // 빈 slug인 경우 처리하지 않음
+        if (empty($slug)) {
+            return null;
+        }
+
+        try {
+            // 계시판 slug 체크
+            $board = DB::table('site_board')->where('slug', $slug)->first();
+            if ($board) {
+                $obj = new \Jiny\Site\Board\Http\Controllers\Site\SiteBoardTable();
+                return $obj->table($board);
+            }
+        } catch (\Exception $e) {
+            // 테이블이 존재하지 않거나 다른 오류 발생시 null 반환
+            \Illuminate\Support\Facades\Log::warning('Board slug check error', [
+                'uri' => $uri,
+                'slug' => $slug,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+
+        return null;
     }
 
 

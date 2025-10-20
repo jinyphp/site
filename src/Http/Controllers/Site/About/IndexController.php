@@ -53,6 +53,8 @@ class IndexController extends Controller
         // 1단계: 뷰 해석
         $viewPath = $this->resolveView();
 
+
+
         // 2단계: 뷰 렌더링
         return $this->renderView($viewPath);
     }

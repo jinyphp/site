@@ -95,198 +95,364 @@
         </div>
     </div>
 
-    <!-- 필터 및 검색 -->
+    <!-- 탭 네비게이션 -->
     <div class="row mt-4">
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-body">
-                    <form method="GET" class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">검색</label>
-                            <input type="text" name="search" class="form-control"
-                                   placeholder="제목, 내용 검색..." value="{{ request('search') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">상태</label>
-                            <select name="status" class="form-select">
-                                <option value="">모든 상태</option>
-                                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>발행됨</option>
-                                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>임시저장</option>
-                                <option value="private" {{ request('status') === 'private' ? 'selected' : '' }}>비공개</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">추천</label>
-                            <select name="featured" class="form-select">
-                                <option value="">모든 페이지</option>
-                                <option value="1" {{ request('featured') === '1' ? 'selected' : '' }}>추천 페이지</option>
-                                <option value="0" {{ request('featured') === '0' ? 'selected' : '' }}>일반 페이지</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">정렬</label>
-                            <select name="sort_by" class="form-select">
-                                <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>생성일</option>
-                                <option value="title" {{ request('sort_by') == 'title' ? 'selected' : '' }}>제목</option>
-                                <option value="order" {{ request('sort_by') == 'order' ? 'selected' : '' }}>정렬순서</option>
-                                <option value="view_count" {{ request('sort_by') == 'view_count' ? 'selected' : '' }}>조회수</option>
-                            </select>
-                        </div>
-                        <div class="col-md-1">
-                            <label class="form-label">순서</label>
-                            <select name="sort_order" class="form-select">
-                                <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>내림차순</option>
-                                <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>오름차순</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label d-block">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary me-2">검색</button>
-                            <a href="{{ route('admin.cms.pages.index') }}" class="btn btn-outline-secondary">초기화</a>
-                        </div>
-                    </form>
+                <div class="card-header border-bottom-0">
+                    <ul class="nav nav-tabs nav-tabs-flush" id="page-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="pages-tab" data-bs-toggle="tab" href="#pages" role="tab" aria-controls="pages" aria-selected="true">
+                                <i class="fe fe-file-text me-2"></i>페이지 수정
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="headers-tab" data-bs-toggle="tab" href="#headers" role="tab" aria-controls="headers" aria-selected="false">
+                                <i class="fe fe-layers me-2"></i>상단 목록
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="footers-tab" data-bs-toggle="tab" href="#footers" role="tab" aria-controls="footers" aria-selected="false">
+                                <i class="fe fe-anchor me-2"></i>하단 목록
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- 페이지 목록 -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4 class="card-header-title mb-0">페이지 목록</h4>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="text-muted me-3">선택된 항목에 대해 일괄 작업을 수행할 수 있습니다.</span>
-                            <form id="bulkActionForm" method="POST" action="{{ route('admin.cms.pages.bulkAction') }}" class="d-flex">
-                                @csrf
-                                <div class="input-group input-group-sm">
-                                    <select name="action" class="form-select" required>
-                                        <option value="">일괄 작업 선택</option>
-                                        <option value="publish">발행</option>
-                                        <option value="draft">임시저장</option>
-                                        <option value="private">비공개</option>
-                                        <option value="featured">추천 설정</option>
-                                        <option value="unfeatured">추천 해제</option>
-                                        <option value="delete">삭제</option>
+                <div class="tab-content" id="page-tabs-content">
+                    <!-- 페이지 목록 탭 -->
+                    <div class="tab-pane fade show active" id="pages" role="tabpanel" aria-labelledby="pages-tab">
+                        <div class="card-body">
+                            <!-- 필터 및 검색 -->
+                            <form method="GET" class="row g-3">
+                                <input type="hidden" name="tab" value="pages">
+                                <div class="col-md-3">
+                                    <label class="form-label">검색</label>
+                                    <input type="text" name="search" class="form-control"
+                                           placeholder="제목, 내용 검색..." value="{{ request('search') }}">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">상태</label>
+                                    <select name="status" class="form-select">
+                                        <option value="">모든 상태</option>
+                                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>발행됨</option>
+                                        <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>임시저장</option>
+                                        <option value="private" {{ request('status') === 'private' ? 'selected' : '' }}>비공개</option>
                                     </select>
-                                    <button type="submit" class="btn btn-outline-primary">실행</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">추천</label>
+                                    <select name="featured" class="form-select">
+                                        <option value="">모든 페이지</option>
+                                        <option value="1" {{ request('featured') === '1' ? 'selected' : '' }}>추천 페이지</option>
+                                        <option value="0" {{ request('featured') === '0' ? 'selected' : '' }}>일반 페이지</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">정렬</label>
+                                    <select name="sort_by" class="form-select">
+                                        <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>생성일</option>
+                                        <option value="title" {{ request('sort_by') == 'title' ? 'selected' : '' }}>제목</option>
+                                        <option value="order" {{ request('sort_by') == 'order' ? 'selected' : '' }}>정렬순서</option>
+                                        <option value="view_count" {{ request('sort_by') == 'view_count' ? 'selected' : '' }}>조회수</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label">순서</label>
+                                    <select name="sort_order" class="form-select">
+                                        <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>내림차순</option>
+                                        <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>오름차순</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary me-2">검색</button>
+                                    <a href="{{ route('admin.cms.pages.index') }}" class="btn btn-outline-secondary">초기화</a>
                                 </div>
                             </form>
                         </div>
+
+                        <!-- 페이지 목록 -->
+                        <div class="card-body p-0 border-top">
+                            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                                <div>
+                                    <h4 class="card-header-title mb-0">페이지 목록</h4>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-muted me-3">선택된 항목에 대해 일괄 작업을 수행할 수 있습니다.</span>
+                                    <form id="bulkActionForm" method="POST" action="{{ route('admin.cms.pages.bulkAction') }}" class="d-flex">
+                                        @csrf
+                                        <div class="input-group input-group-sm">
+                                            <select name="action" class="form-select" required>
+                                                <option value="">일괄 작업 선택</option>
+                                                <option value="publish">발행</option>
+                                                <option value="draft">임시저장</option>
+                                                <option value="private">비공개</option>
+                                                <option value="featured">추천 설정</option>
+                                                <option value="unfeatured">추천 해제</option>
+                                                <option value="delete">삭제</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-outline-primary">실행</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            @if($pages->count() > 0)
+                            <!-- 페이지 목록 테이블 -->
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th width="40">
+                                                <input type="checkbox" id="selectAllTable" class="form-check-input">
+                                            </th>
+                                            <th>제목</th>
+                                            <th width="120">상태</th>
+                                            <th width="100">조회수</th>
+                                            <th width="120">블럭수</th>
+                                            <th width="80">추천</th>
+                                            <th width="120">작성자</th>
+                                            <th width="140">생성일</th>
+                                            <th width="120">작업</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($pages as $page)
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="ids[]" value="{{ $page->id }}"
+                                                       class="form-check-input bulk-checkbox">
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <a href="{{ route('admin.cms.pages.show', $page->id) }}"
+                                                       class="text-decoration-none fw-medium">
+                                                        {{ $page->title }}
+                                                    </a>
+                                                    <div class="text-muted small">
+                                                        <i class="fe fe-link"></i> /{{ $page->slug }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge {{ $page->getStatusBadgeClass() }}">
+                                                    {{ $page->getStatusLabel() }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ number_format($page->view_count) }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ number_format($page->blocks_count) }}</span>
+                                            </td>
+                                            <td>
+                                                @if($page->is_featured)
+                                                    <i class="fe fe-star text-warning"></i>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ $page->creator->name ?? '-' }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">{{ $page->created_at->format('Y-m-d H:i') }}</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ $page->url }}" class="btn btn-outline-info"
+                                                       target="_blank" title="미리보기">
+                                                        <i class="fe fe-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.cms.pages.edit', $page->id) }}"
+                                                       class="btn btn-outline-primary" title="수정">
+                                                        <i class="fe fe-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-outline-danger"
+                                                            onclick="deletePage({{ $page->id }})" title="삭제">
+                                                        <i class="fe fe-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 페이지네이션 -->
+                            @if($pages->hasPages())
+                            <div class="d-flex justify-content-between align-items-center mt-3 px-3 pb-3 border-top pt-3">
+                                <div class="text-muted">
+                                    총 {{ number_format($pages->total()) }}개 중
+                                    {{ number_format($pages->firstItem()) }} - {{ number_format($pages->lastItem()) }}개 표시
+                                </div>
+                                <div>
+                                    {{ $pages->appends(request()->query())->links('pagination.custom') }}
+                                </div>
+                            </div>
+                            @endif
+                            @else
+                            <div class="text-center py-5">
+                                <i class="fe fe-file-text text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3 text-muted">페이지가 없습니다</h5>
+                                <p class="text-muted">새 페이지를 생성해보세요.</p>
+                                <a href="{{ route('admin.cms.pages.create') }}" class="btn btn-primary">
+                                    <i class="fe fe-plus me-2"></i>페이지 생성
+                                </a>
+                            </div>
+                            @endif
+                        </div>
                     </div>
-                </div>
 
-                <div class="card-body p-0">
-                    @if($pages->count() > 0)
+                    <!-- 상단 목록 탭 -->
+                    <div class="tab-pane fade" id="headers" role="tabpanel" aria-labelledby="headers-tab">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <h5 class="mb-1">사이트 헤더 템플릿 관리</h5>
+                                    <p class="text-muted mb-0">사이트의 상단 헤더 템플릿을 관리합니다.</p>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveHeaderConfig()">
+                                    <i class="fe fe-save me-2"></i>저장
+                                </button>
+                            </div>
 
-                    <!-- 페이지 목록 -->
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th width="40">
-                                        <input type="checkbox" id="selectAllTable" class="form-check-input">
-                                    </th>
-                                    <th>제목</th>
-                                    <th width="120">상태</th>
-                                    <th width="100">조회수</th>
-                                    <th width="120">블럭수</th>
-                                    <th width="80">추천</th>
-                                    <th width="120">작성자</th>
-                                    <th width="140">생성일</th>
-                                    <th width="120">작업</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($pages as $page)
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" name="ids[]" value="{{ $page->id }}"
-                                               class="form-check-input bulk-checkbox">
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a href="{{ route('admin.cms.pages.show', $page->id) }}"
-                                               class="text-decoration-none fw-medium">
-                                                {{ $page->title }}
-                                            </a>
-                                            <div class="text-muted small">
-                                                <i class="fe fe-link"></i> /{{ $page->slug }}
+                            @if(isset($headers['template']) && is_array($headers['template']))
+                            <div class="row">
+                                @foreach($headers['template'] as $index => $header)
+                                <div class="col-lg-6 col-xl-4 mb-4">
+                                    <div class="card border {{ $header['default'] ? 'border-primary' : '' }}">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           id="header_enable_{{ $index }}"
+                                                           {{ $header['enable'] ? 'checked' : '' }}
+                                                           onchange="updateHeaderConfig({{ $index }}, 'enable', this.checked)">
+                                                    <label class="form-check-label fw-medium" for="header_enable_{{ $index }}">
+                                                        {{ $header['title'] }}
+                                                    </label>
+                                                </div>
+                                                @if($header['default'])
+                                                <span class="badge bg-primary">기본값</span>
+                                                @endif
+                                            </div>
+
+                                            <p class="text-muted small mb-3">{{ $header['description'] }}</p>
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="default_header"
+                                                           id="header_default_{{ $index }}"
+                                                           value="{{ $index }}"
+                                                           {{ $header['default'] ? 'checked' : '' }}
+                                                           onchange="setDefaultHeader({{ $index }})">
+                                                    <label class="form-check-label small" for="header_default_{{ $index }}">
+                                                        기본값으로 설정
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           id="header_active_{{ $index }}"
+                                                           {{ $header['active'] ? 'checked' : '' }}
+                                                           onchange="updateHeaderConfig({{ $index }}, 'active', this.checked)">
+                                                    <label class="form-check-label small" for="header_active_{{ $index }}">
+                                                        활성화
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <span class="badge {{ $page->getStatusBadgeClass() }}">
-                                            {{ $page->getStatusLabel() }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">{{ number_format($page->view_count) }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">{{ number_format($page->blocks_count) }}</span>
-                                    </td>
-                                    <td>
-                                        @if($page->is_featured)
-                                            <i class="fe fe-star text-warning"></i>
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">{{ $page->creator->name ?? '-' }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">{{ $page->created_at->format('Y-m-d H:i') }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="{{ $page->url }}" class="btn btn-outline-info"
-                                               target="_blank" title="미리보기">
-                                                <i class="fe fe-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.cms.pages.edit', $page->id) }}"
-                                               class="btn btn-outline-primary" title="수정">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-outline-danger"
-                                                    onclick="deletePage({{ $page->id }})" title="삭제">
-                                                <i class="fe fe-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                                 @endforeach
-                            </tbody>
-                        </table>
+                            </div>
+                            @else
+                            <div class="text-center py-5">
+                                <i class="fe fe-layers text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3 text-muted">헤더 템플릿이 없습니다</h5>
+                                <p class="text-muted">헤더 설정 파일을 확인해주세요.</p>
+                            </div>
+                            @endif
+                        </div>
                     </div>
 
-                    <!-- 페이지네이션 -->
-                    @if($pages->hasPages())
-                    <div class="d-flex justify-content-between align-items-center mt-3 px-3 pb-3 border-top pt-3">
-                        <div class="text-muted">
-                            총 {{ number_format($pages->total()) }}개 중
-                            {{ number_format($pages->firstItem()) }} - {{ number_format($pages->lastItem()) }}개 표시
-                        </div>
-                        <div>
-                            {{ $pages->appends(request()->query())->links('pagination.custom') }}
+                    <!-- 하단 목록 탭 -->
+                    <div class="tab-pane fade" id="footers" role="tabpanel" aria-labelledby="footers-tab">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <h5 class="mb-1">사이트 푸터 템플릿 관리</h5>
+                                    <p class="text-muted mb-0">사이트의 하단 푸터 템플릿을 관리합니다.</p>
+                                </div>
+                                <button class="btn btn-primary" onclick="saveFooterConfig()">
+                                    <i class="fe fe-save me-2"></i>저장
+                                </button>
+                            </div>
+
+                            @if(isset($footers['template']) && is_array($footers['template']))
+                            <div class="row">
+                                @foreach($footers['template'] as $index => $footer)
+                                <div class="col-lg-6 col-xl-4 mb-4">
+                                    <div class="card border {{ $footer['default'] ? 'border-primary' : '' }}">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           id="footer_enable_{{ $index }}"
+                                                           {{ $footer['enable'] ? 'checked' : '' }}
+                                                           onchange="updateFooterConfig({{ $index }}, 'enable', this.checked)">
+                                                    <label class="form-check-label fw-medium" for="footer_enable_{{ $index }}">
+                                                        {{ $footer['title'] }}
+                                                    </label>
+                                                </div>
+                                                @if($footer['default'])
+                                                <span class="badge bg-primary">기본값</span>
+                                                @endif
+                                            </div>
+
+                                            <p class="text-muted small mb-3">{{ $footer['description'] }}</p>
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="default_footer"
+                                                           id="footer_default_{{ $index }}"
+                                                           value="{{ $index }}"
+                                                           {{ $footer['default'] ? 'checked' : '' }}
+                                                           onchange="setDefaultFooter({{ $index }})">
+                                                    <label class="form-check-label small" for="footer_default_{{ $index }}">
+                                                        기본값으로 설정
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           id="footer_active_{{ $index }}"
+                                                           {{ $footer['active'] ? 'checked' : '' }}
+                                                           onchange="updateFooterConfig({{ $index }}, 'active', this.checked)">
+                                                    <label class="form-check-label small" for="footer_active_{{ $index }}">
+                                                        활성화
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @else
+                            <div class="text-center py-5">
+                                <i class="fe fe-anchor text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3 text-muted">푸터 템플릿이 없습니다</h5>
+                                <p class="text-muted">푸터 설정 파일을 확인해주세요.</p>
+                            </div>
+                            @endif
                         </div>
                     </div>
-                    @endif
-                    @else
-                    <div class="text-center py-5">
-                        <i class="fe fe-file-text text-muted" style="font-size: 3rem;"></i>
-                        <h5 class="mt-3 text-muted">페이지가 없습니다</h5>
-                        <p class="text-muted">새 페이지를 생성해보세요.</p>
-                        <a href="{{ route('admin.cms.pages.create') }}" class="btn btn-primary">
-                            <i class="fe fe-plus me-2"></i>페이지 생성
-                        </a>
-                    </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -321,8 +487,26 @@
 
 @push('scripts')
 <script>
+// 탭 상태 관리
+let headerConfig = @json($headers ?? []);
+let footerConfig = @json($footers ?? []);
+
+document.addEventListener('DOMContentLoaded', function() {
+    // URL 파라미터로 탭 활성화
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab');
+
+    if (activeTab && ['headers', 'footers'].includes(activeTab)) {
+        const tabElement = document.getElementById(activeTab + '-tab');
+        if (tabElement) {
+            const tab = new bootstrap.Tab(tabElement);
+            tab.show();
+        }
+    }
+});
+
 // 전체 선택 - 테이블 헤더
-document.getElementById('selectAllTable').addEventListener('change', function() {
+document.getElementById('selectAllTable')?.addEventListener('change', function() {
     const checkboxes = document.querySelectorAll('.bulk-checkbox');
     checkboxes.forEach(checkbox => checkbox.checked = this.checked);
 });
@@ -334,12 +518,15 @@ document.addEventListener('change', function(e) {
         const checkedCheckboxes = document.querySelectorAll('.bulk-checkbox:checked');
         const allChecked = allCheckboxes.length === checkedCheckboxes.length;
 
-        document.getElementById('selectAllTable').checked = allChecked;
+        const selectAllCheckbox = document.getElementById('selectAllTable');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.checked = allChecked;
+        }
     }
 });
 
 // 일괄 작업
-document.getElementById('bulkActionForm').addEventListener('submit', function(e) {
+document.getElementById('bulkActionForm')?.addEventListener('submit', function(e) {
     const checkedBoxes = document.querySelectorAll('.bulk-checkbox:checked');
     if (checkedBoxes.length === 0) {
         e.preventDefault();
@@ -361,6 +548,100 @@ function deletePage(id) {
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
     document.getElementById('deleteForm').action = `/admin/cms/pages/${id}`;
     modal.show();
+}
+
+// 헤더 설정 관리
+function updateHeaderConfig(index, field, value) {
+    if (headerConfig.template && headerConfig.template[index]) {
+        headerConfig.template[index][field] = value;
+    }
+}
+
+function setDefaultHeader(index) {
+    if (headerConfig.template) {
+        // 모든 헤더의 default를 false로 설정
+        headerConfig.template.forEach((header, i) => {
+            header.default = (i === index);
+        });
+
+        // 라디오 버튼 상태 업데이트
+        document.querySelectorAll('input[name="default_header"]').forEach((radio, i) => {
+            radio.checked = (i === index);
+        });
+    }
+}
+
+function saveHeaderConfig() {
+    fetch('{{ route("admin.cms.pages.index") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            action: 'save_header_config',
+            config: headerConfig
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('헤더 설정이 저장되었습니다.');
+        } else {
+            alert('저장 중 오류가 발생했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('저장 중 오류가 발생했습니다.');
+    });
+}
+
+// 푸터 설정 관리
+function updateFooterConfig(index, field, value) {
+    if (footerConfig.template && footerConfig.template[index]) {
+        footerConfig.template[index][field] = value;
+    }
+}
+
+function setDefaultFooter(index) {
+    if (footerConfig.template) {
+        // 모든 푸터의 default를 false로 설정
+        footerConfig.template.forEach((footer, i) => {
+            footer.default = (i === index);
+        });
+
+        // 라디오 버튼 상태 업데이트
+        document.querySelectorAll('input[name="default_footer"]').forEach((radio, i) => {
+            radio.checked = (i === index);
+        });
+    }
+}
+
+function saveFooterConfig() {
+    fetch('{{ route("admin.cms.pages.index") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            action: 'save_footer_config',
+            config: footerConfig
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('푸터 설정이 저장되었습니다.');
+        } else {
+            alert('저장 중 오류가 발생했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('저장 중 오류가 발생했습니다.');
+    });
 }
 </script>
 @endpush

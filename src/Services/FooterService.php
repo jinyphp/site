@@ -440,4 +440,28 @@ class FooterService
         $footers['logo'] = $logo;
         return $this->saveFooters($footers);
     }
+
+    /**
+     * Footer 설정 정보 반환 (로고, 회사명, 저작권 등)
+     */
+    public function getConfig(): array
+    {
+        $footers = $this->loadFooters();
+
+        return [
+            'logo' => $footers['logo'] ?? '',
+            'company' => $footers['company'] ?? null,
+            'copyright' => $footers['copyright'] ?? '',
+            'social' => $footers['social'] ?? [],
+            'menu_sections' => $footers['menu_sections'] ?? []
+        ];
+    }
+
+    /**
+     * Footer 링크 반환 (getFooterLinks의 별칭)
+     */
+    public function getLinks(): array
+    {
+        return $this->getFooterLinks();
+    }
 }

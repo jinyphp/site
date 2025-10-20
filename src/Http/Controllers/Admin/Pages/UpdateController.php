@@ -35,9 +35,9 @@ class UpdateController extends Controller
             'sort_order' => 'nullable|integer|min:0',
             'template' => 'nullable|string|max:100',
             'layout' => 'nullable|string|max:255',
-            'header' => 'nullable|string|max:255',
-            'footer' => 'nullable|string|max:255',
-            'sidebar' => 'nullable|string|max:255',
+            'header_template' => 'nullable|string|max:255',
+            'footer_template' => 'nullable|string|max:255',
+            'sidebar_template' => 'nullable|string|max:255',
             'published_at' => 'nullable|date',
             'custom_fields' => 'nullable|array',
         ]);

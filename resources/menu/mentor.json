@@ -8,17 +8,17 @@
             "dropdown_class": "dropdown-menu",
             "children": [
                 {"type": "header", "title": "Landings", "css_class": "dropdown-header"},
-                {"title": "Home Default", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Abroad", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Mentor", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Education", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Academy", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Courses", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Home Sass", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Default", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Abroad", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Mentor", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Education", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Academy", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Courses", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Home Sass", "url": "#", "css_class": "dropdown-item"},
                 {"type": "divider", "css_class": "border-bottom my-2"},
-                {"title": "Lead Course", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Request Access", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Job Listing", "url": "#", "css_class": "dropdown-item"}
+                {"type": "link", "title": "Lead Course", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Request Access", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Job Listing", "url": "#", "css_class": "dropdown-item"}
             ]
         },
         {
@@ -34,31 +34,31 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Course Grid", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Course List", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Grid", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course List", "url": "#", "css_class": "dropdown-item"},
                         {"type": "divider", "css_class": "border-bottom my-2"},
-                        {"title": "Course Category v1", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Course Category v2", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Category v1", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Category v2", "url": "#", "css_class": "dropdown-item"},
                         {"type": "divider", "css_class": "border-bottom my-2"},
-                        {"title": "Course Single v1", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Course Single v2", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Course Single v3", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Single v1", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Single v2", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Single v3", "url": "#", "css_class": "dropdown-item"},
                         {"type": "divider", "css_class": "border-bottom my-2"},
-                        {"title": "Course Resume", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Course Checkout", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Add New Course", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Course Resume", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Course Checkout", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Add New Course", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
-                {"title": "Projects", "url": "#", "css_class": "dropdown-item", "badge": {"text": "New", "class": "badge bg-primary ms-2"}},
-                {"title": "Quizzes", "url": "#", "css_class": "dropdown-item", "badge": {"text": "New", "class": "badge bg-primary ms-2"}},
+                {"type": "link", "title": "Projects", "url": "#", "css_class": "dropdown-item", "badge": {"text": "New", "class": "badge bg-primary ms-2"}},
+                {"type": "link", "title": "Quizzes", "url": "#", "css_class": "dropdown-item", "badge": {"text": "New", "class": "badge bg-primary ms-2"}},
                 {
                     "type": "submenu",
                     "title": "Paths",
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Browse Path", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Path Single", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Browse Path", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Path Single", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -67,10 +67,10 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Listing", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Article", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Category", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Sidebar", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Listing", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Article", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Category", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Sidebar", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -79,9 +79,9 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Overview", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Listing", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Opening", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Overview", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Listing", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Opening", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -90,8 +90,8 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "List", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Single", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "List", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Single", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -100,9 +100,9 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Home", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "List", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Single", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Home", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "List", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Single", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -111,12 +111,12 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Home", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "List", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Grid", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Single", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Company List", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Company Single", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Home", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "List", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Grid", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Single", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Company List", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Company Single", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {
@@ -125,30 +125,30 @@
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Coming Soon", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Error 404", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Maintenance Mode", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Terms & Conditions", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Coming Soon", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Error 404", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Maintenance Mode", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Terms & Conditions", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
                 {"type": "hr", "css_class": "mx-3"},
-                {"title": "About", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "About", "url": "#", "css_class": "dropdown-item"},
                 {
                     "type": "submenu",
                     "title": "Help Center",
                     "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                     "submenu_class": "dropdown-submenu dropend",
                     "children": [
-                        {"title": "Help Center", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "FAQ's", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Guide", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Guide Single", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Support", "url": "#", "css_class": "dropdown-item"}
+                        {"type": "link", "title": "Help Center", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "FAQ's", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Guide", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Guide Single", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Support", "url": "#", "css_class": "dropdown-item"}
                     ]
                 },
-                {"title": "Pricing", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Compare Plan", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Contact", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Pricing", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Compare Plan", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Contact", "url": "#", "css_class": "dropdown-item"},
                 {
                     "type": "submenu",
                     "title": "Dropdown levels",
@@ -157,9 +157,9 @@
                     "dropdown_class": "dropdown-menu dropdown-menu-start",
                     "data_bs_popper": "none",
                     "children": [
-                        {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
                         {
                             "type": "submenu",
                             "title": "Dropdown (end)",
@@ -168,8 +168,8 @@
                             "dropdown_class": "dropdown-menu",
                             "data_bs_popper": "none",
                             "children": [
-                                {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"}
                             ]
                         },
                         {
@@ -180,8 +180,8 @@
                             "dropdown_class": "dropdown-menu",
                             "data_bs_popper": "none",
                             "children": [
-                                {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Dropdown item", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Dropdown item", "url": "#", "css_class": "dropdown-item"}
                             ]
                         }
                     ]
@@ -210,23 +210,23 @@
                             "css_class": "text-wrap"
                         },
                         {"type": "hr", "css_class": "mx-3"},
-                        {"title": "Dashboard", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Profile", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "My Courses", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Orders", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Reviews", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Students", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Payouts", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Earning", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Dashboard", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Profile", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "My Courses", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Orders", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Reviews", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Students", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Payouts", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Earning", "url": "#", "css_class": "dropdown-item"},
                         {
                             "type": "submenu",
                             "title": "Quiz",
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "Quiz", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Single", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Result", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Quiz", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Single", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Result", "url": "#", "css_class": "dropdown-item"}
                             ]
                         }
                     ]
@@ -245,36 +245,36 @@
                             "css_class": "text-wrap"
                         },
                         {"type": "hr", "css_class": "mx-3"},
-                        {"title": "Dashboard", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Subscriptions", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Payments", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Billing Info", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Dashboard", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Subscriptions", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Payments", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Billing Info", "url": "#", "css_class": "dropdown-item"},
                         {
                             "type": "submenu",
                             "title": "Invoice",
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "Invoice", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Invoice Details", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Invoice", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Invoice Details", "url": "#", "css_class": "dropdown-item"}
                             ]
                         },
-                        {"title": "Bookmarked", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "My Path", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "All Courses", "url": "#", "css_class": "dropdown-item"},
-                        {"title": "Learning Path", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Bookmarked", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "My Path", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "All Courses", "url": "#", "css_class": "dropdown-item"},
+                        {"type": "link", "title": "Learning Path", "url": "#", "css_class": "dropdown-item"},
                         {
                             "type": "submenu",
                             "title": "Quiz",
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "Quiz", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Quiz Blank", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "My Quiz", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Quiz Attempt", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Quiz Single", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Quiz Result", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Quiz", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Quiz Blank", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "My Quiz", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Quiz Attempt", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Quiz Single", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Quiz Result", "url": "#", "css_class": "dropdown-item"}
                             ]
                         },
                         {
@@ -283,8 +283,8 @@
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "Certificate", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "My Certificate", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Certificate", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "My Certificate", "url": "#", "css_class": "dropdown-item"}
                             ]
                         },
                         {
@@ -293,9 +293,9 @@
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "My Learning", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Learning Single", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Learning Path Single", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "My Learning", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Learning Single", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Learning Path Single", "url": "#", "css_class": "dropdown-item"}
                             ]
                         },
                         {
@@ -304,9 +304,9 @@
                             "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
                             "submenu_class": "dropdown-submenu dropend",
                             "children": [
-                                {"title": "Project Blank", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Dashboard Project", "url": "#", "css_class": "dropdown-item"},
-                                {"title": "Project Single", "url": "#", "css_class": "dropdown-item"}
+                                {"type": "link", "title": "Project Blank", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Dashboard Project", "url": "#", "css_class": "dropdown-item"},
+                                {"type": "link", "title": "Project Single", "url": "#", "css_class": "dropdown-item"}
                             ]
                         }
                     ]
@@ -334,16 +334,16 @@
                     ]
                 },
                 {"type": "hr", "css_class": "mx-3"},
-                {"title": "Sign In", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Sign Up", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Forgot Password", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Edit Profile", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Security", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Social Profiles", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Notifications", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Privacy Settings", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Delete Profile", "url": "#", "css_class": "dropdown-item"},
-                {"title": "Linked Accounts", "url": "#", "css_class": "dropdown-item"}
+                {"type": "link", "title": "Sign In", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Sign Up", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Forgot Password", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Edit Profile", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Security", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Social Profiles", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Notifications", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Privacy Settings", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Delete Profile", "url": "#", "css_class": "dropdown-item"},
+                {"type": "link", "title": "Linked Accounts", "url": "#", "css_class": "dropdown-item"}
             ]
         },
         {

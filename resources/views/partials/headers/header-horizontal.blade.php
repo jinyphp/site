@@ -1,6 +1,7 @@
 {{-- navbar --}}
 <nav class="navbar navbar-expand-lg">
     <div class="container px-0">
+
         <a class="navbar-brand" href="/">
             <img src="{{ asset(Site::logo()) }}" alt="{{ Site::brand() }}" style="height: 1.875rem" />
         </a>
@@ -200,6 +201,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-default py-0 py-lg-2">
     <div class="container px-0">
-        @include('jiny-site::partials.navs.horizontal.top')
+        @includeIf('jiny-site::partials.navs.horizontal.top', ['menuItems' => Site::menuItems('horizontal')])
     </div>
 </nav>

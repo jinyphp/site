@@ -1,0 +1,515 @@
+{
+    "main_menu": [
+        {
+            "type": "dropdown",
+            "title": "Dashboard",
+            "id": "navbarDashboard",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "data_bs_display": "static",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "Overview",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Analytics",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Pages",
+            "id": "navbarPages",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu",
+            "children": [
+                {
+                    "type": "submenu",
+                    "title": "Courses",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "All Courses",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Category",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Category Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Users",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Instructor",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Students",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "CMS",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Overview",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "All Post",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "New Post",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Category",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Project",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Grid",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Single",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Overview",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Task",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Budget",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Team",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Files",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Summary",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "link",
+                            "title": "Create Project",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Site Setting",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "General",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "google",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Social",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Social Login",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Payment",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "SMPT",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Apps",
+            "id": "navbarApps",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "Chat",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Task",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Mail",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Calendar",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Authentication",
+            "id": "navbarAuthentication",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "Sign In",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Sign Up",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Forgot Password",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Notifications",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "404 Error",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Ecommerce",
+            "id": "ecommerceDropdown",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "header",
+                    "title": "Ecommerce",
+                    "css_class": "dropdown-header"
+                },
+                {
+                    "type": "submenu",
+                    "title": "Products",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "css_class": "dropdown-item dropdown-toggle d-flex justify-content-between",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Grid",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Grid Sidebar",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Products",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Product Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Product Single v2",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Add Product",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "link",
+                    "title": "Shopping Cart",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Checkout",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Order",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Order Single",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Order History",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Order Summary",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Customers",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Customer Single",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Add Customer",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Layouts",
+            "id": "layoutsDropdown",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-start",
+            "children": [
+                {
+                    "type": "header",
+                    "title": "Layouts",
+                    "css_class": "dropdown-header"
+                },
+                {
+                    "type": "link",
+                    "title": "Top",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Compact",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Vertical",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "title": "Tables",
+            "id": "navbarTables",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "link",
+                    "title": "Basic",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Datatables",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "special_dropdown",
+            "id": "navbarDropdown",
+            "css_class": "nav-link",
+            "icon": "fe fe-more-horizontal",
+            "dropdown_class": "dropdown-menu dropdown-menu-md",
+            "children": [
+                {
+                    "type": "list_group",
+                    "items": [
+                        {
+                            "title": "Documentations",
+                            "description": "Browse the all documentation",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-file-text fs-3 text-primary"
+                        },
+                        {
+                            "title": "Snippet",
+                            "description": "Bunch of Snippet",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "bi bi-files fs-3 text-primary"
+                        },
+                        {
+                            "title": "Changelog",
+                            "title_extra": "<span class=\"text-primary ms-1\" id=\"changelog\"></span>",
+                            "description": "See what's new",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-layers fs-3 text-primary"
+                        },
+                        {
+                            "title": "RTL demo",
+                            "description": "RTL Pages",
+                            "url": "https://geeksui.codescandy.com/geeks-rtl/",
+                            "target": "_blank",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "icon": "fe fe-toggle-right fs-3 text-primary"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

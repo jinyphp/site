@@ -30,9 +30,9 @@ class SitePage extends Model
         'sort_order',
         'template',
         'layout',
-        'header',
-        'footer',
-        'sidebar',
+        'header_template',
+        'footer_template',
+        'sidebar_template',
         'custom_fields',
         'published_at',
         'created_by',
@@ -160,7 +160,23 @@ class SitePage extends Model
     // 변경자 (Mutators)
     public function setSlugAttribute($value)
     {
-        $this->attributes['slug'] = Str::slug($value);
+        // 빈 값이면 빈 문자열로 설정
+        if (empty($value)) {
+            $this->attributes['slug'] = '';
+            return;
+        }
+
+        // 슬래시가 포함된 경우 각 세그먼트별로 slug 처리
+        if (strpos($value, '/') !== false) {
+            $segments = explode('/', $value);
+            $sluggedSegments = array_map(function($segment) {
+                return Str::slug($segment);
+            }, $segments);
+            $this->attributes['slug'] = implode('/', $sluggedSegments);
+        } else {
+            // 일반적인 경우는 기존과 동일하게 처리
+            $this->attributes['slug'] = Str::slug($value);
+        }
     }
 
     // 메서드

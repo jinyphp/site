@@ -44,6 +44,102 @@ class ShowController extends Controller
     }
 
     /**
+     * 설정 파일 로드
+     */
+    private function loadConfigFile($filename)
+    {
+        $configPath = base_path("vendor/jiny/site/config/{$filename}");
+
+        if (file_exists($configPath)) {
+            $content = file_get_contents($configPath);
+            return json_decode($content, true);
+        }
+
+        return [];
+    }
+
+    /**
+     * 페이지별 템플릿 설정 로드
+     */
+    protected function loadTemplateData($page)
+    {
+        $templateData = [
+            'headers' => $this->loadConfigFile('headers.json'),
+            'footers' => $this->loadConfigFile('footers.json'),
+            'selectedHeader' => null,
+            'selectedFooter' => null,
+        ];
+
+        // 페이지별 헤더/푸터 설정이 있는 경우
+        if ($page) {
+            // 페이지에 지정된 헤더 템플릿 찾기
+            if (!empty($page['header_template'])) {
+                $templateData['selectedHeader'] = $this->findTemplateByPath(
+                    $templateData['headers']['template'] ?? [],
+                    $page['header_template']
+                );
+            }
+
+            // 페이지에 지정된 푸터 템플릿 찾기
+            if (!empty($page['footer_template'])) {
+                $templateData['selectedFooter'] = $this->findTemplateByPath(
+                    $templateData['footers']['template'] ?? [],
+                    $page['footer_template']
+                );
+            }
+        }
+
+        // 기본 템플릿 설정이 없으면 기본값 사용
+        if (!$templateData['selectedHeader']) {
+            $templateData['selectedHeader'] = $this->findDefaultTemplate(
+                $templateData['headers']['template'] ?? []
+            );
+        }
+
+        if (!$templateData['selectedFooter']) {
+            $templateData['selectedFooter'] = $this->findDefaultTemplate(
+                $templateData['footers']['template'] ?? []
+            );
+        }
+
+        return $templateData;
+    }
+
+    /**
+     * 경로로 템플릿 찾기
+     */
+    private function findTemplateByPath($templates, $path)
+    {
+        foreach ($templates as $template) {
+            if ($template['path'] === $path && $template['enable']) {
+                return $template;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 기본 템플릿 찾기
+     */
+    private function findDefaultTemplate($templates)
+    {
+        foreach ($templates as $template) {
+            if ($template['default'] && $template['enable']) {
+                return $template;
+            }
+        }
+
+        // 기본값이 없으면 첫 번째 활성화된 템플릿 반환
+        foreach ($templates as $template) {
+            if ($template['enable']) {
+                return $template;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * 동적 페이지 표시 (메인 진입점)
      *
      * @param Request $request
@@ -60,6 +156,8 @@ class ShowController extends Controller
         // 1단계: 페이지 데이터 로드
         $page = $this->loadPage($slug);
 
+        // dd($page);
+
         // 2단계: 뷰 해석
         $viewPath = $this->resolveView($slug);
 
@@ -75,7 +173,35 @@ class ShowController extends Controller
      */
     protected function loadPage($slug)
     {
-        return $this->pageService->getPageBySlug($slug);
+        // site_pages 테이블에서 페이지 조회
+        $page = \Jiny\Site\Models\SitePage::where('slug', $slug)
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('published_at')
+                      ->orWhere('published_at', '<=', now());
+            })
+            ->first();
+
+        return $page ? $page->toArray() : null;
+    }
+
+    /**
+     * 페이지 조회수 증가
+     *
+     * @param int $pageId
+     * @return void
+     */
+    protected function incrementPageViewCount($pageId)
+    {
+        try {
+            \Jiny\Site\Models\SitePage::where('id', $pageId)->increment('view_count');
+        } catch (\Exception $e) {
+            // 조회수 증가 실패는 무시 (로그에만 기록)
+            \Log::warning('Failed to increment page view count', [
+                'page_id' => $pageId,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -126,9 +252,23 @@ class ShowController extends Controller
             abort(404);
         }
 
+        // 템플릿 데이터 로드
+        $templateData = $this->loadTemplateData($page);
+
+        // 조회수 증가 (페이지가 있는 경우)
+        if ($page && isset($page['id'])) {
+            $this->incrementPageViewCount($page['id']);
+        }
+
         return view($viewPath, [
             'page' => $page,
             'config' => $this->config,
+            'headers' => $templateData['headers'],
+            'footers' => $templateData['footers'],
+            'selectedHeader' => $templateData['selectedHeader'],
+            'selectedFooter' => $templateData['selectedFooter'],
+            'headerTemplate' => $templateData['selectedHeader']['path'] ?? null,
+            'footerTemplate' => $templateData['selectedFooter']['path'] ?? null,
         ]);
     }
 }

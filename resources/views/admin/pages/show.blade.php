@@ -50,7 +50,7 @@
         <!-- 메인 콘텐츠 -->
         <div class="col-lg-8">
             <!-- 기본 정보 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">페이지 내용</h4>
                 </div>
@@ -69,7 +69,7 @@
             </div>
 
             <!-- SEO 정보 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">SEO 정보</h4>
                 </div>
@@ -149,7 +149,7 @@
 
             <!-- 커스텀 필드 -->
             @if($page->custom_fields && count($page->custom_fields) > 0)
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">커스텀 필드</h4>
                 </div>
@@ -170,7 +170,7 @@
         <!-- 사이드바 -->
         <div class="col-lg-4">
             <!-- 페이지 정보 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">페이지 정보</h4>
                 </div>
@@ -226,7 +226,7 @@
             </div>
 
             <!-- 작성자 정보 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">작성자 정보</h4>
                 </div>
@@ -255,7 +255,7 @@
             </div>
 
             <!-- 작업 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         <a href="{{ route('admin.cms.pages.edit', $page->id) }}" class="btn btn-primary">
@@ -287,7 +287,7 @@
             </div>
 
             <!-- 통계 정보 -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="card-title">통계</h4>
                 </div>

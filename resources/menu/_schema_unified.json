@@ -1,0 +1,41 @@
+{
+  "main_menu": [
+    {
+      "type": "dropdown|submenu|link|header|divider|hr|info|button|special_dropdown|list_group",
+      "title": "string",
+      "url": "string (optional)",
+      "id": "string (optional)",
+      "css_class": "string (optional)",
+      "dropdown_class": "string (optional)",
+      "submenu_class": "string (optional)",
+      "container_class": "string (optional)",
+      "icon": "string (optional)",
+      "description": "string (optional)",
+      "title_extra": "string (optional, HTML allowed)",
+      "target": "string (optional)",
+      "data_bs_display": "string (optional)",
+      "data_bs_popper": "string (optional)",
+      "badge": {
+        "text": "string",
+        "class": "string"
+      },
+      "children": [
+        {
+          "same_structure_as_parent": true
+        }
+      ],
+      "items": [
+        {
+          "type": "link",
+          "title": "string",
+          "url": "string",
+          "css_class": "string (optional)",
+          "icon": "string (optional)",
+          "description": "string (optional)",
+          "title_extra": "string (optional)",
+          "target": "string (optional)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 <!-- Collapse -->
 <div class="collapse navbar-collapse" id="navbar-default">
     <ul class="navbar-nav">
-        @foreach (Site::menuItems('horizontal') as $menuItem)
+        @foreach ($menuItems as $menuItem)
             @if (isset($menuItem['type']) && $menuItem['type'] === 'dropdown')
                 <li class="nav-item dropdown">
                     <a class="{{ $menuItem['css_class'] ?? 'nav-link dropdown-toggle' }}" href="#"

@@ -21,19 +21,24 @@ class PageController extends Controller
             // 조회수 증가
             $page->incrementViewCount();
 
+            //dd($page);
+
             // 템플릿 결정
             $template = $this->getTemplate($page);
 
             // SEO 메타 데이터 설정
             $this->setSeoData($page);
 
+            // 템플릿 데이터 로드
+            $templateData = $this->loadTemplateData($page);
+
             // 레이아웃 정보를 뷰에 전달
             $layout = $page->layout ?: null;
-            $header = $page->header ?: null;
-            $footer = $page->footer ?: null;
-            $sidebar = $page->sidebar ?: null;
+            $sidebar = $page->sidebar_template ?: null;
+            $header = $templateData['headerTemplate'];
+            $footer = $templateData['footerTemplate'];
 
-            return view($template, compact('page', 'layout', 'header', 'footer', 'sidebar'));
+            return view($template, array_merge(compact('page', 'layout', 'sidebar', 'header', 'footer'), $templateData));
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // 페이지를 찾을 수 없는 경우 404 반환
@@ -49,6 +54,112 @@ class PageController extends Controller
             ]);
             abort(404, '페이지를 표시할 수 없습니다.');
         }
+    }
+
+    /**
+     * 설정 파일 로드
+     */
+    private function loadConfigFile($filename)
+    {
+        $configPath = base_path("vendor/jiny/site/config/{$filename}");
+
+        if (file_exists($configPath)) {
+            $content = file_get_contents($configPath);
+            return json_decode($content, true);
+        }
+
+        return [];
+    }
+
+    /**
+     * 페이지별 템플릿 설정 로드
+     */
+    private function loadTemplateData(SitePage $page)
+    {
+        $templateData = [
+            'headers' => $this->loadConfigFile('headers.json'),
+            'footers' => $this->loadConfigFile('footers.json'),
+            'selectedHeader' => null,
+            'selectedFooter' => null,
+            'headerTemplate' => null,
+            'footerTemplate' => null,
+        ];
+
+        // 페이지별 헤더/푸터 설정이 있는 경우
+        if ($page) {
+            // 페이지에 지정된 헤더 템플릿 찾기
+            if (!empty($page->header_template)) {
+                $templateData['selectedHeader'] = $this->findTemplateByPath(
+                    $templateData['headers']['template'] ?? [],
+                    $page->header_template
+                );
+                $templateData['headerTemplate'] = $page->header_template;
+            }
+
+            // 페이지에 지정된 푸터 템플릿 찾기
+            if (!empty($page->footer_template)) {
+                $templateData['selectedFooter'] = $this->findTemplateByPath(
+                    $templateData['footers']['template'] ?? [],
+                    $page->footer_template
+                );
+                $templateData['footerTemplate'] = $page->footer_template;
+            }
+        }
+
+        // 기본 템플릿 설정이 없으면 기본값 사용
+        if (!$templateData['selectedHeader']) {
+            $templateData['selectedHeader'] = $this->findDefaultTemplate(
+                $templateData['headers']['template'] ?? []
+            );
+            if ($templateData['selectedHeader']) {
+                $templateData['headerTemplate'] = $templateData['selectedHeader']['path'];
+            }
+        }
+
+        if (!$templateData['selectedFooter']) {
+            $templateData['selectedFooter'] = $this->findDefaultTemplate(
+                $templateData['footers']['template'] ?? []
+            );
+            if ($templateData['selectedFooter']) {
+                $templateData['footerTemplate'] = $templateData['selectedFooter']['path'];
+            }
+        }
+
+        return $templateData;
+    }
+
+    /**
+     * 경로로 템플릿 찾기
+     */
+    private function findTemplateByPath($templates, $path)
+    {
+        foreach ($templates as $template) {
+            if ($template['path'] === $path && $template['enable']) {
+                return $template;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 기본 템플릿 찾기
+     */
+    private function findDefaultTemplate($templates)
+    {
+        foreach ($templates as $template) {
+            if ($template['default'] && $template['enable']) {
+                return $template;
+            }
+        }
+
+        // 기본값이 없으면 첫 번째 활성화된 템플릿 반환
+        foreach ($templates as $template) {
+            if ($template['enable']) {
+                return $template;
+            }
+        }
+
+        return null;
     }
 
     /**

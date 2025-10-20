@@ -53,8 +53,12 @@
                 </button>
             </div>
         </div>
-        <!-- Button -->
 
-        @include('jiny-site::partials.navs.simple.top')
+        <!-- Unified Navigation -->
+        @includeIf('jiny-site::partials.navs.nav-default.top', [
+            'menuItems' => Site::menuItems('simple'),
+            'alignment' => 'left'
+        ])
+
     </div>
 </nav>

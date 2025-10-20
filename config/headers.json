@@ -39,8 +39,8 @@
             "path": "jiny-site::partials.headers.header-instructor",
             "title": "Instructor Header",
             "description": "Header layout for instructor pages",
-            "enable": false,
-            "active": false,
+            "enable": true,
+            "active": true,
             "default": false
         },
         {
@@ -72,8 +72,8 @@
             "title": "Secondary Header",
             "description": "Alternative secondary header layout",
             "enable": true,
-            "active": false,
-            "default": false
+            "active": true,
+            "default": true
         },
         {
             "path": "jiny-site::partials.headers.header-simple",
@@ -81,7 +81,7 @@
             "description": "Minimalist simple header layout",
             "enable": true,
             "active": true,
-            "default": true
+            "default": false
         },
         {
             "path": "jiny-site::partials.headers.header-student",

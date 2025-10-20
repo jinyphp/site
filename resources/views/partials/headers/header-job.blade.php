@@ -52,8 +52,11 @@
             </button>
         </div>
 
-        <!-- Button -->
-        @include('jiny-site::partials.navs.right.top')
+        <!-- Button Collapse -->
+        @includeIf('jiny-site::partials.navs.nav-default.top', [
+            'menuItems' => Site::menuItems('job'),
+            'alignment' => 'right'
+        ])
 
     </div>
 </nav>

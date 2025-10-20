@@ -278,6 +278,8 @@
                 <span class="icon-bar bottom-bar"></span>
             </button>
         </div>
-        @include('jiny-site::partials.navs.nav-header')
+
+        @includeIf('jiny-site::partials.navs.nav-header', ['menuItems' => Site::menuItems('default')])
+
     </div>
 </nav>

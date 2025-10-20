@@ -51,6 +51,11 @@
                                     <i class="fe fe-search me-2"></i>SEO 설정
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="template-tab" data-bs-toggle="tab" data-bs-target="#template" type="button" role="tab">
+                                    <i class="fe fe-layout me-2"></i>템플릿 설정
+                                </button>
+                            </li>
                         </ul>
                     </div>
                     <div class="card-body">
@@ -174,6 +179,106 @@
                             @enderror
                                 </div>
                             </div>
+
+                            <!-- 템플릿 설정 탭 -->
+                            <div class="tab-pane fade" id="template" role="tabpanel">
+                                <!-- 템플릿 선택 -->
+                                <div class="mb-4">
+                                    <label for="template" class="form-label">페이지 템플릿</label>
+                                    <select class="form-select @error('template') is-invalid @enderror" id="template" name="template">
+                                        <option value="" {{ old('template', $page->template) === '' ? 'selected' : '' }}>기본 템플릿</option>
+                                        @foreach($templates as $key => $name)
+                                            <option value="{{ $key }}" {{ old('template', $page->template) === $key ? 'selected' : '' }}>
+                                                {{ $name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">페이지에 사용할 템플릿을 선택하세요.</div>
+                                    @error('template')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- 레이아웃 선택 -->
+                                <div class="mb-4">
+                                    <label for="layout" class="form-label">레이아웃</label>
+                                    <select class="form-select @error('layout') is-invalid @enderror" id="layout" name="layout">
+                                        <option value="" {{ old('layout', $page->layout) === '' ? 'selected' : '' }}>기본 레이아웃</option>
+                                        @foreach($layouts as $key => $name)
+                                            <option value="{{ $key }}" {{ old('layout', $page->layout) === $key ? 'selected' : '' }}>
+                                                {{ $name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">페이지에 사용할 레이아웃을 선택하세요.</div>
+                                    @error('layout')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- 헤더 템플릿 선택 -->
+                                <div class="mb-4">
+                                    <label for="header_template" class="form-label">헤더 템플릿</label>
+                                    <select class="form-select @error('header_template') is-invalid @enderror" id="header_template" name="header_template">
+                                        <option value="" {{ old('header_template', $page->header_template) === '' ? 'selected' : '' }}>기본 헤더</option>
+                                        @foreach($headers as $key => $name)
+                                            <option value="{{ $key }}" {{ old('header_template', $page->header_template) === $key ? 'selected' : '' }}>
+                                                {{ $name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">페이지 상단에 사용할 헤더 템플릿을 선택하세요.</div>
+                                    @error('header_template')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- 푸터 템플릿 선택 -->
+                                <div class="mb-4">
+                                    <label for="footer_template" class="form-label">푸터 템플릿</label>
+                                    <select class="form-select @error('footer_template') is-invalid @enderror" id="footer_template" name="footer_template">
+                                        <option value="" {{ old('footer_template', $page->footer_template) === '' ? 'selected' : '' }}>기본 푸터</option>
+                                        @foreach($footers as $key => $name)
+                                            <option value="{{ $key }}" {{ old('footer_template', $page->footer_template) === $key ? 'selected' : '' }}>
+                                                {{ $name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">페이지 하단에 사용할 푸터 템플릿을 선택하세요.</div>
+                                    @error('footer_template')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- 사이드바 선택 -->
+                                <div class="mb-4">
+                                    <label for="sidebar_template" class="form-label">사이드바 템플릿</label>
+                                    <select class="form-select @error('sidebar_template') is-invalid @enderror" id="sidebar_template" name="sidebar_template">
+                                        <option value="" {{ old('sidebar_template', $page->sidebar_template) === '' ? 'selected' : '' }}>사이드바 없음</option>
+                                        @foreach($sidebars as $key => $name)
+                                            <option value="{{ $key }}" {{ old('sidebar_template', $page->sidebar_template) === $key ? 'selected' : '' }}>
+                                                {{ $name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">페이지에 사용할 사이드바 템플릿을 선택하세요.</div>
+                                    @error('sidebar_template')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- 템플릿 미리보기 -->
+                                <div class="mt-4">
+                                    <h6 class="mb-3">템플릿 미리보기</h6>
+                                    <div class="border rounded p-3 bg-light">
+                                        <div class="text-center text-muted">
+                                            <i class="fe fe-layout" style="font-size: 2rem;"></i>
+                                            <p class="mt-2 mb-0">선택된 템플릿의 미리보기</p>
+                                            <small id="template-preview-info">템플릿을 선택하면 미리보기가 표시됩니다.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -237,28 +342,6 @@
                     </div>
                 </div>
 
-                <!-- 템플릿 설정 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">템플릿 설정</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="template" class="form-label">템플릿</label>
-                            <select class="form-select @error('template') is-invalid @enderror" id="template" name="template">
-                                <option value="" {{ old('template', $page->template) === '' ? 'selected' : '' }}>기본 템플릿</option>
-                                @foreach($templates as $key => $name)
-                                    <option value="{{ $key }}" {{ old('template', $page->template) === $key ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('template')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
 
                 <!-- 페이지 정보 -->
                 <div class="card">
@@ -322,16 +405,27 @@ document.getElementById('status').addEventListener('change', function() {
     }
 });
 
-// 제목에서 슬러그 자동 생성 (기존 슬러그가 비어있을 때만)
-document.getElementById('title').addEventListener('input', function() {
-    const slugField = document.getElementById('slug');
-    const currentSlug = slugField.dataset.original || '{{ $page->slug }}';
+// 슬러그 필드에 원본 값 저장 및 수동 편집 추적
+const slugField = document.getElementById('slug');
+slugField.dataset.original = '{{ $page->slug }}';
+slugField.dataset.manuallyEdited = 'false';
 
-    if (slugField.value === currentSlug || slugField.value === '') {
+// 슬러그 필드 수동 편집 감지
+slugField.addEventListener('input', function() {
+    this.dataset.manuallyEdited = 'true';
+});
+
+// 제목에서 슬러그 자동 생성 (수동으로 편집되지 않았을 때만)
+document.getElementById('title').addEventListener('input', function() {
+    const currentSlug = slugField.dataset.original || '{{ $page->slug }}';
+    const isManuallyEdited = slugField.dataset.manuallyEdited === 'true';
+
+    // 슬러그가 원본과 같거나 비어있고, 수동으로 편집되지 않았을 때만 자동 생성
+    if (!isManuallyEdited && (slugField.value === currentSlug || slugField.value === '')) {
         const title = this.value;
         const slug = title
             .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/[^a-z0-9\s\/-]/g, '')
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
             .trim('-');
@@ -339,8 +433,39 @@ document.getElementById('title').addEventListener('input', function() {
     }
 });
 
-// 슬러그 필드에 원본 값 저장
-document.getElementById('slug').dataset.original = '{{ $page->slug }}';
+// 템플릿 미리보기 업데이트
+function updateTemplatePreview() {
+    const template = document.getElementById('template').value;
+    const layout = document.getElementById('layout').value;
+    const header = document.getElementById('header_template').value;
+    const footer = document.getElementById('footer_template').value;
+    const sidebar = document.getElementById('sidebar_template').value;
+
+    const previewInfo = document.getElementById('template-preview-info');
+
+    let info = [];
+    if (template) info.push(`템플릿: ${template}`);
+    if (layout) info.push(`레이아웃: ${layout}`);
+    if (header) info.push(`헤더: ${header}`);
+    if (footer) info.push(`푸터: ${footer}`);
+    if (sidebar) info.push(`사이드바: ${sidebar}`);
+
+    if (info.length > 0) {
+        previewInfo.innerHTML = info.join('<br>');
+    } else {
+        previewInfo.textContent = '템플릿을 선택하면 미리보기가 표시됩니다.';
+    }
+}
+
+// 템플릿 선택 변경 시 미리보기 업데이트
+document.getElementById('template')?.addEventListener('change', updateTemplatePreview);
+document.getElementById('layout')?.addEventListener('change', updateTemplatePreview);
+document.getElementById('header_template')?.addEventListener('change', updateTemplatePreview);
+document.getElementById('footer_template')?.addEventListener('change', updateTemplatePreview);
+document.getElementById('sidebar_template')?.addEventListener('change', updateTemplatePreview);
+
+// 페이지 로드 시 초기 미리보기 설정
+updateTemplatePreview();
 </script>
 
 @endpush

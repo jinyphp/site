@@ -1,0 +1,1000 @@
+{
+    "main_menu": [
+        {
+            "type": "dropdown",
+            "id": "navbarLanding",
+            "title": "Landings",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu",
+            "children": [
+                {
+                    "type": "header",
+                    "title": "Landings",
+                    "css_class": "dropdown-header"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Default",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Abroad",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Mentor",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Education",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Academy",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Courses",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Home Sass",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "divider",
+                    "css_class": "border-bottom my-2"
+                },
+                {
+                    "type": "link",
+                    "title": "Lead Course",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Request Access",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Job Listing",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "id": "navbarPages",
+            "title": "Pages",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "submenu",
+                    "title": "Courses",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Course Grid",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "divider",
+                            "css_class": "border-bottom my-2"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Category v1",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Category v2",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "divider",
+                            "css_class": "border-bottom my-2"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Single v1",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Single v2",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Single v3",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "divider",
+                            "css_class": "border-bottom my-2"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Resume",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Course Checkout",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Add New Course",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "link",
+                    "title": "Projects",
+                    "url": "#",
+                    "css_class": "dropdown-item",
+                    "badge": {
+                        "text": "New",
+                        "class": "badge bg-primary ms-2"
+                    }
+                },
+                {
+                    "type": "link",
+                    "title": "Quizzes",
+                    "url": "#",
+                    "css_class": "dropdown-item",
+                    "badge": {
+                        "text": "New",
+                        "class": "badge bg-primary ms-2"
+                    }
+                },
+                {
+                    "type": "submenu",
+                    "title": "Paths",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Browse Path",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Path Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Blog",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Listing",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Article",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Category",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Sidebar",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Career",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Overview",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Listing",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Opening",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Portfolio",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Mentor",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Home",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Job",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Home",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Grid",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Company List",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Company Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Specialty",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Coming Soon",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Error 404",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Maintenance Mode",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Terms & Conditions",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "hr",
+                    "css_class": "mx-3"
+                },
+                {
+                    "type": "link",
+                    "title": "About",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "submenu",
+                    "title": "Help Center",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Help Center",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "FAQ's",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Guide",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Guide Single",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Support",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        }
+                    ]
+                },
+                {
+                    "type": "link",
+                    "title": "Pricing",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Compare Plan",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Contact",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "submenu",
+                    "title": "Dropdown levels",
+                    "css_class": "dropdown-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu dropdown-menu-start",
+                    "data_bs_popper": "none",
+                    "children": [
+                        {
+                            "type": "link",
+                            "title": "Dropdown item",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Dropdown item",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Dropdown item",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Dropdown (end)",
+                            "css_class": "dropdown-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "data_bs_popper": "none",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Dropdown item",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Dropdown item",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Dropdown (start)",
+                            "css_class": "dropdown-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropstart",
+                            "dropdown_class": "dropdown-menu",
+                            "data_bs_popper": "none",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Dropdown item",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Dropdown item",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "id": "navbarAccount",
+            "title": "Accounts",
+            "css_class": "nav-link dropdown-toggle",
+            "dropdown_class": "dropdown-menu dropdown-menu-arrow",
+            "children": [
+                {
+                    "type": "header",
+                    "title": "Accounts",
+                    "css_class": "dropdown-header"
+                },
+                {
+                    "type": "submenu",
+                    "title": "Instructor",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "badge": {
+                        "text": "New",
+                        "class": "badge bg-primary ms-2"
+                    },
+                    "children": [
+                        {
+                            "type": "info",
+                            "title": "Instructor",
+                            "description": "Instructor dashboard for manage courses and earning.",
+                            "css_class": "text-wrap"
+                        },
+                        {
+                            "type": "hr",
+                            "css_class": "mx-3"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Dashboard",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Profile",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "My Courses",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Orders",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Reviews",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Students",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Payouts",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Earning",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Quiz",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Quiz",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Single",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Result",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Students",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "badge": {
+                        "text": "New",
+                        "class": "badge bg-primary ms-2"
+                    },
+                    "children": [
+                        {
+                            "type": "info",
+                            "title": "Students",
+                            "description": "Students dashboard to manage your courses and subscriptions.",
+                            "css_class": "text-wrap"
+                        },
+                        {
+                            "type": "hr",
+                            "css_class": "mx-3"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Dashboard",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Subscriptions",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Payments",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Billing Info",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Invoice",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Invoice",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Invoice Details",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "link",
+                            "title": "Bookmarked",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "My Path",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "All Courses",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Learning Path",
+                            "url": "#",
+                            "css_class": "dropdown-item"
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Quiz",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Quiz",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Quiz Blank",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "My Quiz",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Quiz Attempt",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Quiz Single",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Quiz Result",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Certificate",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Certificate",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "My Certificate",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "Learning",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "My Learning",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Learning Single",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Learning Path Single",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "submenu",
+                            "title": "My Projects",
+                            "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                            "submenu_class": "dropdown-submenu dropend",
+                            "dropdown_class": "dropdown-menu",
+                            "children": [
+                                {
+                                    "type": "link",
+                                    "title": "Project Blank",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Dashboard Project",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                },
+                                {
+                                    "type": "link",
+                                    "title": "Project Single",
+                                    "url": "#",
+                                    "css_class": "dropdown-item"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "submenu",
+                    "title": "Admin",
+                    "css_class": "dropdown-item dropdown-list-group-item dropdown-toggle",
+                    "submenu_class": "dropdown-submenu dropend",
+                    "dropdown_class": "dropdown-menu",
+                    "children": [
+                        {
+                            "type": "info",
+                            "title": "Master Admin",
+                            "description": "Master admin dashboard to manage courses, user, site setting , and work with amazing apps.",
+                            "css_class": "text-wrap"
+                        },
+                        {
+                            "type": "hr",
+                            "css_class": "mx-3"
+                        },
+                        {
+                            "type": "button",
+                            "title": "Go to Dashboard",
+                            "url": "#",
+                            "css_class": "btn btn-sm btn-primary",
+                            "container_class": "px-3 d-grid"
+                        }
+                    ]
+                },
+                {
+                    "type": "hr",
+                    "css_class": "mx-3"
+                },
+                {
+                    "type": "link",
+                    "title": "Sign In",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Sign Up",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Forgot Password",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Edit Profile",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Security",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Social Profiles",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Notifications",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Privacy Settings",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Delete Profile",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                },
+                {
+                    "type": "link",
+                    "title": "Linked Accounts",
+                    "url": "#",
+                    "css_class": "dropdown-item"
+                }
+            ]
+        },
+        {
+            "type": "special_dropdown",
+            "id": "navbarDropdown",
+            "icon": "fe fe-more-horizontal",
+            "css_class": "nav-link",
+            "dropdown_class": "dropdown-menu dropdown-menu-md",
+            "children": [
+                {
+                    "type": "list_group",
+                    "items": [
+                        {
+                            "type": "link",
+                            "title": "Documentations",
+                            "description": "Browse the all documentation",
+                            "icon": "fe fe-file-text fs-3 text-primary",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Snippet",
+                            "description": "Bunch of Snippet",
+                            "icon": "bi bi-files fs-3 text-primary",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0"
+                        },
+                        {
+                            "type": "link",
+                            "title": "Changelog",
+                            "description": "See what's new",
+                            "icon": "fe fe-layers fs-3 text-primary",
+                            "url": "#",
+                            "css_class": "list-group-item list-group-item-action border-0",
+                            "title_extra": "<span class=\"text-primary ms-1\" id=\"changelog\"></span>"
+                        },
+                        {
+                            "type": "link",
+                            "title": "RTL demo",
+                            "description": "RTL Pages",
+                            "icon": "fe fe-toggle-right fs-3 text-primary",
+                            "url": "https://geeksui.codescandy.com/geeks-rtl/",
+                            "target": "_blank",
+                            "css_class": "list-group-item list-group-item-action border-0"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

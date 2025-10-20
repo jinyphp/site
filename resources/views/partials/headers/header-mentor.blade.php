@@ -53,8 +53,12 @@
                 </button>
             </div>
         </div>
-        <!-- Button -->
 
-        @include('jiny-site::partials.navs.mentor.top')
+        <!-- Button Collapse -->
+        @includeIf('jiny-site::partials.navs.nav-default.top', [
+            'menuItems' => Site::menuItems('mentor'),
+            'alignment' => 'center'
+        ])
+
     </div>
 </nav>

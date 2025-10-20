@@ -264,18 +264,29 @@
 
 @push('scripts')
 <script>
-// 제목에서 슬러그 자동 생성
-document.getElementById('title').addEventListener('input', function() {
-    const title = this.value;
-    const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim('-');
+// 슬러그 필드 수동 편집 추적
+const slugField = document.getElementById('slug');
+slugField.dataset.manuallyEdited = 'false';
 
-    if (document.getElementById('slug').value === '') {
-        document.getElementById('slug').value = slug;
+// 슬러그 필드 수동 편집 감지
+slugField.addEventListener('input', function() {
+    this.dataset.manuallyEdited = 'true';
+});
+
+// 제목에서 슬러그 자동 생성 (수동으로 편집되지 않았을 때만)
+document.getElementById('title').addEventListener('input', function() {
+    const isManuallyEdited = slugField.dataset.manuallyEdited === 'true';
+
+    // 슬러그가 비어있고, 수동으로 편집되지 않았을 때만 자동 생성
+    if (!isManuallyEdited && slugField.value === '') {
+        const title = this.value;
+        const slug = title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s\/-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim('-');
+        slugField.value = slug;
     }
 });
 

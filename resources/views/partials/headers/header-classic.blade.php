@@ -62,8 +62,13 @@
             </button>
         </div>
 
-        {{-- 상단 메뉴 --}}
-        @include('jiny-site::partials.navs.nav-classic.top')
+        {{-- 상단 메뉴 Collapse --}}
+        <div class="collapse navbar-collapse" id="navbar-default">
+            @includeIf('jiny-site::partials.navs.nav-classic.top', [
+                'menuItems' => Site::menuItems('classic')
+            ])
+        </div>
+
     </div>
 </nav>
 

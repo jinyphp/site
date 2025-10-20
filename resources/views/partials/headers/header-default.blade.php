@@ -2,15 +2,8 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container px-0">
 
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            @if(\Jiny\Site\Facades\Header::getLogo())
-                <img src="{{ \Jiny\Site\Facades\Header::getLogo() }}" alt="{{ \Jiny\Site\Facades\Header::getBrand() ?: 'Logo' }}" />
-            @else
-                <img src="{{ asset('assets/images/brand/logo/logo.svg') }}" alt="Geeks" />
-            @endif
-            @if(\Jiny\Site\Facades\Header::getBrand())
-                <span class="ms-2 fw-bold">{{ \Jiny\Site\Facades\Header::getBrand() }}</span>
-            @endif
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="{{ asset(Site::logo()) }}" alt="{{ Site::brand() }}" />
         </a>
 
         <!-- Mobile view nav wrap -->
@@ -47,8 +40,8 @@
                         0
                     </span>
                 </a>
-                <x-login class="btn-outline-dark">로그인</x-login>
-                <x-register class="btn-dark d-none d-md-block">회원가입</x-register>
+                <a href="/login" class="btn btn-outline-dark">로그인</a>
+                <a href="/register" class="btn btn-dark d-none d-md-block">회원가입</a>
             </div>
         </div>
         <div>
@@ -61,7 +54,14 @@
                 <span class="icon-bar bottom-bar"></span>
             </button>
         </div>
-        @include('jiny-site::partials.navs.nav-default.top')
+
+        <!-- Collapse -->
+        @includeIf('jiny-site::partials.navs.nav-default.top', [
+            'menuItems' => Site::menuItems('default'),
+            'alignment' => 'center'
+        ])
+
+
     </div>
 </nav>
 

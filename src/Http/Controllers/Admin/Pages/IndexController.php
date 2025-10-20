@@ -10,6 +10,11 @@ class IndexController extends Controller
 {
     public function __invoke(Request $request)
     {
+        // POST 요청인 경우 설정 저장 처리
+        if ($request->isMethod('post')) {
+            return $this->handleConfigSave($request);
+        }
+
         $query = SitePage::with(['creator', 'updater'])
             ->withCount(['contents as blocks_count' => function ($query) {
                 $query->where('is_active', true);
@@ -56,6 +61,54 @@ class IndexController extends Controller
             'featured' => SitePage::where('is_featured', true)->count(),
         ];
 
-        return view('jiny-site::admin.pages.index', compact('pages', 'stats'));
+        // 헤더/푸터 설정 로드
+        $headers = $this->loadConfig('headers.json');
+        $footers = $this->loadConfig('footers.json');
+
+        return view('jiny-site::admin.pages.index', compact('pages', 'stats', 'headers', 'footers'));
+    }
+
+    /**
+     * 설정 파일 로드
+     */
+    private function loadConfig($filename)
+    {
+        $configPath = base_path("vendor/jiny/site/config/{$filename}");
+
+        if (file_exists($configPath)) {
+            $content = file_get_contents($configPath);
+            return json_decode($content, true);
+        }
+
+        return [];
+    }
+
+    /**
+     * 설정 저장 처리
+     */
+    private function handleConfigSave(Request $request)
+    {
+        $action = $request->input('action');
+        $config = $request->input('config');
+
+        if ($action === 'save_header_config') {
+            $this->saveConfig('headers.json', $config);
+        } elseif ($action === 'save_footer_config') {
+            $this->saveConfig('footers.json', $config);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Invalid action']);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * 설정 파일 저장
+     */
+    private function saveConfig($filename, $config)
+    {
+        $configPath = base_path("vendor/jiny/site/config/{$filename}");
+        $jsonData = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        file_put_contents($configPath, $jsonData);
     }
 }
