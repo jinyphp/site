@@ -1,10 +1,10 @@
 @php
-use Jiny\Site\Facades\Footer;
+    use Jiny\Site\Facades\Footer;
 
-// Footer 설정 정보 가져오기
-$footerConfig = Footer::getConfig();
-$footerLinks = Footer::getLinks();
-$copyright = Footer::getCopyright();
+    // Footer 설정 정보 가져오기
+    $footerConfig = Footer::getConfig();
+    $footerLinks = Footer::getLinks();
+    $copyright = Footer::getCopyright();
 @endphp
 
 <!-- Footer -->
@@ -20,7 +20,7 @@ $copyright = Footer::getCopyright();
                             document.getElementById("copyright").appendChild(document.createTextNode(new Date().getFullYear()));
                         </script>
                     </span>
-                    @if($copyright)
+                    @if ($copyright)
                         {{ $copyright }}
                     @else
                         Geeks. All Rights Reserved.
@@ -30,9 +30,9 @@ $copyright = Footer::getCopyright();
             <!-- Links -->
             <div class="col-12 col-md-6">
                 <nav class="nav nav-footer justify-content-center justify-content-md-end">
-                    @if(!empty($footerLinks))
-                        @foreach($footerLinks as $link)
-                            @if(!empty($link['title']) && !empty($link['href']))
+                    @if (!empty($footerLinks))
+                        @foreach ($footerLinks as $link)
+                            @if (!empty($link['title']) && !empty($link['href']))
                                 <a class="nav-link" href="{{ $link['href'] }}">{{ $link['title'] }}</a>
                             @endif
                         @endforeach

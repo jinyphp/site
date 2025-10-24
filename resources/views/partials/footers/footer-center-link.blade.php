@@ -1,14 +1,14 @@
 @php
-use Jiny\Site\Facades\Footer;
+    use Jiny\Site\Facades\Footer;
 
-// Footer 설정 정보 가져오기
-$company = Footer::getCompany();
-$copyright = Footer::getCopyright();
-$logo = Footer::getLogo();
-$companySection = Footer::getMenuSection('company');
-$communitySection = Footer::getMenuSection('community');
-$educationSection = Footer::getMenuSection('education');
-$social = Footer::getSocial();
+    // Footer 설정 정보 가져오기
+    $company = Footer::getCompany();
+    $copyright = Footer::getCopyright();
+    $logo = Footer::getLogo();
+    $companySection = Footer::getMenuSection('company');
+    $communitySection = Footer::getMenuSection('community');
+    $educationSection = Footer::getMenuSection('education');
+    $social = Footer::getSocial();
 @endphp
 
 <!-- footer -->
@@ -17,24 +17,28 @@ $social = Footer::getSocial();
         <div class="row justify-content-center text-center align-items-center">
             <div class="col-12 col-md-12 col-xxl-6 px-0">
                 <div class="mb-4">
-                    @if($logo)
+                    @if ($logo)
                         <a href="/">
-                            <img src="{{ asset($logo) }}" alt="{{ $company['name'] ?? 'Logo' }}" class="mb-4 logo-inverse" />
+                            <img src="{{ asset($logo) }}" alt="{{ $company['name'] ?? 'Logo' }}"
+                                class="mb-4 logo-inverse" />
                         </a>
                     @else
                         <a href="/">
-                            <img src="{{ asset('assets/images/brand/logo/logo.svg') }}" alt="Geeks" class="mb-4 logo-inverse" />
+                            <img src="{{ asset('assets/images/brand/logo/logo.svg') }}" alt="Geeks"
+                                class="mb-4 logo-inverse" />
                         </a>
                     @endif
-                    <p class="lead">{{ $company['description'] ?? 'Geek은 Bootstrap 반응형 프레임워크로 제작된 개발자를 위한 풍부한 기능과 아름다운 Bootstrap 5 템플릿입니다.' }}</p>
+                    <p class="lead">
+                        {{ $company['description'] ?? 'Geek은 Bootstrap 반응형 프레임워크로 제작된 개발자를 위한 풍부한 기능과 아름다운 Bootstrap 5 템플릿입니다.' }}
+                    </p>
                 </div>
 
                 <!-- Navigation Links -->
                 <nav class="nav nav-footer justify-content-center">
-                    @if(!empty($companySection['links']))
-                        @foreach($companySection['links'] as $index => $link)
+                    @if (!empty($companySection['links']))
+                        @foreach ($companySection['links'] as $index => $link)
                             <a class="nav-link" href="{{ $link['href'] }}">{{ $link['title'] }}</a>
-                            @if($index < count($companySection['links']) - 1)
+                            @if ($index < count($companySection['links']) - 1)
                                 <span class="my-2 vr opacity-50"></span>
                             @endif
                         @endforeach
@@ -61,11 +65,11 @@ $social = Footer::getSocial();
         </div>
 
         <!-- Social Media Section -->
-        @if(!empty($social))
+        @if (!empty($social))
             <div class="row justify-content-center text-center mt-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-center gap-3">
-                        @foreach($social as $socialLink)
+                        @foreach ($social as $socialLink)
                             <a href="{{ $socialLink['url'] }}" target="_blank" rel="noopener" class="text-muted">
                                 <i class="bi {{ $socialLink['icon'] }} fs-4"></i>
                             </a>

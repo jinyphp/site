@@ -214,47 +214,8 @@
                 </div>
             </li>
 
-            {{-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                    data-bs-target="#navBoard" aria-expanded="false" aria-controls="navBoard">
-                    <i class="nav-icon fe fe-message-square me-2"></i>
-                    게시판
-                </a>
-                <div id="navBoard" class="collapse" data-bs-parent="#sideNavbar">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.cms.board.dashboard') }}">
-                                <i class="bi bi-speedometer2 me-2"></i>
-                                대시보드
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.cms.board.list') }}">
-                                <i class="bi bi-layout-text-sidebar me-2"></i>
-                                게시판 목록
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.cms.board.table') }}">
-                                <i class="bi bi-file-text me-2"></i>
-                                게시글
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.cms.board.related') }}">
-                                <i class="bi bi-link-45deg me-2"></i>
-                                관련글
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.cms.board.trend') }}">
-                                <i class="bi bi-graph-up-arrow me-2"></i>
-                                트렌드글
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li> --}}
+            {{-- jiny/post 패키지 --}}
+            @includeIf("jiny-post::partials.admin.menu")
 
             {{-- ============================================
                 서비스
