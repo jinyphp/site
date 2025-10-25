@@ -1,0 +1,78 @@
+{
+    "title": "Welcome Page Blocks",
+    "description": "Configuration for welcome page blocks management",
+    "blocks": [
+        {
+            "id": 2,
+            "name": "About Section",
+            "view": "jiny-site::www.blocks.test-block",
+            "enabled": false,
+            "order": 3,
+            "config": {
+                "title": "회사 소개",
+                "description": "저희 회사에 대해 더 알아보세요",
+                "background": "#ffffff"
+            }
+        },
+        {
+            "id": 3,
+            "name": "CTA Section",
+            "view": "jiny-site::www.blocks.test-block",
+            "enabled": false,
+            "order": 4,
+            "config": {
+                "title": "지금 시작하세요",
+                "button_text": "시작하기",
+                "background": "#007bff"
+            }
+        },
+        {
+            "id": 4,
+            "name": "jiny-site::www.blocks.hero",
+            "view": "jiny-site::www.blocks.hero",
+            "enabled": true,
+            "order": 1,
+            "config": []
+        },
+        {
+            "id": 5,
+            "name": "jiny-site::www.blocks.hero_categories",
+            "view": "jiny-site::www.blocks.hero_categories",
+            "enabled": true,
+            "order": 2,
+            "config": []
+        },
+        {
+            "id": 6,
+            "name": "jiny-site::www.blocks.hero_courses",
+            "view": "jiny-site::www.blocks.hero_courses",
+            "enabled": true,
+            "order": 5,
+            "config": []
+        },
+        {
+            "id": 7,
+            "name": "jiny-site::www.blocks.hero_testimonials",
+            "view": "jiny-site::www.blocks.hero_testimonials",
+            "enabled": true,
+            "order": 6,
+            "config": []
+        },
+        {
+            "id": 8,
+            "name": "jiny-site::www.blocks.hero_hiring",
+            "view": "jiny-site::www.blocks.hero_hiring",
+            "enabled": true,
+            "order": 7,
+            "config": []
+        },
+        {
+            "id": 9,
+            "name": "jiny-site::www.blocks.hero_trusted",
+            "view": "jiny-site::www.blocks.hero_trusted",
+            "enabled": true,
+            "order": 8,
+            "config": []
+        }
+    ]
+}

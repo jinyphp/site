@@ -565,6 +565,76 @@ Route::prefix('admin/site/testimonials')->middleware(['web', 'admin'])->name('ad
 });
 
 /**
+ * Welcome (웰컴) 관리 라우트
+ *
+ * @description
+ * 웹사이트 초기 welcome 페이지를 관리하는 라우트입니다.
+ * 여러 블록을 순차적으로 섹션으로 나열하며 출력합니다.
+ * 그룹별 관리, 스케줄링, 미리보기 기능을 지원합니다.
+ * Single Action Controllers 방식으로 구현됨
+ */
+Route::prefix('admin/cms/welcome')->name('admin.cms.welcome.')->middleware(['web', 'admin'])->group(function () {
+    // 기본 블록 관리
+    Route::get('/', \Jiny\Site\Http\Controllers\Admin\Welcome\IndexController::class)->name('index');
+    Route::post('/update-order', \Jiny\Site\Http\Controllers\Admin\Welcome\UpdateOrderController::class)->name('updateOrder');
+    Route::post('/toggle', \Jiny\Site\Http\Controllers\Admin\Welcome\ToggleController::class)->name('toggle');
+    Route::post('/store', \Jiny\Site\Http\Controllers\Admin\Welcome\StoreController::class)->name('store');
+    Route::put('/{id}', \Jiny\Site\Http\Controllers\Admin\Welcome\UpdateController::class)->name('update')->where('id', '[0-9]+');
+    Route::delete('/{id}', \Jiny\Site\Http\Controllers\Admin\Welcome\DestroyController::class)->name('destroy')->where('id', '[0-9]+');
+
+    // 그룹 관리
+    Route::post('/activate-group', \Jiny\Site\Http\Controllers\Admin\Welcome\ActivateGroupController::class)->name('activateGroup');
+
+    // 배포 관리
+    Route::prefix('deploy')->name('deploy.')->group(function () {
+        Route::post('/', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeployGroupController::class, 'deploy'])->name('now');
+        Route::post('/schedule', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeployGroupController::class, 'schedule'])->name('schedule');
+        Route::post('/scheduled', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeployGroupController::class, 'deployScheduled'])->name('scheduled');
+        Route::get('/deployable', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeployGroupController::class, 'deployable'])->name('deployable');
+    });
+
+    // 배포 이력 관리
+    Route::prefix('history')->name('history.')->group(function () {
+        Route::get('/', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeploymentHistoryController::class, 'index'])->name('index');
+        Route::get('/stats', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeploymentHistoryController::class, 'stats'])->name('stats');
+        Route::get('/recent', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeploymentHistoryController::class, 'recent'])->name('recent');
+        Route::get('/{id}', [\Jiny\Site\Http\Controllers\Admin\Welcome\DeploymentHistoryController::class, 'show'])->name('show')->where('id', '[0-9]+');
+    });
+
+    // 미리보기 관리
+    Route::prefix('preview')->name('preview.')->group(function () {
+        Route::get('/', [\Jiny\Site\Http\Controllers\Admin\Welcome\PreviewController::class, 'list'])->name('list');
+        Route::get('/{groupName}', \Jiny\Site\Http\Controllers\Admin\Welcome\PreviewController::class)->name('group');
+    });
+});
+
+/**
+ * Blocks (블록) 관리 라우트
+ *
+ * @description
+ * 웹사이트 블록 템플릿 파일들을 관리하는 라우트입니다.
+ * blocks 디렉토리의 blade 파일들을 조회, 편집, 생성, 삭제할 수 있습니다.
+ * Single Action Controllers 방식으로 구현됨
+ */
+Route::prefix('admin/cms/blocks')->name('admin.cms.blocks.')->middleware(['web', 'admin'])->group(function () {
+    // 블록 관리 기본 라우트 (루트 경로)
+    Route::get('/', \Jiny\Site\Http\Controllers\Admin\Blocks\IndexController::class)->name('index');
+    Route::get('/create', \Jiny\Site\Http\Controllers\Admin\Blocks\CreateController::class)->name('create');
+    Route::get('/create/{folder}', \Jiny\Site\Http\Controllers\Admin\Blocks\CreateController::class)->name('create.folder')->where('folder', '[a-zA-Z0-9._-]+');
+    Route::post('/', \Jiny\Site\Http\Controllers\Admin\Blocks\StoreController::class)->name('store');
+
+    // 구체적인 액션 라우트를 먼저 배치 (경로 파라미터 지원)
+    Route::get('/edit/{pathParam}', \Jiny\Site\Http\Controllers\Admin\Blocks\EditController::class)->name('edit')->where('pathParam', '[a-zA-Z0-9._-]+');
+    Route::put('/edit/{pathParam}', \Jiny\Site\Http\Controllers\Admin\Blocks\UpdateController::class)->name('update')->where('pathParam', '[a-zA-Z0-9._-]+');
+    Route::get('/preview/{pathParam}', \Jiny\Site\Http\Controllers\Admin\Blocks\PreviewController::class)->name('preview')->where('pathParam', '[a-zA-Z0-9._-]+');
+    Route::get('/show/{pathParam}', \Jiny\Site\Http\Controllers\Admin\Blocks\ShowController::class)->name('show')->where('pathParam', '[a-zA-Z0-9._-]+');
+    Route::delete('/{pathParam}', \Jiny\Site\Http\Controllers\Admin\Blocks\DestroyController::class)->name('destroy')->where('pathParam', '[a-zA-Z0-9._-]+');
+
+    // 폴더별 목록 조회 (서브폴더 지원) - 가장 마지막에 배치
+    Route::get('/folder/{folder}', \Jiny\Site\Http\Controllers\Admin\Blocks\IndexController::class)->name('folder')->where('folder', '[a-zA-Z0-9._-]+');
+});
+
+/**
  * Menu 관리 라우트
  *
  * @description

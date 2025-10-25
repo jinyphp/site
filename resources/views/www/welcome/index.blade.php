@@ -8,8 +8,12 @@
 @endpush
 
 @section('content')
-      @includeIf('jiny-site::www.blocks.hero')
-      <section>
+
+    <!-- Welcome Blocks Section -->
+    @includeIf("jiny-site::www.welcome.loop")
+
+      {{-- @includeIf('jiny-site::www.blocks.hero') --}}
+      {{-- <section>
         <div class="container">
           <div class="row">
             <div class="col-12">
@@ -17,12 +21,12 @@
             </div>
           </div>
         </div>
-      </section>
-      @includeIf('jiny-site::www.blocks.hero_categories')
-      @includeIf('jiny-site::www.blocks.hero_courses')
-      @includeIf('jiny-site::www.blocks.hero_testimonials')
-      @includeIf('jiny-site::www.blocks.hero_hiring')
-      @includeIf('jiny-site::www.blocks.hero_trusted')
+      </section> --}}
+      {{-- @includeIf('jiny-site::www.blocks.hero_categories') --}}
+      {{-- @includeIf('jiny-site::www.blocks.hero_courses') --}}
+      {{-- @includeIf('jiny-site::www.blocks.hero_testimonials') --}}
+      {{-- @includeIf('jiny-site::www.blocks.hero_hiring')
+      @includeIf('jiny-site::www.blocks.hero_trusted') --}}
 @endsection
 
 @push('scripts')

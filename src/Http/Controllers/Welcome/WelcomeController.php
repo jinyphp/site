@@ -28,8 +28,10 @@ namespace Jiny\Site\Http\Controllers\Welcome;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Jiny\Site\Services\SiteService;
 use Jiny\Site\Models\Banner;
+use Jiny\Site\Models\SiteWelcome;
 use Jiny\Site\Facades\Header;
 use Jiny\Site\Facades\Footer;
 
@@ -163,13 +165,18 @@ class WelcomeController extends Controller
         // footers.json에서 기본 푸터 경로를 읽어옴
         $footer = Footer::getDefaultFooterPath();
 
+        // [1.9단계] Welcome 블록 데이터 가져오기
+        // 데이터베이스에서 활성화된 블록들을 순서대로 가져옴 (미리보기 모드 체크 포함)
+        $welcomeBlocks = $this->getWelcomeBlocks($request);
+
         // [2단계] 뷰 우선순위 해석
         // 설정에 따라 가장 적합한 뷰 경로를 결정
         $viewPath = $this->resolveView();
+        //dd($viewPath);
 
         // [3단계] 뷰 렌더링 및 반환
-        // 결정된 뷰에 $config 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 전달하여 렌더링
-        return $this->renderView($viewPath, $banners, $header, $footer);
+        // 결정된 뷰에 $config 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 전달하여 렌더링
+        return $this->renderView($viewPath, $banners, $header, $footer, $welcomeBlocks);
     }
 
     /**
@@ -208,6 +215,158 @@ class WelcomeController extends Controller
         });
 
         return $visibleBanners;
+    }
+
+    /**
+     * [1.9단계] Welcome 블록 데이터 가져오기
+     *
+     * @description
+     * 데이터베이스에서 활성화된 블록들을 순서대로 가져옵니다.
+     * 미리보기 모드와 스케줄링 기능을 지원합니다.
+     *
+     * @param Request $request HTTP 요청 객체
+     * @return array 블록 배열 (order 순으로 정렬)
+     *
+     * @features
+     * - 활성화된 그룹의 블록들 자동 조회
+     * - 미리보기 모드 지원 (?preview=group_name)
+     * - 스케줄된 그룹 자동 배포
+     * - 블록별 활성화/비활성화 필터링
+     *
+     * @workflow
+     * 1. 미리보기 모드 확인
+     * 2. 스케줄된 그룹 자동 배포 체크
+     * 3. 블록 데이터 조회 (그룹별 또는 활성화된 그룹)
+     * 4. 블록 데이터를 배열 형태로 변환
+     * 5. 정렬된 블록 배열 반환
+     */
+    protected function getWelcomeBlocks(Request $request)
+    {
+        try {
+            // 스케줄된 그룹 자동 배포 체크
+            SiteWelcome::deployScheduledGroups();
+
+            // 미리보기 모드 체크
+            $previewGroup = $request->get('preview');
+
+            if ($previewGroup && $this->isPreviewAllowed($request)) {
+                // 미리보기 모드: 지정된 그룹의 블록들
+                $blocks = SiteWelcome::getPreviewBlocks($previewGroup);
+
+                // 미리보기 헤더 정보 추가 (개발 모드에서만)
+                if (config('app.debug')) {
+                    \Log::info("Welcome blocks preview mode: {$previewGroup}");
+                }
+
+                // 관리자 미리보기 모드에서는 비활성화된 블록도 표시할지 결정
+                // ?preview=default&show_disabled=true 파라미터로 제어 가능
+                $showDisabled = $request->get('show_disabled', 'false') === 'true' && auth()->check();
+
+                if (!$showDisabled) {
+                    // 일반 미리보기: 활성화된 블록만 표시
+                    $blocks = $blocks->filter(function ($block) {
+                        return $block->is_enabled;
+                    });
+                }
+            } else {
+                // 일반 모드: 현재 활성화된 그룹의 활성화된 블록들만
+                $blocks = SiteWelcome::getCurrentBlocks();
+            }
+
+            // 모델 데이터를 배열 형태로 변환 (기존 JSON 구조와 호환)
+            return $blocks->map(function ($block) {
+                return [
+                    'id' => $block->id,
+                    'name' => $block->block_name,
+                    'view' => $block->view_template,
+                    'enabled' => $block->is_enabled,
+                    'order' => $block->order,
+                    'config' => $block->config ?? [],
+                    // 추가 메타 정보
+                    'group_name' => $block->group_name,
+                    'deploy_status' => $block->deploy_status,
+                    'is_active' => $block->is_active,
+                ];
+            })->toArray();
+
+        } catch (\Exception $e) {
+            // 데이터베이스 오류 또는 기타 오류 발생 시 빈 배열 반환
+            \Log::warning('Failed to load welcome blocks from database: ' . $e->getMessage());
+
+            // 폴백으로 JSON 파일 시도 (마이그레이션 전 호환성)
+            return $this->getWelcomeBlocksFromJson();
+        }
+    }
+
+    /**
+     * 미리보기 권한 확인
+     *
+     * @description
+     * 미리보기 기능 사용 권한을 확인합니다.
+     * 관리자 권한이 있거나 개발 환경일 때만 허용됩니다.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    protected function isPreviewAllowed(Request $request): bool
+    {
+        // 개발 환경에서는 항상 허용
+        if (config('app.debug')) {
+            return true;
+        }
+
+        // 관리자 로그인 체크 (관리자 미들웨어 로직 재사용)
+        if (auth()->check()) {
+            $user = auth()->user();
+            return $user->isAdmin ?? false;
+        }
+
+        return false;
+    }
+
+    /**
+     * JSON 파일에서 블록 데이터 가져오기 (폴백용)
+     *
+     * @description
+     * 데이터베이스 마이그레이션 전 호환성을 위한 폴백 메서드입니다.
+     * 기존 Welcome.json 파일이 있으면 해당 데이터를 사용합니다.
+     *
+     * @return array
+     */
+    protected function getWelcomeBlocksFromJson(): array
+    {
+        $configPath = __DIR__ . '/Welcome.json';
+
+        if (!File::exists($configPath)) {
+            return [];
+        }
+
+        try {
+            $content = File::get($configPath);
+            $data = json_decode($content, true);
+
+            if (!$data || !isset($data['blocks']) || !is_array($data['blocks'])) {
+                return [];
+            }
+
+            // 활성화된 블록만 필터링
+            $enabledBlocks = array_filter($data['blocks'], function($block) {
+                return isset($block['enabled']) && $block['enabled'] === true;
+            });
+
+            // order 기준으로 정렬
+            usort($enabledBlocks, function($a, $b) {
+                $orderA = $a['order'] ?? 0;
+                $orderB = $b['order'] ?? 0;
+                return $orderA - $orderB;
+            });
+
+            return $enabledBlocks;
+
+        } catch (\Exception $e) {
+            \Log::warning('Failed to load welcome blocks from JSON fallback: ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -439,7 +598,7 @@ class WelcomeController extends Controller
         // [우선순위 5] 패키지 기본 뷰 (최종 폴백)
         // ====================================================================
         // 위의 모든 뷰가 없을 때 사용되는 안전장치
-        return "jiny-site::www.index";
+        return "jiny-site::www.welcome.index";
     }
 
     /**
@@ -447,12 +606,13 @@ class WelcomeController extends Controller
      *
      * @description
      * resolveView()에서 결정된 뷰 경로를 사용하여 실제 뷰를 렌더링합니다.
-     * 뷰 파일에서 사용할 수 있도록 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 함께 전달합니다.
+     * 뷰 파일에서 사용할 수 있도록 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 함께 전달합니다.
      *
      * @param string $viewPath 렌더링할 뷰 경로
      * @param \Illuminate\Database\Eloquent\Collection $banners 표시할 베너 컬렉션
      * @param string $header 기본 헤더 경로
      * @param string $footer 기본 푸터 경로
+     * @param array $welcomeBlocks 웰컴 페이지 블록 배열
      *
      * @return \Illuminate\View\View Laravel 뷰 객체
      *
@@ -464,6 +624,7 @@ class WelcomeController extends Controller
      * - $banners              : Collection - 표시할 베너 컬렉션
      * - $header               : string - 기본 헤더 경로 (headers.json에서 읽음)
      * - $footer               : string - 기본 푸터 경로 (footers.json에서 읽음)
+     * - $welcomeBlocks        : array - Welcome.json에서 읽은 블록 배열
      *
      * @example 뷰 파일에서 사용 예시
      * // resources/views/www/index.blade.php
@@ -540,15 +701,29 @@ class WelcomeController extends Controller
      * Blade 템플릿 컴파일
      *     ↓
      * HTML 응답 반환
+     *
+     * @example 웰컴 블록 사용 예시
+     * // resources/views/www/welcome/index.blade.php
+     * @if(!empty($welcomeBlocks))
+     *     @foreach($welcomeBlocks as $block)
+     *         <section class="welcome-block" data-block-id="{{ $block['id'] }}">
+     *             @include($block['view'], [
+     *                 'blockConfig' => $block['config'] ?? [],
+     *                 'blockName' => $block['name']
+     *             ])
+     *         </section>
+     *     @endforeach
+     * @endif
      */
-    protected function renderView($viewPath, $banners, $header, $footer)
+    protected function renderView($viewPath, $banners, $header, $footer, $welcomeBlocks = [])
     {
-        // 뷰 경로와 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로를 함께 전달하여 렌더링
+        // 뷰 경로와 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 함께 전달하여 렌더링
         return view($viewPath, [
             'config' => $this->config,
             'banners' => $banners,
             'header' => $header,
             'footer' => $footer,
+            'welcomeBlocks' => $welcomeBlocks,
         ]);
     }
 }

@@ -9,7 +9,7 @@
             "description": "Standard default header layout",
             "enable": true,
             "active": true,
-            "default": false
+            "default": true
         },
         {
             "path": "jiny-site::partials.headers.header-classic",
@@ -73,7 +73,7 @@
             "description": "Alternative secondary header layout",
             "enable": true,
             "active": true,
-            "default": true
+            "default": false
         },
         {
             "path": "jiny-site::partials.headers.header-simple",

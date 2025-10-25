@@ -177,6 +177,20 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.welcome.index') }}">
+                    <i class="nav-icon fe fe-grid me-2"></i>
+                    Welcome
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.cms.blocks.index') }}">
+                    <i class="nav-icon fe fe-grid me-2"></i>
+                    Block
+                </a>
+            </li>
+
+
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.cms.pages.index') }}">
                     <i class="nav-icon fe fe-grid me-2"></i>
                     Pages

@@ -48,7 +48,8 @@ class JinySiteServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Jiny\Site\Console\Commands\SiteSlot::class,
-                \Jiny\Site\Console\Commands\UpdateExchangeRates::class
+                \Jiny\Site\Console\Commands\UpdateExchangeRates::class,
+                \Jiny\Site\Console\Commands\SeedWelcomeBlocks::class
             ]);
         }
 
