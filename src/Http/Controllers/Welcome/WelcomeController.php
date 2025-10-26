@@ -161,6 +161,11 @@ class WelcomeController extends Controller
         // headers.json에서 기본 헤더 경로를 읽어옴
         $header = Header::getDefaultHeaderPath();
 
+        // [1.7.5단계] 헤더 메뉴코드 가져오기
+        // headers.json에서 기본 헤더의 메뉴코드를 읽어옴
+        $headerMenuCode = Header::getDefaultMenuCode();
+        //dd($headerMenuCode);
+
         // [1.8단계] 푸터 경로 가져오기
         // footers.json에서 기본 푸터 경로를 읽어옴
         $footer = Footer::getDefaultFooterPath();
@@ -175,8 +180,8 @@ class WelcomeController extends Controller
         //dd($viewPath);
 
         // [3단계] 뷰 렌더링 및 반환
-        // 결정된 뷰에 $config 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 전달하여 렌더링
-        return $this->renderView($viewPath, $banners, $header, $footer, $welcomeBlocks);
+        // 결정된 뷰에 $config 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록, 헤더 메뉴코드를 전달하여 렌더링
+        return $this->renderView($viewPath, $banners, $header, $footer, $welcomeBlocks, $headerMenuCode);
     }
 
     /**
@@ -606,13 +611,14 @@ class WelcomeController extends Controller
      *
      * @description
      * resolveView()에서 결정된 뷰 경로를 사용하여 실제 뷰를 렌더링합니다.
-     * 뷰 파일에서 사용할 수 있도록 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 함께 전달합니다.
+     * 뷰 파일에서 사용할 수 있도록 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록, 헤더 메뉴코드를 함께 전달합니다.
      *
      * @param string $viewPath 렌더링할 뷰 경로
      * @param \Illuminate\Database\Eloquent\Collection $banners 표시할 베너 컬렉션
      * @param string $header 기본 헤더 경로
      * @param string $footer 기본 푸터 경로
      * @param array $welcomeBlocks 웰컴 페이지 블록 배열
+     * @param string $headerMenuCode 헤더 메뉴코드
      *
      * @return \Illuminate\View\View Laravel 뷰 객체
      *
@@ -625,6 +631,7 @@ class WelcomeController extends Controller
      * - $header               : string - 기본 헤더 경로 (headers.json에서 읽음)
      * - $footer               : string - 기본 푸터 경로 (footers.json에서 읽음)
      * - $welcomeBlocks        : array - Welcome.json에서 읽은 블록 배열
+     * - $headerMenuCode       : string - 헤더에서 사용할 메뉴코드
      *
      * @example 뷰 파일에서 사용 예시
      * // resources/views/www/index.blade.php
@@ -715,15 +722,16 @@ class WelcomeController extends Controller
      *     @endforeach
      * @endif
      */
-    protected function renderView($viewPath, $banners, $header, $footer, $welcomeBlocks = [])
+    protected function renderView($viewPath, $banners, $header, $footer, $welcomeBlocks = [], $headerMenuCode = 'default')
     {
-        // 뷰 경로와 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록을 함께 전달하여 렌더링
+        // 뷰 경로와 설정 데이터, 베너 데이터, 헤더 경로, 푸터 경로, 웰컴 블록, 헤더 메뉴코드를 함께 전달하여 렌더링
         return view($viewPath, [
             'config' => $this->config,
             'banners' => $banners,
             'header' => $header,
             'footer' => $footer,
             'welcomeBlocks' => $welcomeBlocks,
+            'headerMenuCode' => $headerMenuCode,
         ]);
     }
 }

@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool updateLogo(string $logo)
  * @method static bool updateBrand(string $brand)
  * @method static bool updateSearch(string $search)
+ * @method static string getDefaultMenuCode()
  *
  * @see \Jiny\Site\Services\HeaderService
  */

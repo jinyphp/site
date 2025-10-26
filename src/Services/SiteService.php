@@ -147,10 +147,17 @@ class SiteService
      */
     public function menu($menuName)
     {
-        $menuPath = __DIR__ . "/../../resources/menu/{$menuName}.json";
+        // 1순위: 프로젝트 resources/menu 경로에서 찾기
+        $projectMenuPath = resource_path("menu/{$menuName}.json");
+        if (file_exists($projectMenuPath)) {
+            $json = file_get_contents($projectMenuPath);
+            return json_decode($json, true) ?: [];
+        }
 
-        if (file_exists($menuPath)) {
-            $json = file_get_contents($menuPath);
+        // 2순위: 패키지 resources/menu 경로에서 찾기 (기본값)
+        $packageMenuPath = __DIR__ . "/../../resources/menu/{$menuName}.json";
+        if (file_exists($packageMenuPath)) {
+            $json = file_get_contents($packageMenuPath);
             return json_decode($json, true) ?: [];
         }
 

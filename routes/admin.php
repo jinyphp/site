@@ -639,30 +639,25 @@ Route::prefix('admin/cms/blocks')->name('admin.cms.blocks.')->middleware(['web',
  *
  * @description
  * 사이트 메뉴 시스템을 관리하는 라우트입니다.
- * 트리 구조 메뉴 생성, 수정, 삭제 및 드래그 앤 드롭 기능을 제공합니다.
+ * JSON 기반 트리 구조 메뉴 생성, 수정, 삭제 및 드래그 앤 드롭 기능을 제공합니다.
  */
 Route::prefix('admin/cms/menu')->middleware(['web', 'admin'])->name('admin.cms.menu.')->group(function () {
-    // 메뉴 목록
+    // 메뉴 목록 관리
     Route::get('/', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'index'])->name('index');
+    Route::post('/', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'store'])->name('store');
+    Route::put('/{id}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'update'])->name('update')->where('id', '[0-9]+');
+    Route::delete('/{id}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'destroy'])->name('destroy')->where('id', '[0-9]+');
+    Route::post('/{id}/toggle', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'toggle'])->name('toggle')->where('id', '[0-9]+');
+    Route::post('/register-json', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'registerJsonFiles'])->name('register-json');
+    Route::post('/upload-json', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'uploadJsonFiles'])->name('upload-json');
 
-    // 메뉴 관리 (생성, 수정, 삭제)
-    Route::post('/create', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'createMenu'])->name('create');
-    Route::put('/{menuId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'updateMenu'])->name('update')->where(['menuId' => '[0-9]+']);
-    Route::delete('/{menuId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'deleteMenu'])->name('delete')->where(['menuId' => '[0-9]+']);
-
-    // 특정 메뉴 보기 및 메뉴 아이템 관리
-    Route::get('/{menuId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'show'])->name('show')->where(['menuId' => '[0-9]+']);
-
-    // 메뉴 아이템 관리
-    Route::post('/item/create', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'createMenuItem'])->name('item.create');
-    Route::put('/item/{itemId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'updateMenuItem'])->name('item.update')->where(['itemId' => '[0-9]+']);
-    Route::delete('/item/{itemId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'deleteMenuItem'])->name('item.delete')->where(['itemId' => '[0-9]+']);
-
-    // 드래그 앤 드롭을 위한 메뉴 구조 업데이트
-    Route::post('/structure/update', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'updateMenuStructure'])->name('structure.update');
-
-    // AJAX용 메뉴 트리 데이터
-    Route::get('/{menuId}/tree', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuController::class, 'getMenuTree'])->name('tree')->where(['menuId' => '[0-9]+']);
+    // 메뉴 트리 관리
+    Route::get('/{id}/tree', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'show'])->name('tree')->where('id', '[0-9]+');
+    Route::get('/{id}/tree-data', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'getTreeData'])->name('tree.data')->where('id', '[0-9]+');
+    Route::post('/{id}/tree/items', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'addItem'])->name('tree.items.store')->where('id', '[0-9]+');
+    Route::put('/{id}/tree/items/{itemId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'updateItem'])->name('tree.items.update')->where('id', '[0-9]+');
+    Route::delete('/{id}/tree/items/{itemId}', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'deleteItem'])->name('tree.items.destroy')->where('id', '[0-9]+');
+    Route::post('/{id}/tree/structure', [\Jiny\Site\Http\Controllers\Admin\Menus\MenuTreeController::class, 'updateStructure'])->name('tree.structure.update')->where('id', '[0-9]+');
 });
 
 /**

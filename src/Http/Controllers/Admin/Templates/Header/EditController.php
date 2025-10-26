@@ -5,6 +5,7 @@ namespace Jiny\Site\Http\Controllers\Admin\Templates\Header;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Jiny\Site\Services\HeaderService;
+use Jiny\Site\Models\SiteMenu;
 
 class EditController extends Controller
 {
@@ -23,6 +24,11 @@ class EditController extends Controller
             abort(404, 'Header not found');
         }
 
-        return view('jiny-site::admin.templates.header.edit', compact('header'));
+        // 메뉴 목록 가져오기
+        $menus = SiteMenu::where('enable', true)
+            ->orderBy('menu_code')
+            ->get(['menu_code', 'description']);
+
+        return view('jiny-site::admin.templates.header.edit', compact('header', 'menus'));
     }
 }

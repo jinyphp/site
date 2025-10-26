@@ -88,6 +88,36 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="menu_code" class="form-label">메뉴 코드</label>
+                                    <select class="form-select @error('menu_code') is-invalid @enderror"
+                                            id="menu_code" name="menu_code">
+                                        <option value="">메뉴를 선택하세요</option>
+                                        <option value="default" {{ old('menu_code', $header['menu_code'] ?? '') === 'default' ? 'selected' : '' }}>
+                                            default (기본 메뉴)
+                                        </option>
+                                        @foreach($menus as $menu)
+                                            <option value="{{ $menu->menu_code }}"
+                                                    {{ old('menu_code', $header['menu_code'] ?? '') === $menu->menu_code ? 'selected' : '' }}>
+                                                {{ $menu->menu_code }}
+                                                @if($menu->description)
+                                                    - {{ $menu->description }}
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">
+                                        이 헤더에서 사용할 메뉴를 선택하세요
+                                    </div>
+                                    @error('menu_code')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
                                     <label for="description" class="form-label">설명</label>
                                     <textarea class="form-control @error('description') is-invalid @enderror"
                                               id="description" name="description" rows="3"

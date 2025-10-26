@@ -32,7 +32,9 @@
         {{-- blade에서 직접 header 섹션을 추가하는 경우 --}}
         @yield('header')
     @else
-        @includeIf($header ?? 'jiny-site::partials.headers.' . ($header ?? 'header-default'))
+        @includeIf($header ?? 'jiny-site::partials.headers.' . ($header ?? 'header-default'),[
+            'menu' => $headerMenuCode ?? 'default'
+        ])
     @endif
 
 

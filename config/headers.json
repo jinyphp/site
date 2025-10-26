@@ -9,7 +9,8 @@
             "description": "Standard default header layout",
             "enable": true,
             "active": true,
-            "default": true
+            "default": true,
+            "menu_code": "classic"
         },
         {
             "path": "jiny-site::partials.headers.header-classic",
@@ -17,7 +18,8 @@
             "description": "Classic style header layout",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "classic"
         },
         {
             "path": "jiny-site::partials.headers.header-doc",
@@ -25,7 +27,8 @@
             "description": "Header for documentation pages",
             "enable": false,
             "active": false,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-horizontal",
@@ -33,7 +36,8 @@
             "description": "Horizontal navigation header layout",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "classic"
         },
         {
             "path": "jiny-site::partials.headers.header-instructor",
@@ -41,7 +45,8 @@
             "description": "Header layout for instructor pages",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-job",
@@ -49,7 +54,8 @@
             "description": "Header layout for job/career pages",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-login",
@@ -57,7 +63,8 @@
             "description": "Header layout for login pages",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-mentor",
@@ -65,7 +72,8 @@
             "description": "Header layout for mentor pages",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-second",
@@ -73,7 +81,8 @@
             "description": "Alternative secondary header layout",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "classic"
         },
         {
             "path": "jiny-site::partials.headers.header-simple",
@@ -81,7 +90,8 @@
             "description": "Minimalist simple header layout",
             "enable": true,
             "active": true,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-student",
@@ -89,7 +99,8 @@
             "description": "Header layout for student pages",
             "enable": false,
             "active": false,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-vertical",
@@ -97,7 +108,8 @@
             "description": "Vertical navigation header layout",
             "enable": false,
             "active": false,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         },
         {
             "path": "jiny-site::partials.headers.header-vertical-compact",
@@ -105,7 +117,8 @@
             "description": "Compact vertical navigation header layout",
             "enable": false,
             "active": false,
-            "default": false
+            "default": false,
+            "menu_code": "default"
         }
     ]
 }

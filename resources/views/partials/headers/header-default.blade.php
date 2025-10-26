@@ -56,8 +56,9 @@
         </div>
 
         <!-- Collapse -->
+        {{-- {{dd($menu)}} --}}
         @includeIf('jiny-site::partials.navs.nav-default.top', [
-            'menuItems' => Site::menuItems('default'),
+            'menuItems' => Site::menuItems($menu ?? 'default'),
             'alignment' => 'center'
         ])
 

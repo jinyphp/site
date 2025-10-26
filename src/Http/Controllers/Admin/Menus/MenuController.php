@@ -7,16 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Jiny\Site\Models\SiteMenu;
-use Jiny\Site\Models\SiteMenuItem;
 
 /**
- * 메뉴 관리 컨트롤러
- * 트리 구조 메뉴 생성, 수정, 삭제 및 드래그 앤 드롭 지원
+ * 메뉴 목록 관리 컨트롤러
+ * 메뉴 코드별 관리 및 JSON 파일 연동
  */
 class MenuController extends Controller
 {
     /**
-     * 메뉴 관리 메인 페이지
+     * 메뉴 목록 페이지
      */
     public function index(Request $request)
     {
@@ -26,9 +25,8 @@ class MenuController extends Controller
         if ($request->filled('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
-                $q->where('code', 'like', "%{$search}%")
+                $q->where('menu_code', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('blade', 'like', "%{$search}%")
                   ->orWhere('manager', 'like', "%{$search}%");
             });
         }
@@ -42,36 +40,34 @@ class MenuController extends Controller
         $sortBy = $request->get('sort_by', 'created_at');
         $order = $request->get('order', 'desc');
 
-        $allowedSorts = ['id', 'code', 'enable', 'created_at'];
+        $allowedSorts = ['id', 'menu_code', 'enable', 'created_at'];
         if (in_array($sortBy, $allowedSorts)) {
             $query->orderBy($sortBy, $order);
         }
 
-        $menus = $query->get();
+        $menus = $query->paginate(10);
 
-        return view('jiny-site::admin.menu.index', compact('menus'));
-    }
+        // JSON 파일과 동기화
+        foreach ($menus as $menu) {
+            $menu->syncWithJsonFile();
+        }
 
-    /**
-     * 특정 메뉴의 아이템들을 트리 구조로 표시
-     */
-    public function show($menuId)
-    {
-        $menu = SiteMenu::findOrFail($menuId);
-        $menuItems = SiteMenuItem::getTree($menuId);
+        // 전체 통계 계산 (페이지네이션과 별개로)
+        $totalMenus = SiteMenu::count();
+        $activeMenus = SiteMenu::where('enable', true)->count();
+        $inactiveMenus = SiteMenu::where('enable', false)->count();
 
-        return view('jiny-site::admin.menu.show', compact('menu', 'menuItems'));
+        return view('jiny-site::admin.menu.index', compact('menus', 'totalMenus', 'activeMenus', 'inactiveMenus'));
     }
 
     /**
      * 새 메뉴 생성
      */
-    public function createMenu(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:255|unique:site_menus',
+            'menu_code' => 'required|string|max:100|unique:site_menus,menu_code',
             'description' => 'nullable|string',
-            'blade' => 'nullable|string',
             'manager' => 'nullable|string',
         ]);
 
@@ -82,31 +78,47 @@ class MenuController extends Controller
             ], 422);
         }
 
-        $menu = SiteMenu::create([
-            'code' => $request->code,
-            'description' => $request->description,
-            'blade' => $request->blade,
-            'manager' => $request->manager,
-            'enable' => $request->enable ?? true,
-        ]);
+        DB::beginTransaction();
+        try {
+            $menu = SiteMenu::create([
+                'menu_code' => $request->menu_code,
+                'code' => $request->menu_code, // 기존 호환성
+                'description' => $request->description,
+                'manager' => $request->manager,
+                'enable' => $request->enable ?? true,
+                'menu_data' => [], // 빈 메뉴로 시작
+                'json_updated_at' => now(),
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'menu' => $menu
-        ]);
+            // 초기 JSON 파일 생성
+            $menu->saveJsonData([]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'menu' => $menu,
+                'message' => '메뉴가 성공적으로 생성되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => '메뉴 생성 중 오류가 발생했습니다.'
+            ], 500);
+        }
     }
 
     /**
      * 메뉴 수정
      */
-    public function updateMenu(Request $request, $menuId)
+    public function update(Request $request, $id)
     {
-        $menu = SiteMenu::findOrFail($menuId);
+        $menu = SiteMenu::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:255|unique:site_menus,code,' . $menuId,
+            'menu_code' => 'required|string|max:100|unique:site_menus,menu_code,' . $id,
             'description' => 'nullable|string',
-            'blade' => 'nullable|string',
             'manager' => 'nullable|string',
         ]);
 
@@ -117,29 +129,70 @@ class MenuController extends Controller
             ], 422);
         }
 
-        $menu->update($request->only(['code', 'description', 'blade', 'manager', 'enable']));
+        DB::beginTransaction();
+        try {
+            // 메뉴 코드가 변경되면 JSON 파일도 이동
+            if ($menu->menu_code !== $request->menu_code) {
+                $oldPath = $menu->getJsonFilePath();
+                $menu->menu_code = $request->menu_code;
+                $newPath = $menu->getJsonFilePath();
 
-        return response()->json([
-            'success' => true,
-            'menu' => $menu
-        ]);
+                if (file_exists($oldPath)) {
+                    rename($oldPath, $newPath);
+                }
+            }
+
+            $menu->update([
+                'menu_code' => $request->menu_code,
+                'code' => $request->menu_code, // 기존 호환성
+                'description' => $request->description,
+                'manager' => $request->manager,
+                'enable' => $request->enable ?? $menu->enable,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'menu' => $menu,
+                'message' => '메뉴가 성공적으로 수정되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => '메뉴 수정 중 오류가 발생했습니다.'
+            ], 500);
+        }
     }
 
     /**
      * 메뉴 삭제
      */
-    public function deleteMenu($menuId)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            // 메뉴에 속한 모든 아이템 먼저 삭제
-            SiteMenuItem::where('menu_id', $menuId)->delete();
+            $menu = SiteMenu::findOrFail($id);
 
-            // 메뉴 삭제
-            SiteMenu::findOrFail($menuId)->delete();
+            // JSON 파일을 백업 폴더로 이동
+            if ($menu->hasJsonFile()) {
+                $backupPath = resource_path('menu/backups');
+                if (!file_exists($backupPath)) {
+                    mkdir($backupPath, 0755, true);
+                }
+                $backupFile = $backupPath . '/' . $menu->menu_code . '_deleted_' . date('Y-m-d_H-i-s') . '.json';
+                rename($menu->getJsonFilePath(), $backupFile);
+            }
+
+            $menu->delete();
 
             DB::commit();
-            return response()->json(['success' => true]);
+
+            return response()->json([
+                'success' => true,
+                'message' => '메뉴가 성공적으로 삭제되었습니다.'
+            ]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
@@ -150,142 +203,59 @@ class MenuController extends Controller
     }
 
     /**
-     * 메뉴 아이템 생성
+     * 메뉴 활성화/비활성화 토글
      */
-    public function createMenuItem(Request $request)
+    public function toggle(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'menu_id' => 'required|exists:site_menus,id',
-            'title' => 'required|string|max:255',
-            'href' => 'nullable|string',
-            'ref' => 'nullable|integer',
-        ]);
-
-        // ref가 0이 아닌 경우에만 존재하는지 검증
-        if ($request->ref && $request->ref != 0) {
-            $parentExists = SiteMenuItem::where('id', $request->ref)
-                ->where('menu_id', $request->menu_id)
-                ->exists();
-
-            if (!$parentExists) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['ref' => ['선택한 부모 메뉴 아이템이 존재하지 않습니다.']]
-                ], 422);
-            }
-        }
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => '입력 데이터가 올바르지 않습니다.',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $ref = $request->ref ?? 0;
-            $level = $ref == 0 ? 0 : (SiteMenuItem::find($ref)->level + 1);
-            $pos = SiteMenuItem::getNextPosition($ref, $request->menu_id);
-
-            $menuItem = SiteMenuItem::create([
-                'menu_id' => $request->menu_id,
-                'code' => $request->code,
-                'enable' => $request->enable ?? true,
-                'header' => $request->header,
-                'title' => $request->title,
-                'name' => $request->name,
-                'icon' => $request->icon,
-                'href' => $request->href,
-                'target' => $request->target,
-                'selected' => $request->selected,
-                'submenu' => $request->submenu,
-                'ref' => $ref,
-                'level' => $level,
-                'pos' => $pos,
-                'description' => $request->description,
-                'user_id' => auth()->id() ?? 0,
-            ]);
+            $menu = SiteMenu::findOrFail($id);
+            $menu->update(['enable' => $request->enable]);
 
             return response()->json([
                 'success' => true,
-                'menuItem' => $menuItem->load('children')
+                'enable' => $menu->enable,
+                'message' => $menu->enable ? '메뉴가 활성화되었습니다.' : '메뉴가 비활성화되었습니다.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => '메뉴 아이템 생성 중 오류가 발생했습니다.',
-                'error' => app()->hasDebugModeEnabled() ? $e->getMessage() : '시스템 오류'
+                'message' => '상태 변경 중 오류가 발생했습니다.'
             ], 500);
         }
     }
 
     /**
-     * 메뉴 아이템 수정
+     * 기존 JSON 파일들을 site_menus 테이블에 등록
      */
-    public function updateMenuItem(Request $request, $itemId)
+    public function registerJsonFiles(Request $request)
     {
-        $menuItem = SiteMenuItem::findOrFail($itemId);
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'href' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $menuItem->update($request->only([
-            'code', 'enable', 'header', 'title', 'name', 'icon',
-            'href', 'target', 'selected', 'submenu', 'description'
-        ]));
-
-        return response()->json([
-            'success' => true,
-            'menuItem' => $menuItem
-        ]);
-    }
-
-    /**
-     * 메뉴 아이템 삭제
-     */
-    public function deleteMenuItem($itemId)
-    {
-        DB::beginTransaction();
         try {
-            $menuItem = SiteMenuItem::findOrFail($itemId);
+            $results = SiteMenu::registerExistingJsonFiles();
 
-            // 자식 아이템들도 함께 삭제 (재귀적)
-            $this->deleteChildrenRecursively($itemId);
-
-            // 현재 아이템 삭제
-            $menuItem->delete();
-
-            DB::commit();
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'results' => $results,
+                'message' => 'JSON 파일 등록이 완료되었습니다.',
+            ]);
         } catch (\Exception $e) {
-            DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => '메뉴 아이템 삭제 중 오류가 발생했습니다.'
+                'message' => 'JSON 파일 등록 중 오류가 발생했습니다: ' . $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * 드래그 앤 드롭으로 메뉴 구조 업데이트
+     * JSON 파일들을 업로드하고 site_menus 테이블에 등록
      */
-    public function updateMenuStructure(Request $request)
+    public function uploadJsonFiles(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'items' => 'required|array',
-            'items.*.id' => 'required|integer|exists:site_menu_items,id',
-            'items.*.ref' => 'nullable|integer',
-            'items.*.pos' => 'required|integer',
+            'json_files' => 'required|array',
+            'json_files.*' => 'required|file|mimes:json|max:2048',
+            'description' => 'nullable|string',
+            'manager' => 'nullable|string',
+            'enable' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -297,50 +267,83 @@ class MenuController extends Controller
 
         DB::beginTransaction();
         try {
-            foreach ($request->items as $item) {
-                $menuItem = SiteMenuItem::find($item['id']);
-                if ($menuItem) {
-                    $ref = $item['ref'] ?? 0;
-                    $level = $ref == 0 ? 0 : (SiteMenuItem::find($ref)->level + 1);
+            $results = [
+                'uploaded' => [],
+                'skipped' => [],
+                'errors' => []
+            ];
 
-                    $menuItem->update([
-                        'ref' => $ref,
-                        'level' => $level,
-                        'pos' => $item['pos']
+            $menuDir = resource_path('menu');
+            if (!file_exists($menuDir)) {
+                mkdir($menuDir, 0755, true);
+            }
+
+            foreach ($request->file('json_files') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $menuCode = pathinfo($originalName, PATHINFO_FILENAME);
+
+                try {
+                    // JSON 형식 검증
+                    $jsonContent = file_get_contents($file->getPathname());
+                    $jsonData = json_decode($jsonContent, true);
+
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        $results['errors'][] = "{$originalName}: 올바른 JSON 형식이 아닙니다";
+                        continue;
+                    }
+
+                    // 이미 존재하는 메뉴 코드인지 확인
+                    if (SiteMenu::where('menu_code', $menuCode)->exists()) {
+                        $results['skipped'][] = "{$originalName}: 이미 존재하는 메뉴 코드입니다";
+                        continue;
+                    }
+
+                    // 파일을 resources/menu 디렉토리에 저장
+                    $targetPath = $menuDir . '/' . $originalName;
+                    if (file_exists($targetPath)) {
+                        // 파일이 이미 존재하면 백업
+                        $backupPath = $menuDir . '/backups';
+                        if (!file_exists($backupPath)) {
+                            mkdir($backupPath, 0755, true);
+                        }
+                        $backupFile = $backupPath . '/' . pathinfo($originalName, PATHINFO_FILENAME) . '_backup_' . date('Y-m-d_H-i-s') . '.json';
+                        rename($targetPath, $backupFile);
+                    }
+
+                    move_uploaded_file($file->getPathname(), $targetPath);
+
+                    // site_menus 테이블에 등록
+                    $menu = SiteMenu::create([
+                        'menu_code' => $menuCode,
+                        'code' => $menuCode, // 기존 호환성
+                        'description' => $request->description ?: "업로드된 메뉴: {$menuCode}",
+                        'manager' => $request->manager,
+                        'enable' => $request->enable ?? true,
+                        'menu_data' => $jsonData,
+                        'json_updated_at' => now(),
                     ]);
+
+                    $results['uploaded'][] = $originalName;
+
+                } catch (\Exception $e) {
+                    $results['errors'][] = "{$originalName}: " . $e->getMessage();
                 }
             }
 
             DB::commit();
-            return response()->json(['success' => true]);
+
+            return response()->json([
+                'success' => true,
+                'results' => $results,
+                'message' => 'JSON 파일 업로드가 완료되었습니다.',
+            ]);
+
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => '메뉴 구조 업데이트 중 오류가 발생했습니다.'
+                'message' => 'JSON 파일 업로드 중 오류가 발생했습니다: ' . $e->getMessage()
             ], 500);
         }
-    }
-
-    /**
-     * 메뉴 아이템의 자식들을 재귀적으로 삭제
-     */
-    private function deleteChildrenRecursively($parentId)
-    {
-        $children = SiteMenuItem::where('ref', $parentId)->get();
-
-        foreach ($children as $child) {
-            $this->deleteChildrenRecursively($child->id);
-            $child->delete();
-        }
-    }
-
-    /**
-     * 메뉴 트리 데이터를 JSON으로 반환 (AJAX 요청용)
-     */
-    public function getMenuTree($menuId)
-    {
-        $menuItems = SiteMenuItem::getTree($menuId);
-        return response()->json($menuItems);
     }
 }

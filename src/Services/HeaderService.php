@@ -213,6 +213,9 @@ class HeaderService
                 'path' => $data['path'] ?? $data['header_key'] ?? $headers[$index]['path'] ?? '',
                 'title' => $data['title'] ?? $data['name'] ?? $headers[$index]['title'] ?? '',
                 'description' => $data['description'] ?? $headers[$index]['description'] ?? '',
+                'menu_code' => $data['menu_code'] ?? $headers[$index]['menu_code'] ?? 'default',
+                'enable' => isset($data['enable']) ? (bool)$data['enable'] : ($headers[$index]['enable'] ?? true),
+                'active' => isset($data['active']) ? (bool)$data['active'] : ($headers[$index]['active'] ?? false),
                 'default' => isset($data['default']) ? (bool)$data['default'] : ($headers[$index]['default'] ?? false),
             ];
 
@@ -779,6 +782,21 @@ class HeaderService
         $data = $this->getFullJsonDataPrivate();
         $data['search'] = $search;
         return $this->saveJsonData($data);
+    }
+
+    /**
+     * Get the default header's menu code
+     */
+    public function getDefaultMenuCode(): string
+    {
+        $defaultHeader = $this->getDefaultHeader();
+
+        if ($defaultHeader) {
+            return $defaultHeader['menu_code'] ?? 'default';
+        }
+
+        // Fallback to 'default' if no default header is found
+        return 'default';
     }
 
 }
