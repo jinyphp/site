@@ -233,13 +233,13 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('home.account.phones') }}">
+                <a class="dropdown-item" href="{{ route('home.profile.phone') }}">
                   <i class="fe fe-phone me-2"></i>
                   전화번호 관리
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('home.account.address') }}">
+                <a class="dropdown-item" href="{{ route('home.profile.address') }}">
                   <i class="fe fe-map-pin me-2"></i>
                   주소 관리
                 </a>

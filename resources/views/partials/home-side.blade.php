@@ -104,14 +104,14 @@
             </li>
             <!-- Nav item -->
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('home.account.phones') }}">
+              <a class="nav-link" href="{{ route('home.profile.phone') }}">
                 <i class="fe fe-phone nav-icon"></i>
                 전화번호 관리
               </a>
             </li>
             <!-- Nav item -->
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('home.account.address') }}">
+              <a class="nav-link" href="{{ route('home.profile.address') }}">
                 <i class="fe fe-map-pin nav-icon"></i>
                 주소 관리
               </a>
@@ -164,7 +164,7 @@
             </li>
             <!-- Nav item -->
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('home.account.social') }}">
+              <a class="nav-link" href="{{ Route::has('home.account.social') ? route('home.account.social') : '/home/account/social' }}">
                 <i class="fe fe-refresh-cw nav-icon"></i>
                     소셜 프로파일
               </a>
