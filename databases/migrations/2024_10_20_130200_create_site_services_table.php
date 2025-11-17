@@ -66,36 +66,13 @@ return new class extends Migration
             $table->index('slug');
 
             // Foreign key
-            $table->foreign('category_id')->references('id')->on('site_service_categories')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('service_categories')->onDelete('set null');
         });
 
-        // Site service categories table
-        Schema::create('site_service_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->integer('sort_order')->default(0);
-            $table->boolean('enable')->default(true);
-            $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
-            $table->timestamps();
-
-            // Indexes
-            $table->index(['parent_id', 'enable']);
-            $table->index(['sort_order', 'name']);
-            $table->index('slug');
-
-            // Foreign key
-            $table->foreign('parent_id')->references('id')->on('site_service_categories')->onDelete('cascade');
-        });
     }
 
     public function down()
     {
         Schema::dropIfExists('site_services');
-        Schema::dropIfExists('site_service_categories');
     }
 };
